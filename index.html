@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClearEye Report &mdash; Demo House, Tampa FL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SpexInspect Report v4 — Cinematic Edition
+   ============================================================ */
+
+/* ========== DARK MODE ========== */
+[data-theme="dark"] body{
+  background:#0f172a;
+  color:#e2e8f0;
+}
+[data-theme="dark"] .gauge-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .exec-card,
+[data-theme="dark"] .severity-section,
+[data-theme="dark"] .cost-section,
+[data-theme="dark"] .action-section,
+[data-theme="dark"] .defect-card{
+  background:#1e293b;
+  border-color:#334155;
+}
+[data-theme="dark"] .stat-card{
+  background:rgba(30,41,59,0.8);
+  border-color:#334155;
+}
+[data-theme="dark"] .stat-value,
+[data-theme="dark"] .gauge-score-num,
+[data-theme="dark"] .legend-count,
+[data-theme="dark"] .cost-total-value{
+  color:#f1f5f9;
+}
+[data-theme="dark"] .stat-label,
+[data-theme="dark"] .gauge-label,
+[data-theme="dark"] .legend-pct,
+[data-theme="dark"] .defect-meta,
+[data-theme="dark"] .defect-conf{
+  color:#94a3b8;
+}
+[data-theme="dark"] .exec-card p,
+[data-theme="dark"] .defect-desc{
+  color:#cbd5e1;
+}
+[data-theme="dark"] .defect-detail{
+  color:#94a3b8;
+}
+[data-theme="dark"] .defect-detail strong,
+[data-theme="dark"] .defect-type,
+[data-theme="dark"] .legend-label,
+[data-theme="dark"] .section-title,
+[data-theme="dark"] .heatmap-name{
+  color:#f1f5f9;
+}
+[data-theme="dark"] .action-table thead th{
+  color:#94a3b8;
+  border-bottom-color:#334155;
+}
+[data-theme="dark"] .action-table tbody td{
+  border-bottom-color:#1e293b;
+  color:#cbd5e1;
+}
+[data-theme="dark"] .action-table tbody tr:nth-child(even){background:#162032}
+[data-theme="dark"] .action-table tbody tr:hover{background:#1e3a5f}
+[data-theme="dark"] .cost-bar-track{background:#334155}
+[data-theme="dark"] .cost-label,
+[data-theme="dark"] .cost-total-label{
+  color:#94a3b8;
+}
+[data-theme="dark"] .heatmap-stat{color:#94a3b8}
+[data-theme="dark"] .heatmap-cell-clean{background:#0f2d1f;border-color:#166534}
+[data-theme="dark"] .heatmap-cell-low{background:#1c1a05;border-color:#713f12}
+[data-theme="dark"] .heatmap-cell-medium{background:#1c1005;border-color:#9a3412}
+[data-theme="dark"] .heatmap-cell-high{background:#1c0a0a;border-color:#991b1b}
+[data-theme="dark"] .legend-row:hover{background:#1e293b}
+[data-theme="dark"] .disclaimer{
+  background:#1a1505;
+  border-color:#713f12;
+  color:#d97706;
+}
+[data-theme="dark"] .disclaimer strong{color:#f59e0b}
+[data-theme="dark"] .footer{
+  color:#64748b;
+  border-top-color:#334155;
+}
+[data-theme="dark"] .footer-brand{color:#94a3b8}
+[data-theme="dark"] .defect-cost{
+  background:#1c1505;
+  color:#f59e0b;
+}
+[data-theme="dark"] .clean-section{
+  background:#0f2d1f;
+  border-color:#166534;
+}
+[data-theme="dark"] .clean-section h3{color:#4ade80}
+[data-theme="dark"] .clean-badge{
+  background:#14532d;
+  color:#4ade80;
+}
+[data-theme="dark"] .priority-alert{
+  background:#1c0a0a;
+  border-color:#991b1b;
+}
+[data-theme="dark"] .priority-desc{color:#fca5a5}
+[data-theme="dark"] .priority-alert h3{color:#f87171}
+[data-theme="dark"] .priority-alert li{border-bottom-color:rgba(220,38,38,0.2)}
+
+/* ========== THEME TOGGLE BUTTON ========== */
+.theme-toggle{
+  position:fixed;
+  top:18px;
+  right:18px;
+  z-index:999;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(15,23,42,0.75);
+  color:#e2e8f0;
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:20px;
+  padding:8px 16px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+  transition:background 0.2s, transform 0.2s;
+  font-family:'Inter',system-ui,sans-serif;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+.theme-toggle:hover{transform:translateY(-1px);background:rgba(15,23,42,0.9)}
+[data-theme="dark"] .theme-toggle{
+  background:rgba(255,255,255,0.1);
+  border-color:rgba(255,255,255,0.2);
+}
+
+/* ========== SHARE BUTTON ========== */
+.share-bar{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  z-index:999;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  align-items:flex-end;
+}
+.share-btn{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  color:white;
+  border:none;
+  border-radius:20px;
+  padding:10px 20px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  font-family:'Inter',system-ui,sans-serif;
+  box-shadow:0 4px 16px rgba(59,130,246,0.4);
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.share-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,130,246,0.5)}
+.share-btn:active{transform:translateY(0)}
+.share-toast{
+  background:#0f172a;
+  color:#4ade80;
+  border:1px solid #166534;
+  border-radius:12px;
+  padding:8px 16px;
+  font-size:12px;
+  font-weight:600;
+  font-family:'Inter',system-ui,sans-serif;
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity 0.3s, transform 0.3s;
+  pointer-events:none;
+}
+.share-toast.show{opacity:1;transform:translateY(0)}
+
+@media print{
+  .theme-toggle,.share-bar{display:none!important}
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:#f8fafc;
+  color:#1e293b;
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* --- Layout --- */
+.container{max-width:960px;margin:0 auto;padding:0 24px 60px}
+
+/* --- Scroll reveal animations --- */
+.reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.08s}
+.reveal-delay-2{transition-delay:0.16s}
+.reveal-delay-3{transition-delay:0.24s}
+
+/* ==========  HEADER  ========== */
+.header{
+  position:relative;
+  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#312e81 100%);
+  padding:60px 24px 52px;
+  text-align:center;
+  overflow:hidden;
+  border-radius:0 0 32px 32px;
+  margin-bottom:40px;
+}
+/* Grid overlay */
+.header::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+}
+/* Gradient orbs */
+.header-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:0.35;
+  pointer-events:none;
+}
+.header-orb-1{width:300px;height:300px;background:#3b82f6;top:-80px;left:-60px}
+.header-orb-2{width:250px;height:250px;background:#8b5cf6;bottom:-60px;right:-40px}
+.header-orb-3{width:180px;height:180px;background:#06b6d4;top:20px;right:25%}
+
+/* Particle canvas */
+#particleCanvas{
+  position:absolute;inset:0;
+  pointer-events:none;
+  z-index:1;
+}
+
+.header-content{position:relative;z-index:2}
+.logo{
+  font-size:38px;font-weight:900;letter-spacing:-1.5px;
+  color:#fff;
+}
+.logo span{
+  background:linear-gradient(135deg,#60a5fa,#a78bfa,#c084fc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.header-address{
+  font-size:24px;font-weight:700;color:#e2e8f0;
+  margin-top:16px;
+  text-shadow:0 2px 12px rgba(0,0,0,0.3);
+}
+.header-meta{
+  display:flex;justify-content:center;flex-wrap:wrap;gap:20px;
+  margin-top:16px;font-size:13px;color:#94a3b8;
+}
+.header-meta-item{display:flex;align-items:center;gap:6px}
+.header-meta-item svg{opacity:0.6}
+.condition-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:18px;
+  padding:6px 18px;
+  border-radius:20px;
+  font-size:13px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.12);
+  color:#ca8a04;
+}
+.condition-dot{width:8px;height:8px;border-radius:50%;background:#ca8a04;
+  box-shadow:0 0 8px #ca8a04}
+
+/* ==========  HEALTH GAUGE  ========== */
+.gauge-section{
+  display:flex;justify-content:center;
+  margin:-36px auto 36px;
+  position:relative;z-index:3;
+}
+.gauge-card{
+  background:white;
+  border-radius:24px;
+  padding:40px 48px 32px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.gauge-card::before{
+  content:'';position:absolute;inset:-1px;
+  border-radius:25px;
+  padding:1px;
+  background:linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;
+}
+.gauge-glow{
+  position:absolute;
+  width:160px;height:160px;
+  border-radius:50%;
+  top:20px;left:50%;transform:translateX(-50%);
+  background:#ca8a04;
+  filter:blur(60px);
+  opacity:0.15;
+  pointer-events:none;
+  transition:opacity 1s;
+}
+.gauge-svg-wrap{position:relative;width:220px;height:140px;margin:0 auto}
+.gauge-score-num{
+  font-size:56px;font-weight:900;color:#ca8a04;
+  line-height:1;
+  margin-top:4px;
+  font-variant-numeric:tabular-nums;
+}
+.gauge-score-num small{font-size:22px;color:#94a3b8;font-weight:400}
+.gauge-label{
+  font-size:12px;color:#64748b;
+  text-transform:uppercase;letter-spacing:2.5px;font-weight:600;
+  margin-top:6px;
+}
+
+/* ==========  STATS ROW  ========== */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  margin-bottom:32px;
+}
+.stat-card{
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(226,232,240,0.8);
+  border-radius:18px;
+  padding:24px 16px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:18px 18px 0 0;
+}
+.stat-card:nth-child(1)::before{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.stat-card:nth-child(2)::before{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+.stat-card:nth-child(3)::before{background:linear-gradient(90deg,#06b6d4,#22d3ee)}
+.stat-card:nth-child(4)::before{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.stat-icon{
+  width:40px;height:40px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 10px;
+}
+.stat-card:nth-child(1) .stat-icon{background:rgba(59,130,246,0.1)}
+.stat-card:nth-child(2) .stat-icon{background:rgba(139,92,246,0.1)}
+.stat-card:nth-child(3) .stat-icon{background:rgba(6,182,212,0.1)}
+.stat-card:nth-child(4) .stat-icon{background:rgba(245,158,11,0.1)}
+.stat-value{font-size:32px;font-weight:800;color:#0f172a;font-variant-numeric:tabular-nums}
+.stat-label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-top:2px}
+
+/* ==========  SEVERITY DONUT  ========== */
+.severity-section{
+  display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;
+  background:white;border-radius:20px;padding:32px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  border:1px solid #e2e8f0;
+  margin-bottom:32px;
+}
+.donut-wrap{display:flex;justify-content:center;align-items:center}
+.donut-center-text{
+  font-size:36px;font-weight:800;fill:#0f172a;
+  font-family:'Inter',system-ui,sans-serif;
+}
+.donut-center-sub{
+  font-size:11px;fill:#64748b;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;
+  font-family:'Inter',system-ui,sans-serif;
+}
+.severity-legend{display:flex;flex-direction:column;gap:12px}
+.legend-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:12px;transition:background 0.2s}
+.legend-row:hover{background:#f8fafc}
+.legend-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.legend-label{font-size:14px;font-weight:600;color:#1e293b;text-transform:capitalize;flex:1}
+.legend-count{font-size:20px;font-weight:800;color:#0f172a}
+.legend-pct{font-size:12px;color:#94a3b8;width:40px;text-align:right}
+
+/* ==========  EXECUTIVE SUMMARY  ========== */
+.exec-card{
+  background:white;border-radius:20px;padding:28px 32px;
+  border:1px solid #e2e8f0;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  margin-bottom:32px;
+  position:relative;
+  overflow:hidden;
+}
+.exec-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:linear-gradient(180deg,#3b82f6,#8b5cf6);
+  border-radius:20px 0 0 20px;
+}
+.exec-card h2{
+  font-size:17px;font-weight:700;color:#0f172a;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.exec-card h2 svg{flex-shrink:0}
+.exec-card p{font-size:14px;color:#475569;line-height:1.8}
+
+/* ==========  PRIORITY ALERT  ========== */
+.priority-alert{
+  position:relative;
+  background:linear-gradient(135deg,#fef2f2,#fff1f2);
+  border:1.5px solid #fecaca;
+  border-radius:20px;
+  padding:28px 32px;
+  margin-bottom:32px;
+  overflow:hidden;
+}
+.priority-alert-pulse{
+  position:absolute;top:16px;left:24px;
+  width:12px;height:12px;border-radius:50%;
+  background:#dc2626;
+}
+.priority-alert-pulse::before{
+  content:'';position:absolute;inset:-4px;
+  border-radius:50%;border:2px solid #dc2626;
+  animation:pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
+}
+@keyframes pulse-ring{
+  0%{transform:scale(1);opacity:0.8}
+  100%{transform:scale(2.5);opacity:0}
+}
+.priority-alert-content{padding-left:24px}
+.priority-alert h3{
+  font-size:16px;font-weight:700;color:#991b1b;margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.priority-alert ul{list-style:none}
+.priority-alert li{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(220,38,38,0.1);
+  font-size:14px;
+}
+.priority-alert li:last-child{border-bottom:none}
+.priority-sev{
+  font-size:11px;font-weight:800;padding:2px 10px;
+  border-radius:8px;background:rgba(220,38,38,0.1);
+  white-space:nowrap;flex-shrink:0;
+}
+.priority-desc{flex:1;color:#4a1515}
+.priority-room{
+  font-size:11px;color:#991b1b;background:#fee2e2;
+  padding:2px 10px;border-radius:8px;white-space:nowrap;flex-shrink:0;
+}
+
+/* ==========  CLEAN ROOMS  ========== */
+.clean-section{
+  display:flex;align-items:center;gap:16px;
+  background:#f0fdf4;border:1.5px solid #bbf7d0;
+  border-radius:20px;padding:22px 28px;margin-bottom:32px;
+}
+.clean-icon-wrap{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(22,163,74,0.1);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.clean-section h3{font-size:15px;font-weight:700;color:#166534;margin-bottom:6px}
+.clean-badges{display:flex;gap:8px;flex-wrap:wrap}
+.clean-badge{
+  background:#dcfce7;color:#166534;padding:5px 14px;border-radius:20px;
+  font-size:12px;font-weight:600;
+}
+
+/* ==========  ROOM HEATMAP  ========== */
+.section-title{
+  font-size:18px;font-weight:700;color:#0f172a;
+  margin-bottom:18px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title svg{flex-shrink:0;opacity:0.7}
+
+.heatmap-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;
+  margin-bottom:32px;
+}
+.heatmap-cell{
+  border-radius:14px;padding:18px 14px;text-align:center;
+  cursor:default;transition:transform 0.2s, box-shadow 0.2s;
+  position:relative;overflow:hidden;
+}
+.heatmap-cell:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+.heatmap-cell-clean{background:#f0fdf4;border:1.5px solid #bbf7d0}
+.heatmap-cell-low{background:#fefce8;border:1.5px solid #fef08a}
+.heatmap-cell-medium{background:#fff7ed;border:1.5px solid #fed7aa}
+.heatmap-cell-high{background:#fef2f2;border:1.5px solid #fecaca}
+.heatmap-cell-critical{background:#fef2f2;border:2px solid #dc2626;animation:heatmap-critical 2s infinite}
+@keyframes heatmap-critical{0%,100%{border-color:#dc2626}50%{border-color:#fecaca}}
+.heatmap-name{font-size:13px;font-weight:700;color:#0f172a;margin-bottom:4px}
+.heatmap-stat{font-size:11px;color:#64748b}
+.heatmap-indicator{
+  width:8px;height:8px;border-radius:50%;
+  position:absolute;top:10px;right:10px;
+}
+.heatmap-cell-clean .heatmap-indicator{background:#16a34a}
+.heatmap-cell-low .heatmap-indicator{background:#ca8a04}
+.heatmap-cell-medium .heatmap-indicator{background:#ea580c}
+.heatmap-cell-high .heatmap-indicator{background:#ea580c}
+.heatmap-cell-critical .heatmap-indicator{background:#dc2626;box-shadow:0 0 8px #dc2626}
+
+/* Tooltip */
+.heatmap-tooltip{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:#0f172a;color:#e2e8f0;padding:8px 14px;border-radius:10px;
+  font-size:11px;white-space:nowrap;z-index:10;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+.heatmap-tooltip::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:#0f172a;
+}
+.heatmap-cell:hover .heatmap-tooltip{display:block}
+
+/* ==========  COST BREAKDOWN  ========== */
+.cost-section{
+  background:white;border-radius:20px;padding:28px 32px;
+  border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  margin-bottom:32px;
+}
+.cost-bars{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.cost-row{display:flex;align-items:center;gap:14px}
+.cost-label{width:110px;font-size:13px;color:#475569;text-align:right;font-weight:600;text-transform:capitalize}
+.cost-bar-track{flex:1;height:32px;background:#f1f5f9;border-radius:10px;overflow:hidden;position:relative}
+.cost-bar-fill{
+  height:100%;border-radius:10px;
+  display:flex;align-items:center;padding:0 12px;
+  font-size:11px;font-weight:700;color:white;
+  min-width:0;width:0;
+  transition:width 1.2s cubic-bezier(.22,1,.36,1);
+}
+.cost-bar-fill.animate{/* width set by JS */}
+.cost-amount{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-size:12px;color:#475569;font-weight:700;
+}
+.cost-total{
+  margin-top:18px;padding-top:16px;border-top:2px solid #f1f5f9;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.cost-total-label{font-size:14px;font-weight:600;color:#64748b}
+.cost-total-value{font-size:22px;font-weight:800;color:#0f172a}
+
+/* ==========  ACTION PLAN TABLE  ========== */
+.action-section{
+  background:white;border-radius:20px;padding:28px 32px;
+  border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  margin-bottom:32px;overflow-x:auto;
+}
+.action-table{width:100%;border-collapse:collapse;font-size:14px}
+.action-table thead th{
+  text-align:left;color:#64748b;font-weight:600;
+  padding:12px 14px;border-bottom:2px solid #e2e8f0;
+  font-size:11px;text-transform:uppercase;letter-spacing:.8px;
+}
+.action-table tbody td{padding:14px;border-bottom:1px solid #f1f5f9}
+.action-table tbody tr:nth-child(even){background:#fafbfc}
+.action-table tbody tr:hover{background:#f0f4ff}
+.action-table tbody tr{transition:background 0.2s}
+.priority-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:8px;
+  color:white;font-weight:800;font-size:13px;
+}
+.action-text{font-weight:500;color:#1e293b;max-width:260px}
+.timeline-badge{
+  border:1.5px solid;padding:4px 12px;border-radius:10px;
+  font-size:11px;font-weight:700;white-space:nowrap;
+}
+.cost-cell{font-weight:600;color:#b45309;white-space:nowrap}
+
+/* ==========  DEFECT CARDS  ========== */
+.defect-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:20px;margin-bottom:32px}
+.defect-card{
+  background:white;border:1px solid #e2e8f0;border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.defect-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.08)}
+.defect-card[data-severity="critical"]{border-top:3px solid #dc2626}
+.defect-card[data-severity="high"]{border-top:3px solid #ea580c}
+.defect-card[data-severity="medium"]{border-top:3px solid #ca8a04}
+.defect-card[data-severity="low"]{border-top:3px solid #16a34a}
+.defect-photo-wrap{position:relative;overflow:hidden}
+.defect-photo{
+  width:100%;height:220px;object-fit:cover;
+  cursor:pointer;display:block;
+  transition:transform 0.4s;
+}
+.defect-photo:hover{transform:scale(1.05)}
+.defect-ribbon{
+  position:absolute;top:14px;right:14px;
+  padding:4px 14px;border-radius:8px;
+  font-size:11px;font-weight:800;color:white;
+  letter-spacing:0.5px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.defect-body{padding:20px 24px 24px}
+.defect-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sev-badge{padding:4px 14px;border-radius:10px;font-size:11px;font-weight:800;color:white;letter-spacing:0.3px}
+.defect-type{font-weight:700;font-size:14px;color:#0f172a}
+.defect-conf{font-size:11px;color:#94a3b8;margin-left:auto;font-weight:500}
+.defect-meta{font-size:12px;color:#64748b;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.defect-room-tag{
+  background:#f1f5f9;padding:2px 10px;border-radius:8px;
+  font-weight:600;font-size:11px;color:#475569;
+}
+.defect-desc{font-size:14px;margin-bottom:12px;color:#334155;line-height:1.7}
+.defect-detail{font-size:13px;color:#475569;margin-bottom:4px}
+.defect-detail strong{color:#334155}
+.defect-cost{
+  font-size:13px;color:#b45309;margin-top:14px;font-weight:700;
+  background:#fffbeb;padding:8px 14px;border-radius:10px;
+  display:inline-block;
+}
+
+/* ==========  PHOTO GALLERY  ========== */
+.gallery-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;
+  margin-bottom:32px;
+}
+.gallery-item{
+  position:relative;border-radius:14px;overflow:hidden;
+  cursor:pointer;aspect-ratio:4/3;
+  transition:transform 0.3s;
+}
+.gallery-item:hover{transform:scale(1.02)}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery-overlay{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,0.7));
+  padding:24px 12px 10px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+}
+.gallery-room{font-size:12px;font-weight:700;color:white}
+.gallery-time{font-size:10px;color:rgba(255,255,255,0.7)}
+
+/* ==========  LIGHTBOX  ========== */
+.lightbox{
+  display:none;position:fixed;inset:0;
+  background:rgba(15,23,42,0.92);
+  backdrop-filter:blur(8px);
+  z-index:1000;
+  justify-content:center;align-items:center;
+  cursor:pointer;
+  opacity:0;transition:opacity 0.3s;
+}
+.lightbox.active{display:flex;opacity:1}
+.lightbox img{
+  max-width:90vw;max-height:90vh;
+  border-radius:16px;
+  box-shadow:0 24px 80px rgba(0,0,0,0.5);
+  transform:scale(0.95);
+  transition:transform 0.3s;
+}
+.lightbox.active img{transform:scale(1)}
+.lightbox-close{
+  position:fixed;top:24px;right:24px;
+  width:40px;height:40px;border-radius:12px;
+  background:rgba(255,255,255,0.1);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:1001;
+  transition:background 0.2s;
+}
+.lightbox-close:hover{background:rgba(255,255,255,0.2)}
+.lightbox-close svg{color:white}
+
+/* ==========  DISCLAIMER + FOOTER  ========== */
+.disclaimer{
+  background:#fffbeb;border:1px solid #fde68a;border-radius:16px;
+  padding:20px 24px;font-size:12px;color:#92400e;line-height:1.7;
+  margin-bottom:32px;
+}
+.disclaimer strong{color:#78350f}
+.footer{
+  text-align:center;color:#94a3b8;font-size:12px;
+  padding:32px 0;
+  border-top:1px solid #e2e8f0;
+}
+.footer-brand{
+  font-size:16px;font-weight:800;color:#475569;
+  margin-bottom:4px;
+}
+.footer-brand span{
+  background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* ==========  PRINT  ========== */
+@media print{
+  body{background:#fff}
+  .header{border-radius:0;padding:32px 16px}
+  .container{padding:0 16px}
+  .gauge-card,.stat-card,.defect-card,.exec-card,.cost-section,.action-section,.severity-section{
+    break-inside:avoid;box-shadow:none;
+  }
+  .sev-badge,.priority-num,.legend-dot,.heatmap-indicator,.condition-dot,.cost-bar-fill{
+    print-color-adjust:exact;-webkit-print-color-adjust:exact;
+  }
+  .lightbox{display:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+  #particleCanvas{display:none}
+  .header-orb{display:none}
+}
+@media(max-width:640px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .severity-section{grid-template-columns:1fr}
+  .defect-grid{grid-template-columns:1fr}
+  .heatmap-grid{grid-template-columns:repeat(2,1fr)}
+  .container{padding:0 12px 40px}
+  .header{padding:40px 16px 36px}
+  .header-address{font-size:18px}
+  .cost-label{width:70px;font-size:11px}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ====== THEME TOGGLE ====== -->
+<button class="theme-toggle" onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle dark mode">
+  <span id="themeIcon">🌙</span>
+  <span id="themeLabel">Dark Mode</span>
+</button>
+
+<!-- ====== SHARE BUTTON ====== -->
+<div class="share-bar">
+  <div class="share-toast" id="shareToast">✓ Link copied to clipboard!</div>
+  <button class="share-btn" onclick="shareReport()" aria-label="Share report">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    Share Report
+  </button>
+</div>
+
+<!-- ====== HEADER ====== -->
+<div class="header">
+  <div class="header-orb header-orb-1"></div>
+  <div class="header-orb header-orb-2"></div>
+  <div class="header-orb header-orb-3"></div>
+  <canvas id="particleCanvas"></canvas>
+  <div class="header-content">
+    <div class="logo">Clear<span>Eye</span></div>
+    <div class="header-address">Demo House, Tampa FL</div>
+    <div class="header-meta">
+      <span class="header-meta-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Bobby
+      </span>
+      <span class="header-meta-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        2026-04-17 19:26
+      </span>
+      <span class="header-meta-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        0m
+      </span>
+      <span class="header-meta-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        20260417-192604
+      </span>
+    </div>
+    <div class="condition-pill">
+      <span class="condition-dot"></span>
+      fair
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ====== HEALTH GAUGE ====== -->
+<div class="gauge-section">
+  <div class="gauge-card reveal">
+    <div class="gauge-glow"></div>
+    <div class="gauge-svg-wrap">
+      <svg viewBox="0 0 220 140" width="220" height="140">
+        <defs>
+          <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#dc2626"/>
+            <stop offset="30%" stop-color="#ea580c"/>
+            <stop offset="50%" stop-color="#ca8a04"/>
+            <stop offset="75%" stop-color="#16a34a"/>
+            <stop offset="100%" stop-color="#16a34a"/>
+          </linearGradient>
+          <filter id="gaugeGlow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <!-- Track -->
+        <path d="M 25 120 A 85 85 0 1 1 195 120" fill="none" stroke="#e2e8f0" stroke-width="14" stroke-linecap="round"/>
+        <!-- Filled arc (animated via JS) -->
+        <path id="gaugeArc" d="M 25 120 A 85 85 0 1 1 195 120" fill="none"
+              stroke="url(#gaugeGrad)" stroke-width="14" stroke-linecap="round"
+              filter="url(#gaugeGlow)"
+              stroke-dasharray="0 999" />
+        <!-- Needle dot -->
+        <circle id="gaugeDot" cx="25" cy="120" r="8" fill="#ca8a04"
+                filter="url(#gaugeGlow)" opacity="0.9"/>
+      </svg>
+    </div>
+    <div class="gauge-score-num"><span id="scoreCounter">0</span><small>/100</small></div>
+    <div class="gauge-label">ClearEye Health Score</div>
+  </div>
+</div>
+
+<!-- ====== STATS ROW ====== -->
+<div class="stats-grid">
+  <div class="stat-card reveal">
+    <div class="stat-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="stat-value" data-count="2">0</div>
+    <div class="stat-label">Defects Found</div>
+  </div>
+  <div class="stat-card reveal reveal-delay-1">
+    <div class="stat-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    </div>
+    <div class="stat-value" data-count="1">0</div>
+    <div class="stat-label">Photos Taken</div>
+  </div>
+  <div class="stat-card reveal reveal-delay-2">
+    <div class="stat-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <div class="stat-value" data-count="2">0</div>
+    <div class="stat-label">Rooms Inspected</div>
+  </div>
+  <div class="stat-card reveal reveal-delay-3">
+    <div class="stat-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+    </div>
+    <div class="stat-value" data-count="3300" data-prefix="$" style="font-size:24px">$0</div>
+    <div class="stat-label">Est. Max Repairs</div>
+  </div>
+</div>
+
+<!-- ====== SEVERITY DONUT ====== -->
+<div class="severity-section reveal">
+  <div class="donut-wrap">
+    <svg id="donutChart" viewBox="0 0 200 200" width="200" height="200">
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#f1f5f9" stroke-width="28"/>
+      <!-- Segments drawn by JS -->
+      <text class="donut-center-text" x="100" y="96" text-anchor="middle" dominant-baseline="middle">2</text>
+      <text class="donut-center-sub" x="100" y="118" text-anchor="middle">DEFECTS</text>
+    </svg>
+  </div>
+  <div class="severity-legend">
+    <div class="legend-row">
+      <span class="legend-dot" style="background:#dc2626"></span>
+      <span class="legend-label">Critical</span>
+      <span class="legend-count">0</span>
+      <span class="legend-pct">0%</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-dot" style="background:#ea580c"></span>
+      <span class="legend-label">High</span>
+      <span class="legend-count">1</span>
+      <span class="legend-pct">50%</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-dot" style="background:#ca8a04"></span>
+      <span class="legend-label">Medium</span>
+      <span class="legend-count">1</span>
+      <span class="legend-pct">50%</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-dot" style="background:#16a34a"></span>
+      <span class="legend-label">Low</span>
+      <span class="legend-count">0</span>
+      <span class="legend-pct">0%</span>
+    </div>
+  </div>
+</div>
+
+<!-- ====== EXECUTIVE SUMMARY ====== -->
+<div class="exec-card reveal">
+  <h2>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    Executive Summary
+  </h2>
+  <p>The property at Demo House, Tampa FL was inspected across 2 room(s). A total of 2 defect(s) were identified, resulting in a Property Health Score of 78/100 (FAIR). 1 high-priority item(s) should be addressed within 30 days. 1 medium-priority item(s) are recommended within 6 months. Estimated total repair costs range from $500 to $3,300. </p>
+</div>
+
+<!-- ====== PRIORITY ALERT ====== -->
+
+        <div class="priority-alert reveal">
+            <div class="priority-alert-pulse"></div>
+            <div class="priority-alert-content">
+                <h3>Priority Items Requiring Immediate Attention</h3>
+                <ul><li>
+                <span class="priority-sev" style="color:#ea580c">HIGH</span>
+                <span class="priority-desc">Water staining on ceiling tile with slight discoloration and bubbling paint</span>
+                <span class="priority-room">Kitchen</span>
+            </li></ul>
+            </div>
+        </div>
+
+<!-- ====== CLEAN ROOMS ====== -->
+
+
+<!-- ====== ROOM HEATMAP ====== -->
+<div class="section-title reveal">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  Room Heatmap
+</div>
+<div class="heatmap-grid" id="heatmapGrid">
+  <!-- Built by JS -->
+</div>
+
+<!-- ====== COST BREAKDOWN ====== -->
+
+<div class="cost-section reveal">
+  <div class="section-title" style="margin-bottom:4px">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+    Cost Breakdown by Category
+  </div>
+  <div class="cost-bars" id="costBars"></div>
+  <div class="cost-total">
+    <span class="cost-total-label">Estimated Total Range</span>
+    <span class="cost-total-value">$500 &mdash; $3,300</span>
+  </div>
+</div>
+
+
+<!-- ====== ACTION PLAN ====== -->
+
+<div class="action-section reveal">
+  <div class="section-title" style="margin-bottom:4px">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Recommended Action Plan
+  </div>
+  <table class="action-table">
+    <thead><tr><th>#</th><th>Action</th><th>Room</th><th>Timeline</th><th>Est. Cost</th></tr></thead>
+    <tbody><tr class="reveal">
+            <td><span class="priority-num" style="background:#ea580c">1</span></td>
+            <td class="action-text">Investigate source of moisture from above. Check for pipe leaks.</td>
+            <td>Kitchen</td>
+            <td><span class="timeline-badge" style="border-color:#ea580c;color:#ea580c">Within 30 days</span></td>
+            <td class="cost-cell">$300&mdash;$2,500</td>
+        </tr><tr class="reveal">
+            <td><span class="priority-num" style="background:#ca8a04">2</span></td>
+            <td class="action-text">Monitor for growth. If crack widens, consult structural engineer.</td>
+            <td>Kitchen</td>
+            <td><span class="timeline-badge" style="border-color:#ca8a04;color:#ca8a04">Within 6 months</span></td>
+            <td class="cost-cell">$200&mdash;$800</td>
+        </tr></tbody>
+  </table>
+</div>
+
+
+<!-- ====== DEFECT DETAILS ====== -->
+<div class="section-title reveal">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+  Defect Details
+</div>
+<div class="defect-grid">
+  
+        <div class="defect-card reveal" data-severity="medium">
+            <div class="defect-photo-wrap">
+                    <img src="data:image/jpeg;base64,bW9ja3Bob3RvCg==" alt="Defect #1" class="defect-photo" onclick="openLightbox(this.src)">
+                    <div class="defect-ribbon" style="background:#ca8a04">MEDIUM</div>
+                </div>
+            <div class="defect-body">
+                <div class="defect-header">
+                    <span class="sev-badge" style="background:#ca8a04">MEDIUM</span>
+                    <span class="defect-type">CRACK</span>
+                    <span class="defect-conf">85% confidence</span>
+                </div>
+                <div class="defect-meta"><span class="defect-room-tag">Kitchen</span> &bull; structural</div>
+                <p class="defect-desc">Horizontal crack in drywall, approximately 1/4 inch wide, running along ceiling junction</p>
+                <div class="defect-detail"><strong>Location:</strong> Upper wall near ceiling, left side</div>
+                <div class="defect-detail"><strong>Recommended:</strong> Monitor for growth. If crack widens, consult structural engineer.</div>
+                <div class="defect-cost">Est. Cost: $200 &mdash; $800</div>
+            </div>
+        </div>
+        <div class="defect-card reveal" data-severity="high">
+            <div class="defect-photo-wrap">
+                    <img src="data:image/jpeg;base64,bW9ja3Bob3RvCg==" alt="Defect #2" class="defect-photo" onclick="openLightbox(this.src)">
+                    <div class="defect-ribbon" style="background:#ea580c">HIGH</div>
+                </div>
+            <div class="defect-body">
+                <div class="defect-header">
+                    <span class="sev-badge" style="background:#ea580c">HIGH</span>
+                    <span class="defect-type">WATER DAMAGE</span>
+                    <span class="defect-conf">91% confidence</span>
+                </div>
+                <div class="defect-meta"><span class="defect-room-tag">Kitchen</span> &bull; plumbing</div>
+                <p class="defect-desc">Water staining on ceiling tile with slight discoloration and bubbling paint</p>
+                <div class="defect-detail"><strong>Location:</strong> Center ceiling area</div>
+                <div class="defect-detail"><strong>Recommended:</strong> Investigate source of moisture from above. Check for pipe leaks.</div>
+                <div class="defect-cost">Est. Cost: $300 &mdash; $2,500</div>
+            </div>
+        </div>
+</div>
+
+<!-- ====== PHOTO GALLERY ====== -->
+
+<div class="section-title reveal" style="margin-top:32px">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+  Photo Gallery
+</div>
+<div class="gallery-grid">
+  
+        <div class="gallery-item reveal" onclick="openLightbox(this.querySelector('img').src)">
+            <img src="data:image/jpeg;base64,bW9ja3Bob3RvCg==" alt="Kitchen" loading="lazy">
+            <div class="gallery-overlay">
+                <span class="gallery-room">Kitchen</span>
+                <span class="gallery-time"></span>
+            </div>
+        </div>
+</div>
+
+
+<!-- ====== DISCLAIMER ====== -->
+<div class="disclaimer reveal">
+  <strong>Disclaimer:</strong> This report was generated by ClearEye AI and is intended as a preliminary assessment.
+  AI analysis may not detect all defects and should not replace a licensed professional inspection.
+  Cost estimates are approximate and based on national averages. Consult licensed contractors for accurate quotes.
+  Confidence scores reflect the AI model's certainty in each finding.
+</div>
+
+<!-- ====== FOOTER ====== -->
+<div class="footer">
+  <div class="footer-brand">Clear<span>Eye</span></div>
+  AI-Powered Home Inspection<br>
+  Report generated April 17, 2026 at 07:40 PM<br>
+  &copy; 2026 ClearEye. All rights reserved.
+</div>
+
+</div><!-- /container -->
+
+<!-- ====== LIGHTBOX ====== -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </div>
+  <img id="lightboxImg" src="" alt="Enlarged photo">
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---- Config ---- */
+  const HEALTH_SCORE = 78;
+  const SCORE_COLOR = '#ca8a04';
+  const DONUT_DATA = [{"severity": "high", "count": 1, "pct": 50.0, "offset": 0, "color": "#ea580c"}, {"severity": "medium", "count": 1, "pct": 50.0, "offset": 50.0, "color": "#ca8a04"}];
+  const COST_DATA = {"structural": 500.0, "plumbing": 1400.0};
+  const ROOM_DATA = [{"name": "Kitchen", "defects": 2, "photos": 1, "severity": "high"}, {"name": "Bathroom", "defects": 0, "photos": 0, "severity": "clean"}];
+
+  /* ---- Particle mesh in header ---- */
+  const canvas = document.getElementById('particleCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let W, H;
+
+    function resize() {
+      const hdr = canvas.parentElement;
+      W = canvas.width = hdr.offsetWidth;
+      H = canvas.height = hdr.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function createParticles() {
+      particles = [];
+      const count = Math.min(50, Math.floor(W * H / 8000));
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          r: Math.random() * 1.5 + 0.5,
+        });
+      }
+    }
+    createParticles();
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.fill();
+        // Draw lines to nearby particles
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j];
+          const dx = p.x - q.x, dy = p.y - q.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = `rgba(255,255,255,${0.08 * (1 - dist / 120)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+  }
+
+  /* ---- SVG Arc Gauge animation ---- */
+  const arcPath = document.getElementById('gaugeArc');
+  const gaugeDot = document.getElementById('gaugeDot');
+  if (arcPath) {
+    // Total arc length of the background track (270 degrees, radius 85)
+    const totalLen = arcPath.getTotalLength();
+    const fillLen = (HEALTH_SCORE / 100) * totalLen;
+
+    // Animate after short delay
+    setTimeout(() => {
+      arcPath.style.transition = 'stroke-dasharray 1.8s cubic-bezier(.22,1,.36,1)';
+      arcPath.setAttribute('stroke-dasharray', fillLen + ' ' + totalLen);
+
+      // Animate the dot to the end of the filled arc
+      if (gaugeDot && fillLen > 0) {
+        const pt = arcPath.getPointAtLength(fillLen);
+        gaugeDot.style.transition = 'cx 1.8s cubic-bezier(.22,1,.36,1), cy 1.8s cubic-bezier(.22,1,.36,1)';
+        gaugeDot.setAttribute('cx', pt.x);
+        gaugeDot.setAttribute('cy', pt.y);
+      }
+    }, 400);
+  }
+
+  /* ---- Score counter ---- */
+  function animateCounter(el, target, prefix, duration) {
+    prefix = prefix || '';
+    duration = duration || 1500;
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      // Ease out cubic
+      const ease = 1 - Math.pow(1 - t, 3);
+      const val = Math.round(ease * target);
+      el.textContent = prefix + val.toLocaleString();
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Health score counter
+  const scoreEl = document.getElementById('scoreCounter');
+  if (scoreEl) {
+    setTimeout(() => animateCounter(scoreEl, HEALTH_SCORE, '', 1800), 500);
+  }
+
+  /* ---- Scroll reveal + counter animation via IntersectionObserver ---- */
+  const reveals = document.querySelectorAll('.reveal');
+  const counters = document.querySelectorAll('.stat-value[data-count]');
+  const counterDone = new Set();
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !counterDone.has(entry.target)) {
+        counterDone.add(entry.target);
+        const target = parseInt(entry.target.dataset.count, 10);
+        const prefix = entry.target.dataset.prefix || '';
+        animateCounter(entry.target, target, prefix, 1200);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  counters.forEach(el => counterObserver.observe(el));
+
+  /* ---- Donut chart ---- */
+  const donutSvg = document.getElementById('donutChart');
+  if (donutSvg && DONUT_DATA.length > 0) {
+    const R = 70, C = 2 * Math.PI * R;
+    let delay = 600;
+    DONUT_DATA.forEach((seg, i) => {
+      const len = (seg.pct / 100) * C;
+      const offset = C - (seg.offset / 100) * C;
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', '100');
+      circle.setAttribute('cy', '100');
+      circle.setAttribute('r', String(R));
+      circle.setAttribute('fill', 'none');
+      circle.setAttribute('stroke', seg.color);
+      circle.setAttribute('stroke-width', '28');
+      circle.setAttribute('stroke-linecap', 'butt');
+      circle.setAttribute('stroke-dasharray', '0 ' + C);
+      circle.setAttribute('stroke-dashoffset', String(offset));
+      circle.style.transform = 'rotate(-90deg)';
+      circle.style.transformOrigin = '100px 100px';
+      circle.style.transition = `stroke-dasharray 0.8s cubic-bezier(.22,1,.36,1) ${delay}ms`;
+      // Insert before center text
+      const texts = donutSvg.querySelectorAll('text');
+      donutSvg.insertBefore(circle, texts[0]);
+      // Trigger animation
+      setTimeout(() => {
+        circle.setAttribute('stroke-dasharray', len + ' ' + C);
+      }, 50);
+      delay += 200;
+    });
+  }
+
+  /* ---- Room Heatmap ---- */
+  const heatmapGrid = document.getElementById('heatmapGrid');
+  if (heatmapGrid && ROOM_DATA.length > 0) {
+    const sevLabels = { clean: 'No Issues', low: 'Minor Issues', medium: 'Moderate Issues', high: 'Significant Issues', critical: 'Critical Issues' };
+    ROOM_DATA.forEach((room, i) => {
+      const cell = document.createElement('div');
+      cell.className = `heatmap-cell heatmap-cell-${room.severity} reveal`;
+      cell.style.transitionDelay = `${i * 0.06}s`;
+      cell.innerHTML = `
+        <div class="heatmap-indicator"></div>
+        <div class="heatmap-name">${room.name}</div>
+        <div class="heatmap-stat">${room.defects} defect${room.defects !== 1 ? 's' : ''} &bull; ${room.photos} photo${room.photos !== 1 ? 's' : ''}</div>
+        <div class="heatmap-tooltip">${room.name}: ${sevLabels[room.severity] || room.severity}</div>
+      `;
+      heatmapGrid.appendChild(cell);
+      // Observe for scroll reveal
+      observer.observe(cell);
+    });
+  }
+
+  /* ---- Cost Bars ---- */
+  const costBars = document.getElementById('costBars');
+  if (costBars && Object.keys(COST_DATA).length > 0) {
+    const maxVal = Math.max(...Object.values(COST_DATA));
+    const colors = {
+      structural:'#3b82f6', electrical:'#eab308', mechanical:'#8b5cf6',
+      plumbing:'#06b6d4', exterior:'#f97316', roofing:'#ec4899',
+      insulation:'#14b8a6', interior:'#6366f1', other:'#64748b',
+      water_damage:'#0ea5e9', hvac:'#a855f7', safety:'#ef4444'
+    };
+    const sorted = Object.entries(COST_DATA).sort((a,b) => b[1] - a[1]);
+    sorted.forEach(([type, val], i) => {
+      const pct = maxVal > 0 ? (val / maxVal * 100) : 0;
+      const color = colors[type] || '#64748b';
+      const row = document.createElement('div');
+      row.className = 'cost-row';
+      row.innerHTML = `
+        <span class="cost-label">${type.replace(/_/g, ' ')}</span>
+        <div class="cost-bar-track">
+          <div class="cost-bar-fill" style="background:linear-gradient(90deg,${color},${color}cc)" data-width="${pct}%"></div>
+          <span class="cost-amount">${Math.round(val).toLocaleString()}</span>
+        </div>
+      `;
+      costBars.appendChild(row);
+    });
+
+    // Animate bars on scroll
+    const costObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.cost-bar-fill').forEach((bar, i) => {
+            setTimeout(() => {
+              bar.style.width = bar.dataset.width;
+            }, i * 120);
+          });
+          costObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    costObs.observe(costBars);
+  }
+
+  /* ---- Dark mode ---- */
+  const root = document.documentElement;
+  const savedTheme = localStorage.getItem('spexTheme') || 'light';
+  applyTheme(savedTheme);
+
+  window.toggleTheme = function() {
+    const current = root.getAttribute('data-theme') || 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem('spexTheme', next);
+  };
+
+  function applyTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+    if (label) label.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+  }
+
+  /* ---- Share report ---- */
+  window.shareReport = function() {
+    const url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => showToast()).catch(() => fallbackShare(url));
+    } else {
+      fallbackShare(url);
+    }
+  };
+
+  function fallbackShare(url) {
+    const ta = document.createElement('textarea');
+    ta.value = url;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showToast(); } catch(e) { prompt('Copy this link:', url); }
+    document.body.removeChild(ta);
+  }
+
+  function showToast() {
+    const toast = document.getElementById('shareToast');
+    if (!toast) return;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  /* ---- Lightbox ---- */
+  window.openLightbox = function(src) {
+    const lb = document.getElementById('lightbox');
+    document.getElementById('lightboxImg').src = src;
+    lb.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+  window.closeLightbox = function() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+})();
+</script>
+</body>
+</html>
