@@ -38,26 +38,45 @@
   color:#f1f5f9;
 }
 [data-theme="dark"] .stat-label,
-[data-theme="dark"] .gauge-label,
-[data-theme="dark"] .legend-pct,
+[data-theme="dark"] .gauge-label{
+  color:#cbd5e1;
+}
+[data-theme="dark"] .legend-pct{
+  color:#94a3b8;
+}
 [data-theme="dark"] .defect-meta,
 [data-theme="dark"] .defect-conf{
   color:#94a3b8;
 }
 [data-theme="dark"] .exec-card p,
 [data-theme="dark"] .defect-desc{
-  color:#cbd5e1;
+  color:#e2e8f0;
 }
 [data-theme="dark"] .defect-detail{
-  color:#94a3b8;
+  color:#cbd5e1;
 }
 [data-theme="dark"] .defect-detail strong,
 [data-theme="dark"] .defect-type,
 [data-theme="dark"] .legend-label,
 [data-theme="dark"] .section-title,
 [data-theme="dark"] .heatmap-name{
-  color:#f1f5f9;
+  color:#f8fafc;
 }
+/* Fix donut center text in dark mode */
+[data-theme="dark"] .donut-center-text{fill:#f1f5f9}
+[data-theme="dark"] .donut-center-sub{fill:#cbd5e1}
+/* Fix FAIR pill in dark mode */
+[data-theme="dark"] .condition-pill{
+  color:#fde68a;
+  border-color:rgba(253,230,138,0.3);
+}
+[data-theme="dark"] .condition-dot{
+  background:#fde68a;
+  box-shadow:0 0 8px #fde68a;
+}
+/* Fix header meta + cost amount */
+[data-theme="dark"] .header-meta{color:#cbd5e1}
+[data-theme="dark"] .cost-amount{color:#cbd5e1}
 [data-theme="dark"] .action-table thead th{
   color:#94a3b8;
   border-bottom-color:#334155;
