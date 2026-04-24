@@ -3,69 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SpexInspect | AI Home Inspection Reports</title>
-  <meta name="description" content="SpexInspect turns Meta Ray-Ban walkthrough photos, drone thermal scans, sewer scope footage, and HVAC nameplates into InterNACHI-ready inspection reports." />
+  <title>ClearEye | Home Inspection Prototype</title>
+  <meta name="description" content="Clickable ClearEye Home Inspection prototype for AI-assisted InterNACHI home inspections." />
   <style>
     :root {
-      --bg: #020617;
-      --panel: rgba(15, 23, 42, 0.78);
-      --panel-2: rgba(15, 35, 68, 0.74);
-      --line: rgba(148, 163, 184, 0.18);
-      --line-strong: rgba(56, 189, 248, 0.34);
+      --bg: #07111f;
+      --rail: #0b1220;
+      --surface: #101b2d;
+      --surface-2: #13233a;
+      --surface-3: #172b46;
+      --line: rgba(148, 163, 184, .18);
+      --line-strong: rgba(56, 189, 248, .38);
       --text: #f8fafc;
       --muted: #94a3b8;
       --soft: #cbd5e1;
       --sky: #38bdf8;
       --blue: #2563eb;
-      --indigo: #6366f1;
       --green: #22c55e;
       --amber: #f59e0b;
       --red: #ef4444;
-      --radius: 18px;
-      --shadow: 0 30px 80px rgba(0, 0, 0, 0.32);
+      --violet: #8b5cf6;
+      --radius: 12px;
+      --shadow: 0 18px 44px rgba(0,0,0,.28);
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
+      background: var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 252px minmax(0, 1fr);
       background:
-        radial-gradient(circle at 12% 10%, rgba(56, 189, 248, 0.16), transparent 30%),
-        radial-gradient(circle at 88% 16%, rgba(99, 102, 241, 0.18), transparent 32%),
-        linear-gradient(180deg, #020617 0%, #071526 52%, #020617 100%);
-      overflow-x: hidden;
+        radial-gradient(circle at 20% -10%, rgba(56, 189, 248, .12), transparent 30%),
+        linear-gradient(180deg, #07111f, #050914);
     }
 
-    a { color: inherit; text-decoration: none; }
-    button { font: inherit; }
-
-    .page {
-      width: min(1220px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 18px 0 44px;
-    }
-
-    .nav {
+    .sidebar {
+      min-width: 0;
+      border-right: 1px solid var(--line);
+      background: rgba(8, 13, 24, .94);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(2, 6, 23, 0.62);
-      backdrop-filter: blur(18px);
-      box-shadow: 0 12px 34px rgba(0,0,0,.18);
+      flex-direction: column;
+      padding: 16px;
+      gap: 16px;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      min-width: 236px;
+      min-height: 54px;
     }
 
     .brand-mark {
@@ -74,223 +72,177 @@
       border-radius: 12px;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(56, 189, 248, 0.38);
-      background:
-        radial-gradient(circle at 28% 22%, rgba(255,255,255,.32), transparent 18%),
-        linear-gradient(135deg, rgba(14,165,233,.22), rgba(37,99,235,.22));
+      border: 1px solid rgba(56, 189, 248, .42);
       color: #7dd3fc;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+      background: linear-gradient(135deg, rgba(14,165,233,.22), rgba(37,99,235,.2));
     }
 
-    .brand-mark svg {
-      width: 24px;
-      height: 24px;
-      display: block;
+    .brand-mark svg { width: 24px; height: 24px; }
+    .brand strong { display: block; font-size: 18px; letter-spacing: -.03em; }
+    .brand span { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+
+    .nav-group { display: grid; gap: 6px; }
+    .nav-label {
+      margin: 7px 8px 4px;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
     }
 
-    .brand strong { display: block; font-size: 18px; letter-spacing: -0.03em; }
-    .brand span { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
-
-    .nav-links {
+    .nav-btn {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--soft);
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: clamp(16px, 3vw, 38px);
-      color: var(--soft);
+      gap: 10px;
+      padding: 0 10px;
+      text-align: left;
+      font-weight: 700;
       font-size: 14px;
     }
 
-    .nav-links a:hover { color: var(--sky); }
-
-    .button {
-      min-height: 44px;
-      padding: 0 18px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
+    .nav-btn:hover { background: rgba(255,255,255,.05); }
+    .nav-btn.active {
+      background: rgba(14, 165, 233, .13);
+      border-color: rgba(56, 189, 248, .28);
       color: white;
-      font-weight: 750;
-      cursor: pointer;
-      transition: transform .16s ease, opacity .16s ease, border-color .16s ease;
     }
+    .nav-icon { width: 22px; text-align: center; color: var(--sky); }
 
-    .button:hover { transform: translateY(-1px); }
-    .button-primary {
-      background: linear-gradient(135deg, #0ea5e9, #2563eb 55%, #6366f1);
-      box-shadow: 0 16px 36px rgba(14, 165, 233, 0.22);
-    }
-    .button-secondary {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(148, 163, 184, 0.26);
-      color: var(--soft);
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 0.92fr) minmax(560px, 1.08fr);
-      gap: 34px;
-      align-items: center;
-      padding: 54px 0 28px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 8px 13px;
-      border: 1px solid rgba(56, 189, 248, 0.28);
-      border-radius: 999px;
-      background: rgba(14, 165, 233, 0.09);
-      color: #7dd3fc;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    h1 {
-      margin: 20px 0 18px;
-      font-size: clamp(44px, 6vw, 76px);
-      line-height: 0.98;
-      letter-spacing: -0.055em;
-      max-width: 650px;
-    }
-
-    .gradient-text {
-      color: transparent;
-      background: linear-gradient(120deg, #38bdf8, #60a5fa 48%, #a5b4fc);
-      -webkit-background-clip: text;
-      background-clip: text;
-    }
-
-    .hero-copy p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.72;
-      max-width: 590px;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .proof-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 24px;
-      max-width: 610px;
-    }
-
-    .proof {
-      border: 1px solid var(--line);
+    .sidebar-card {
+      margin-top: auto;
+      border: 1px solid rgba(56, 189, 248, .22);
       border-radius: 14px;
-      padding: 14px 12px;
-      background: rgba(255, 255, 255, 0.045);
+      background: rgba(14, 165, 233, .08);
+      padding: 13px;
     }
-    .proof strong { display: block; font-size: 25px; letter-spacing: -0.04em; }
-    .proof span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .sidebar-card strong { display: block; font-size: 13px; }
+    .sidebar-card p { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
 
-    .demo-card {
-      border: 1px solid rgba(56, 189, 248, 0.24);
-      border-radius: 24px;
-      overflow: hidden;
-      background: rgba(5, 15, 30, 0.9);
-      box-shadow: var(--shadow);
+    .main {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: 68px minmax(0, 1fr);
     }
 
-    .demo-header,
-    .demo-footer {
+    .topbar {
+      border-bottom: 1px solid var(--line);
+      background: rgba(9, 16, 29, .82);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
-      padding: 16px 18px;
-      background: rgba(0, 0, 0, 0.32);
-      border-bottom: 1px solid rgba(255,255,255,.07);
+      gap: 16px;
+      padding: 0 20px;
     }
 
-    .demo-footer { border-top: 1px solid rgba(255,255,255,.07); border-bottom: 0; }
-    .label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
-    .demo-header h2 { margin: 0; font-size: 18px; letter-spacing: -0.03em; }
+    .crumb strong { display: block; font-size: 16px; letter-spacing: -.02em; }
+    .crumb span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
 
-    .tag {
+    .btn {
+      min-height: 38px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      padding: 0 13px;
+      color: var(--text);
+      background: rgba(255,255,255,.06);
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
+      justify-content: center;
+      gap: 8px;
       font-weight: 800;
-      white-space: nowrap;
-      border: 1px solid currentColor;
-      background: rgba(255,255,255,.05);
+      font-size: 13px;
     }
-    .tag-green { color: #86efac; }
-    .tag-blue { color: #7dd3fc; }
-    .tag-amber { color: #fcd34d; }
-    .tag-red { color: #fca5a5; }
-    .tag-violet { color: #c4b5fd; }
+    .btn.primary {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      box-shadow: 0 12px 26px rgba(14,165,233,.18);
+    }
+    .btn.ghost { border-color: var(--line); color: var(--soft); }
+    .btn:disabled { opacity: .58; cursor: not-allowed; }
 
-    .live-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--green);
-      box-shadow: 0 0 12px var(--green);
+    .content {
+      min-height: 0;
+      overflow: auto;
+      padding: 18px;
     }
 
-    .demo-grid {
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .grid {
       display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
+      grid-template-columns: minmax(360px, .82fr) minmax(0, 1.18fr);
+      gap: 14px;
+      align-items: start;
     }
 
-    .feed {
-      padding: 15px;
-      border-right: 1px solid rgba(255,255,255,.07);
-      background: rgba(0,0,0,.18);
-    }
-
-    .photo-zone {
-      position: relative;
-      min-height: 220px;
-      border-radius: 16px;
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(16, 27, 45, .86);
+      box-shadow: var(--shadow);
       overflow: hidden;
-      border: 1px dashed rgba(56, 189, 248, 0.32);
+    }
+
+    .panel-head {
+      min-height: 54px;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .panel-head h2, .panel-head h3 { margin: 0; font-size: 16px; letter-spacing: -.025em; }
+    .panel-head p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+    .panel-body { padding: 14px; }
+
+    .status-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: rgba(255,255,255,.04);
+      padding: 12px;
+      min-height: 82px;
+    }
+    .metric strong { display: block; font-size: 24px; letter-spacing: -.04em; }
+    .metric span { display: block; color: var(--muted); font-size: 12px; margin-top: 5px; line-height: 1.35; }
+
+    .feed-card {
+      min-height: 334px;
+      border: 1px dashed rgba(56,189,248,.32);
+      border-radius: 13px;
       background:
-        linear-gradient(rgba(15, 23, 42, .15), rgba(15, 23, 42, .55)),
-        linear-gradient(135deg, #475569 0 15%, #1e293b 15% 35%, #334155 35% 55%, #0f172a 55% 100%);
+        linear-gradient(rgba(15,23,42,.18), rgba(15,23,42,.62)),
+        linear-gradient(135deg, #475569 0 18%, #1e293b 18% 42%, #334155 42% 62%, #0f172a 62% 100%);
       display: grid;
       place-items: center;
-      text-align: center;
-      color: #dbeafe;
+      position: relative;
+      overflow: hidden;
     }
-
     .cabinet {
-      width: min(84%, 260px);
-      aspect-ratio: 1.5;
+      width: min(78%, 330px);
+      aspect-ratio: 1.45;
       border-radius: 14px;
       background:
-        radial-gradient(circle at 34% 70%, rgba(245, 158, 11, .52), transparent 12%),
+        radial-gradient(circle at 34% 72%, rgba(245,158,11,.56), transparent 12%),
         linear-gradient(90deg, #6b4f3a 0 50%, #78583f 50% 100%);
-      border: 1px solid rgba(255,255,255,.16);
-      box-shadow: inset 0 0 0 2px rgba(0,0,0,.18), 0 20px 40px rgba(0,0,0,.3);
+      border: 1px solid rgba(255,255,255,.18);
       position: relative;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.16), 0 20px 40px rgba(0,0,0,.32);
     }
-    .cabinet::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background: rgba(0,0,0,.26);
-    }
+    .cabinet::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.28); }
     .cabinet::after {
       content: "Moisture staining";
       position: absolute;
@@ -298,157 +250,269 @@
       bottom: 14px;
       padding: 6px 9px;
       border-radius: 999px;
-      background: rgba(2, 6, 23, .82);
-      border: 1px solid rgba(245, 158, 11, .48);
+      background: rgba(2,6,23,.84);
+      border: 1px solid rgba(245,158,11,.52);
       color: #fde68a;
       font-size: 11px;
       font-weight: 900;
     }
-
     .scan-line {
       position: absolute;
       left: 0;
       right: 0;
       top: 12%;
       height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(125, 211, 252, .9), transparent);
-      animation: scan 2s ease-in-out infinite alternate;
       opacity: 0;
+      background: linear-gradient(90deg, transparent, rgba(125,211,252,.94), transparent);
+      animation: scan 1.6s ease-in-out infinite alternate;
     }
-    .is-scanning .scan-line { opacity: 1; }
-    @keyframes scan { from { top: 12%; } to { top: 88%; } }
+    .scanning .scan-line { opacity: 1; }
+    @keyframes scan { from { top: 10%; } to { top: 90%; } }
 
-    .nameplate,
-    .coach-note,
-    .progress {
-      display: none;
+    .toolbar {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
       margin-top: 12px;
-      border: 1px solid rgba(99, 102, 241, 0.24);
-      border-radius: 14px;
-      background: rgba(99, 102, 241, 0.09);
+    }
+
+    .list { display: grid; gap: 9px; }
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: rgba(255,255,255,.045);
       padding: 12px;
-    }
-    .nameplate.is-visible,
-    .coach-note.is-visible,
-    .progress.is-visible { display: block; }
-
-    .kv { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; margin-top: 6px; }
-    .kv strong { color: var(--text); text-align: right; }
-
-    .findings { padding: 15px; }
-    .findings-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
-    .score {
-      width: 70px;
-      height: 70px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      border: 8px solid rgba(255,255,255,.08);
-      background: radial-gradient(circle, rgba(56,189,248,.14), transparent 62%);
-      font-weight: 900;
-      font-size: 24px;
-    }
-
-    .finding {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.045);
-      margin-top: 8px;
     }
-    .finding-thumb {
-      flex: 0 0 48px;
-      width: 48px;
-      height: 48px;
+    .thumb {
+      flex: 0 0 50px;
+      width: 50px;
+      height: 50px;
       border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.12);
       background: linear-gradient(135deg, #334155, #0f172a);
     }
-    .finding strong { display: block; font-size: 13px; }
-    .finding span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.4; }
-
-    .section {
-      padding: 32px 0;
+    .thumb.photo-sink {
+      background:
+        radial-gradient(circle at 34% 72%, rgba(245,158,11,.62), transparent 16%),
+        linear-gradient(90deg, #6b4f3a 0 50%, #78583f 50% 100%);
     }
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 16px;
+    .thumb.photo-ceiling {
+      background:
+        radial-gradient(circle at 65% 34%, rgba(120,53,15,.74), transparent 18%),
+        linear-gradient(135deg, #cbd5e1, #64748b);
     }
-    .section h2 { margin: 0 0 8px; font-size: 30px; letter-spacing: -0.045em; }
-    .section p { margin: 0; }
+    .thumb.photo-outlet {
+      background:
+        radial-gradient(circle at 50% 48%, #e2e8f0 0 18%, transparent 19%),
+        linear-gradient(135deg, #475569, #111827);
+    }
+    .thumb.photo-roof {
+      background:
+        radial-gradient(circle at 70% 34%, rgba(239,68,68,.78), transparent 14%),
+        radial-gradient(circle at 42% 56%, rgba(245,158,11,.72), transparent 16%),
+        linear-gradient(135deg, #312e81, #0f172a);
+    }
+    .item-main { min-width: 0; flex: 1; }
+    .item-main strong { display: block; font-size: 13px; }
+    .item-main span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.4; }
 
-    .cards {
+    .risk-stack {
+      flex: 0 0 auto;
+      display: grid;
+      gap: 5px;
+      justify-items: end;
+    }
+
+    .cost {
+      color: #fcd34d;
+      font-size: 12px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 25px;
+      padding: 0 9px;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+      background: rgba(255,255,255,.05);
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .green { color: #86efac; }
+    .blue { color: #7dd3fc; }
+    .amber { color: #fcd34d; }
+    .red { color: #fca5a5; }
+    .violet { color: #c4b5fd; }
+
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tab {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      color: var(--soft);
+      padding: 0 12px;
+      font-weight: 800;
+      font-size: 12px;
+    }
+    .tab.active { background: rgba(14,165,233,.14); border-color: var(--line-strong); color: white; }
+
+    .module-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      gap: 12px;
     }
-    .card {
+    .module {
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: rgba(255,255,255,.045);
-      padding: 18px;
-      min-height: 190px;
+      padding: 14px;
+      min-height: 210px;
     }
-    .card h3 { margin: 0 0 10px; font-size: 18px; letter-spacing: -0.03em; }
-    .card p { color: var(--muted); font-size: 14px; line-height: 1.62; }
-    .card ul { margin: 12px 0 0; padding-left: 18px; color: var(--soft); font-size: 13px; line-height: 1.7; }
+    .module h3 { margin: 0 0 8px; font-size: 15px; letter-spacing: -.02em; }
+    .module p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .kv { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .kv strong { color: var(--text); text-align: right; }
 
-    .report-panel {
+    .cost-bars {
       display: grid;
-      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .cost-row {
+      display: grid;
+      grid-template-columns: 92px 1fr 82px;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .bar-track {
+      height: 24px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255,255,255,.07);
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--amber), var(--red));
+    }
+
+    .report-layout {
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
       gap: 14px;
     }
-    .panel {
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: var(--panel);
-      padding: 18px;
-    }
-    .component-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .chip {
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 11px;
-      padding: 9px 10px;
-      color: var(--soft);
-      background: rgba(255,255,255,.04);
-      font-size: 12px;
-    }
-
-    .report-header {
-      border: 1px solid rgba(56, 189, 248, .24);
-      background: rgba(14, 165, 233, .08);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-    .report-header strong { display: block; font-size: 15px; }
-    .report-header span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
-
-    .footer-cta {
-      margin-top: 34px;
-      border-radius: 24px;
-      padding: 24px;
-      border: 1px solid rgba(56, 189, 248, .24);
-      background:
-        radial-gradient(circle at 90% 20%, rgba(99,102,241,.22), transparent 28%),
-        rgba(14, 165, 233, .08);
+    .component-list { display: grid; gap: 7px; }
+    .component {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255,255,255,.04);
+      padding: 9px 10px;
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .paper {
+      background: #f8fafc;
+      color: #0f172a;
+      border-radius: 12px;
+      min-height: 650px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .paper h2 { margin: 0; font-size: 22px; letter-spacing: -.03em; }
+    .paper .muted { color: #64748b; font-size: 12px; margin-top: 5px; }
+    .paper-section {
+      margin-top: 18px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 14px;
+    }
+    .paper-section h3 { margin: 0 0 10px; font-size: 15px; }
+    .paper-finding {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      gap: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .paper-photo {
+      height: 70px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #94a3b8, #334155);
+    }
+    .paper-photo.sink {
+      background:
+        radial-gradient(circle at 34% 72%, rgba(245,158,11,.62), transparent 16%),
+        linear-gradient(90deg, #6b4f3a 0 50%, #78583f 50% 100%);
+    }
+    .paper-photo.ceiling {
+      background:
+        radial-gradient(circle at 65% 34%, rgba(120,53,15,.74), transparent 18%),
+        linear-gradient(135deg, #cbd5e1, #64748b);
     }
 
+    .score-wrap {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 14px;
+    }
+    .score-card {
+      min-height: 300px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle, rgba(34,197,94,.18), transparent 55%),
+        rgba(255,255,255,.04);
+    }
+    .score-number {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 12px solid rgba(34,197,94,.42);
+      font-size: 52px;
+      font-weight: 950;
+      letter-spacing: -.06em;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      max-width: 380px;
+      border: 1px solid rgba(56,189,248,.3);
+      border-radius: 12px;
+      background: rgba(8, 13, 24, .96);
+      color: var(--soft);
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      font-size: 13px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
     .sr-only {
       position: absolute;
       width: 1px;
@@ -461,37 +525,30 @@
       border: 0;
     }
 
-    @media (max-width: 1040px) {
-      .hero,
-      .report-panel { grid-template-columns: 1fr; }
-      .demo-card { max-width: 860px; }
-      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 1080px) {
+      body { overflow: auto; }
+      .app { height: auto; min-height: 100vh; grid-template-columns: 1fr; }
+      .sidebar { position: sticky; top: 0; z-index: 5; }
+      .nav-group { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .sidebar-card { display: none; }
+      .grid, .report-layout, .score-wrap { grid-template-columns: 1fr; }
+      .module-grid, .status-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
-    @media (max-width: 720px) {
-      .page { width: min(100% - 28px, 1220px); }
-      .nav { flex-wrap: wrap; }
-      .brand { min-width: 0; }
-      .nav-links { order: 3; width: 100%; justify-content: space-between; overflow-x: auto; padding-top: 4px; }
-      .hero { padding-top: 34px; }
-      h1 { font-size: 42px; letter-spacing: -0.04em; }
-      .proof-grid,
-      .demo-grid,
-      .cards,
-      .component-grid { grid-template-columns: 1fr; }
-      .feed { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.07); }
-      .demo-header,
-      .demo-footer,
-      .section-head,
-      .footer-cta { align-items: flex-start; flex-direction: column; }
-      .button { width: 100%; }
+    @media (max-width: 680px) {
+      .content { padding: 12px; }
+      .topbar { min-height: 88px; align-items: flex-start; flex-direction: column; padding: 12px; }
+      .top-actions, .toolbar { width: 100%; }
+      .btn { flex: 1; }
+      .nav-group, .module-grid, .status-row { grid-template-columns: 1fr; }
+      .paper { padding: 16px; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header class="nav" aria-label="Main navigation">
-      <a class="brand" href="#top" id="top">
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
         <span class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M4 10.5 12 4l8 6.5v8.25A1.25 1.25 0 0 1 18.75 20H5.25A1.25 1.25 0 0 1 4 18.75V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
@@ -501,347 +558,430 @@
           </svg>
         </span>
         <span>
-          <strong>SpexInspect</strong>
-          <span>AI home inspection reports</span>
+          <strong>ClearEye</strong>
+          <span>Home Inspection</span>
         </span>
-      </a>
-      <nav class="nav-links">
-        <a href="#workflow">Workflow</a>
-        <a href="#equipment">Equipment</a>
-        <a href="#report">Report</a>
-        <a href="#home-health">Home Health</a>
-      </nav>
-      <a class="button button-primary" href="#demo">Run Demo</a>
-    </header>
+      </div>
 
-    <main>
-      <section class="hero" id="demo">
-        <div class="hero-copy">
-          <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span> InterNACHI-certified inspector</div>
-          <h1>
-            Walk the house.
-            <span class="gradient-text">AI writes the report.</span>
-          </h1>
-          <p>
-            Inspector wears Meta Ray-Ban glasses, snaps photos during the walkthrough, and SpexInspect analyzes defects in real time. Type <strong>!inspect stop</strong> and the full InterNACHI-ready PDF is generated automatically, no forms to fill.
-          </p>
-          <div class="hero-actions">
-            <button class="button button-primary" type="button" id="scanButton">Simulate Photo Capture</button>
-            <a class="button button-secondary" href="#report">View Report Output</a>
-          </div>
-          <div class="proof-grid" aria-label="SpexInspect value proof">
-            <div class="proof"><strong>10</strong><span>InterNACHI required components</span></div>
-            <div class="proof"><strong>0</strong><span>forms to fill out after the job</span></div>
-            <div class="proof"><strong>&lt;3m</strong><span>report generated before the driveway</span></div>
-            <div class="proof"><strong>$4.99</strong><span>future homeowner scan price point</span></div>
-          </div>
+      <div class="nav-group" aria-label="Product areas">
+        <div class="nav-label">Workspace</div>
+        <button class="nav-btn active" type="button" data-view="inspection"><span class="nav-icon">01</span>Live Inspection</button>
+        <button class="nav-btn" type="button" data-view="findings"><span class="nav-icon">02</span>Findings Queue</button>
+        <button class="nav-btn" type="button" data-view="equipment"><span class="nav-icon">03</span>Equipment AI</button>
+        <button class="nav-btn" type="button" data-view="report"><span class="nav-icon">04</span>Report Builder</button>
+        <button class="nav-btn" type="button" data-view="homehealth"><span class="nav-icon">05</span>Home Health</button>
+        <button class="nav-btn" type="button" data-view="settings"><span class="nav-icon">06</span>SOP Settings</button>
+      </div>
+
+      <div class="sidebar-card">
+        <strong>InterNACHI-certified inspector</strong>
+        <p>Demo goal: report ready before leaving the driveway, with no hours of typing after the job.</p>
+      </div>
+    </aside>
+
+    <section class="main">
+      <header class="topbar">
+        <div class="crumb">
+          <strong id="viewTitle">Live Inspection</strong>
+          <span id="viewSubtitle">247 Oakwood Drive - Charlotte, NC - Meta Ray-Ban stream active</span>
         </div>
+        <div class="top-actions">
+          <span class="pill green">Live AI</span>
+          <button class="btn ghost" type="button" id="stopCommand">!inspect stop</button>
+          <button class="btn primary" type="button" id="captureTop">Capture Photo</button>
+        </div>
+      </header>
 
-        <section class="demo-card" aria-label="Live inspection workflow">
-          <div class="demo-header">
-            <div>
-              <span class="label">Active Inspection</span>
-              <h2>247 Oakwood Drive - Charlotte, NC</h2>
-            </div>
-            <div>
-              <span class="tag tag-blue">Kitchen</span>
-              <span class="tag tag-green"><span class="live-dot"></span> Live AI</span>
-            </div>
+      <main class="content">
+        <section class="view active" id="view-inspection">
+          <div class="status-row">
+            <div class="metric"><strong>7</strong><span>photos captured from glasses</span></div>
+            <div class="metric"><strong>3</strong><span>open deficiencies needing review</span></div>
+            <div class="metric"><strong>10/10</strong><span>InterNACHI components tracked</span></div>
+            <div class="metric"><strong>71</strong><span>draft Home Health Score</span></div>
           </div>
 
-          <div class="demo-grid">
-            <div class="feed">
-              <span class="label">Meta Ray-Ban feed</span>
-              <div class="photo-zone" id="photoZone" role="img" aria-label="Mock inspection photo showing cabinet moisture staining">
-                <div class="scan-line" aria-hidden="true"></div>
-                <div class="cabinet" aria-hidden="true"></div>
-              </div>
-              <div class="nameplate" id="nameplateCard">
-                <strong>HVAC Nameplate Decoded</strong>
-                <div class="kv"><span>Model / serial</span><strong>24ABC648A003 / 1814E12345</strong></div>
-                <div class="kv"><span>Manufacture date</span><strong>June 2014</strong></div>
-                <div class="kv"><span>Age / tonnage</span><strong>12 yrs / 4 ton</strong></div>
-                <div class="kv"><span>SEER / refrigerant</span><strong>16 SEER / R-410A</strong></div>
-                <div class="kv"><span>Remaining life</span><strong>~3 years</strong></div>
-                <div class="kv"><span>Replacement estimate</span><strong>$5,000-$7,000</strong></div>
-              </div>
-            </div>
-
-            <div class="findings">
-              <div class="findings-head">
+          <div class="grid">
+            <section class="panel">
+              <div class="panel-head">
                 <div>
-                  <span class="label">AI Findings</span>
-                  <strong>Defects, coaching, and report items</strong>
+                  <h2>Meta Ray-Ban Capture</h2>
+                  <p>Hands-free inspection photos auto-analyzed in real time.</p>
                 </div>
-                <div class="score" id="scoreValue">--</div>
+                <span class="pill blue">Kitchen</span>
               </div>
+              <div class="panel-body">
+                <div class="feed-card" id="feedCard">
+                  <div class="scan-line" aria-hidden="true"></div>
+                  <div class="cabinet" aria-hidden="true"></div>
+                </div>
+                <div class="toolbar">
+                  <button class="btn primary" type="button" id="captureBtn">Simulate Capture</button>
+                  <button class="btn ghost" type="button" data-view-shortcut="findings">Review Findings</button>
+                  <button class="btn ghost" type="button" data-view-shortcut="report">Preview Report</button>
+                </div>
+              </div>
+            </section>
 
-              <div id="findingsList">
-                <div class="finding">
-                  <div class="finding-thumb"></div>
-                  <div>
-                    <strong>Waiting for walkthrough photo</strong>
-                    <span>Click simulate to see the real-time coaching and report-ready findings.</span>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                <h2>AI Coaching + Report Items</h2>
+                <p>What the inspector hears, how dangerous it is, and what it may cost.</p>
+                </div>
+                <span class="pill amber">Voice ready</span>
+              </div>
+              <div class="panel-body">
+                <div class="list" id="liveList">
+                  <div class="item">
+                    <div class="thumb"></div>
+                    <div class="item-main">
+                      <strong>Waiting for next inspection photo</strong>
+                      <span>Click Simulate Capture to test the real-time flow.</span>
+                    </div>
+                    <span class="pill blue">Idle</span>
                   </div>
                 </div>
               </div>
-
-              <div class="coach-note" id="coachNote">
-                <span class="label">Voice coaching note</span>
-                <p>"Check under the sink, moisture staining detected. Get a wider ceiling-corner shot so the report has the right photo next to the finding."</p>
-              </div>
-
-              <div class="progress" id="progressCard">
-                <span class="label">Report progress</span>
-                <div class="kv"><span>Kitchen</span><strong>Inspected - 3 findings</strong></div>
-                <div class="kv"><span>Heating/Cooling</span><strong>Nameplate decoded</strong></div>
-                <div class="kv"><span>Report command</span><strong>!inspect stop -> PDF</strong></div>
-              </div>
-            </div>
+            </section>
           </div>
-
-          <div class="demo-footer">
-            <div>
-              <span class="tag tag-violet">DJI Mavic T3 thermal roof scans</span>
-              <span class="tag tag-blue">Sewer scope analysis</span>
-            </div>
-            <button class="button button-primary" type="button" id="reportButton">Generate PDF</button>
-          </div>
-          <p class="sr-only" id="liveStatus" aria-live="polite"></p>
         </section>
-      </section>
 
-      <section class="section" id="workflow">
-        <div class="section-head">
-          <div>
-            <h2>No more typing reports for hours.</h2>
-            <p class="section-copy">The workflow is built around Bobby's number-one pain point: finish the walkthrough, stop the inspection, and leave with the report already assembled.</p>
+        <section class="view" id="view-findings">
+          <div class="status-row">
+            <div class="metric"><strong>4</strong><span>defects with photos attached</span></div>
+            <div class="metric"><strong>$950-$4,350</strong><span>estimated repair range</span></div>
+            <div class="metric"><strong>1</strong><span>high danger item to prioritize</span></div>
+            <div class="metric"><strong>91%</strong><span>top visual confidence score</span></div>
           </div>
-        </div>
-        <div class="cards">
-          <article class="card">
-            <h3>1. Capture during walkthrough</h3>
-            <p>Meta Ray-Ban photos auto-send to the AI as the inspector moves through the house.</p>
-          </article>
-          <article class="card">
-            <h3>2. Coach after each photo</h3>
-            <p>SpexInspect voices practical prompts like "check under the sink" when moisture staining or missing context is detected.</p>
-          </article>
-          <article class="card">
-            <h3>3. Stop and generate</h3>
-            <p>Type <strong>!inspect stop</strong> and the PDF report is generated automatically with photos, findings, categories, and cost estimates.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="equipment">
-        <div class="section-head">
-          <div>
-            <h2>Equipment Bobby can demo mid-May.</h2>
-            <p class="section-copy">The mockup keeps the differentiators front and center: glasses-first capture, thermal drone scans, sewer scope footage, and the HVAC nameplate decoder Bobby called brilliant.</p>
-          </div>
-        </div>
-        <div class="cards">
-          <article class="card">
-            <h3>Meta Ray-Ban glasses</h3>
-            <p>Hands-free photo capture streams inspection context to AI without interrupting the walkthrough.</p>
-            <ul>
-              <li>Real-time defect analysis</li>
-              <li>Voice coaching notes after photos</li>
-              <li>Photos mapped to report sections</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>DJI Mavic T3 thermal roof</h3>
-            <p>Thermal roof scans surface moisture and heat-loss patterns that are invisible to the naked eye.</p>
-            <ul>
-              <li>Moisture anomaly flags</li>
-              <li>Heat-loss evidence</li>
-              <li>Roofing report placement</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>Sewer scope cam</h3>
-            <p>Footage is analyzed for root intrusion, cracks, and belly or sag conditions in the pipe.</p>
-            <ul>
-              <li>Root intrusion detection</li>
-              <li>Crack and separation flags</li>
-              <li>Belly/sag timeline notes</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>HVAC nameplate decoder</h3>
-            <p>Snap a nameplate and the AI extracts model, serial, manufacture date, age, tonnage, SEER, refrigerant type such as R-22, R-410A, or R-32, service life, and replacement cost.</p>
-          </article>
-          <article class="card">
-            <h3>Cost estimates</h3>
-            <p>Repair and replacement ranges are attached to defects so buyers and agents can negotiate with actual numbers.</p>
-          </article>
-          <article class="card">
-            <h3>Training loop</h3>
-            <p>Every SpexInspect inspection builds training data for the same AI engine that will power the homeowner product.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="report">
-        <div class="section-head">
-          <div>
-            <h2>InterNACHI report, not ASHI.</h2>
-            <p class="section-copy">The report output is organized around InterNACHI SOP, includes Bobby's certification slot in the header, embeds photos next to findings, and uses the required condition categories.</p>
-          </div>
-        </div>
-        <div class="report-panel">
           <div class="panel">
-            <div class="report-header">
-              <strong>Bobby "hardrock55" - InterNACHI Certified Home Inspector</strong>
-              <span>InterNACHI Cert # [Bobby's certificate number] | 247 Oakwood Drive | Report generated before leaving the driveway</span>
+            <div class="panel-head">
+              <div>
+                <h2>Findings Queue</h2>
+                <p>Approve, edit, or move AI findings into the InterNACHI report.</p>
+              </div>
+              <div class="tabs" aria-label="Finding filters">
+                <button class="tab active" type="button">All</button>
+                <button class="tab" type="button">Deficiency</button>
+                <button class="tab" type="button">Needs Photo</button>
+                <button class="tab" type="button">Approved</button>
+              </div>
             </div>
-            <span class="tag tag-blue">Condition categories</span>
-            <div class="component-grid">
-              <div class="chip">Inspected</div>
-              <div class="chip">Not Inspected</div>
-              <div class="chip">Not Present</div>
-              <div class="chip">Deficiency</div>
-            </div>
-            <div style="margin-top:14px">
-              <span class="tag tag-amber">Sample defect with photo + estimate</span>
-              <div class="finding">
-                <div class="finding-thumb"></div>
-                <div>
-                  <strong>Plumbing - Deficiency</strong>
-                  <span>Moisture staining under kitchen sink. Photo embedded beside finding. Estimated repair: $250-$650.</span>
+            <div class="panel-body">
+              <div class="list">
+                <div class="item">
+                  <div class="thumb photo-sink"></div>
+                  <div class="item-main"><strong>Plumbing - Deficiency</strong><span>Cabinet moisture under kitchen sink. 88% confidence. Photo embedded beside finding.</span></div>
+                  <div class="risk-stack"><span class="pill amber">Medium Risk</span><span class="cost">$250-$650</span></div>
+                </div>
+                <div class="item">
+                  <div class="thumb photo-ceiling"></div>
+                  <div class="item-main"><strong>Interior - Deficiency</strong><span>Ceiling stain in NW kitchen corner. 91% confidence. Voice coach requested wider attic context photo.</span></div>
+                  <div class="risk-stack"><span class="pill red">High Danger</span><span class="cost">$300-$2,500</span></div>
+                </div>
+                <div class="item">
+                  <div class="thumb photo-outlet"></div>
+                  <div class="item-main"><strong>Electrical - Inspected</strong><span>GFCI present within 6 feet of sink. Mapped to Electrical section as inspected.</span></div>
+                  <div class="risk-stack"><span class="pill green">Low Risk</span><span class="cost">$0</span></div>
+                </div>
+                <div class="item">
+                  <div class="thumb photo-roof"></div>
+                  <div class="item-main"><strong>Roofing - Deficiency</strong><span>DJI Mavic T3 thermal scan indicates possible moisture anomaly near rear slope. 84% thermal confidence.</span></div>
+                  <div class="risk-stack"><span class="pill violet">Thermal Risk</span><span class="cost">$400-$1,200</span></div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="panel" id="internachi">
-            <span class="tag tag-green">All 10 InterNACHI components</span>
-            <div class="component-grid">
-              <div class="chip">Roofing</div>
-              <div class="chip">Exterior</div>
-              <div class="chip">Basement / Foundation / Crawlspace / Structure</div>
-              <div class="chip">Heating</div>
-              <div class="chip">Cooling</div>
-              <div class="chip">Plumbing</div>
-              <div class="chip">Electrical</div>
-              <div class="chip">Fireplace & Solid Fuel</div>
-              <div class="chip">Attic / Insulation / Ventilation</div>
-              <div class="chip">Doors / Windows / Interior</div>
+          <div class="panel" style="margin-top:14px">
+            <div class="panel-head">
+              <div>
+                <h2>Repair Cost Breakdown</h2>
+                <p>Modeled from the older ClearEye report experience: fast negotiation numbers for buyers and agents.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="cost-bars">
+                <div class="cost-row"><span>Interior</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><strong>$300-$2,500</strong></div>
+                <div class="cost-row"><span>Plumbing</span><div class="bar-track"><div class="bar-fill" style="width:42%"></div></div><strong>$250-$650</strong></div>
+                <div class="cost-row"><span>Roofing</span><div class="bar-track"><div class="bar-fill" style="width:55%"></div></div><strong>$400-$1,200</strong></div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="section" id="home-health">
-        <div class="section-head">
-          <div>
-            <h2>Future consumer product: Home Health Score.</h2>
-            <p class="section-copy">The pro inspection engine becomes a homeowner scan product for an 83M-homeowner market, with a simple 0-100 score and an accessible price point around $4.99 per scan.</p>
+        <section class="view" id="view-equipment">
+          <div class="module-grid">
+            <article class="module">
+              <span class="pill blue">Meta Ray-Ban</span>
+              <h3 style="margin-top:12px">Walkthrough Photos</h3>
+              <p>Photos taken during walkthrough auto-send to AI for real-time defect analysis, danger scoring, repair estimates, and report placement.</p>
+              <div class="kv"><span>Status</span><strong>Connected</strong></div>
+              <div class="kv"><span>Last room</span><strong>Kitchen</strong></div>
+            </article>
+            <article class="module">
+              <span class="pill violet">DJI Mavic T3</span>
+              <h3 style="margin-top:12px">Thermal Roof Scan</h3>
+              <p>Detect moisture and heat loss invisible to the naked eye, then place findings in Roofing.</p>
+              <div class="kv"><span>Moisture anomaly</span><strong>Rear slope</strong></div>
+              <div class="kv"><span>Heat loss</span><strong>Attic ridge</strong></div>
+            </article>
+            <article class="module">
+              <span class="pill blue">Sewer Scope</span>
+              <h3 style="margin-top:12px">Pipe Footage Analysis</h3>
+              <p>Analyzes footage for root intrusion, cracks, separation, and belly/sag in pipe.</p>
+              <div class="kv"><span>Root intrusion</span><strong>Possible at 42 ft</strong></div>
+              <div class="kv"><span>Belly/sag</span><strong>Watchlist</strong></div>
+            </article>
+            <article class="module">
+              <span class="pill amber">Brilliant</span>
+              <h3 style="margin-top:12px">HVAC Nameplate Decoder</h3>
+              <p>Snap nameplate to extract model, serial, manufacture date, age, tonnage, SEER, refrigerant, life, and replacement cost.</p>
+              <div class="kv"><span>Model / serial</span><strong>24ABC648A003 / 1814E12345</strong></div>
+              <div class="kv"><span>Age / tonnage</span><strong>12 yrs / 4 ton</strong></div>
+              <div class="kv"><span>SEER / refrigerant</span><strong>16 / R-410A</strong></div>
+              <div class="kv"><span>Also supports</span><strong>R-22, R-32</strong></div>
+              <div class="kv"><span>Remaining life</span><strong>~3 years</strong></div>
+              <div class="kv"><span>Replacement</span><strong>$5,000-$7,000</strong></div>
+            </article>
+            <article class="module">
+              <span class="pill green">Voice</span>
+              <h3 style="margin-top:12px">Inspector Coaching</h3>
+              <p>"Check under the sink, moisture staining detected. Get a wider ceiling-corner shot."</p>
+            </article>
+            <article class="module">
+              <span class="pill red">Negotiation</span>
+              <h3 style="margin-top:12px">Cost Estimate Engine</h3>
+              <p>Defect ranges are attached for buyers and agents to negotiate after inspection.</p>
+            </article>
           </div>
-        </div>
-        <div class="cards">
-          <article class="card">
-            <h3>0-100 Home Health Score</h3>
-            <p>Homeowners get a simple score, clear risk areas, and a next-action list built from the same AI engine as the pro tool.</p>
-          </article>
-          <article class="card">
-            <h3>83M homeowner market</h3>
-            <p>The consumer layer expands SpexInspect beyond pro inspections while preserving the inspector-grade analysis foundation.</p>
-          </article>
-          <article class="card">
-            <h3>$4.99 per scan</h3>
-            <p>Low-friction pricing supports broad adoption while every scan improves the training dataset over time.</p>
-          </article>
-        </div>
-      </section>
+        </section>
 
-      <section class="footer-cta">
-        <div>
-          <h2 style="margin:0 0 8px;font-size:28px;letter-spacing:-.04em">Bobby's demo moment is the driveway report.</h2>
-          <p class="section-copy">The pitch is simple: Ray-Bans capture, AI coaches, equipment data flows in, and the report is ready before he leaves the driveway.</p>
-        </div>
-        <a class="button button-primary" href="#demo">Replay Demo</a>
-      </section>
-    </main>
+        <section class="view" id="view-report">
+          <div class="report-layout">
+            <aside class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Report Builder</h2>
+                  <p>InterNACHI SOP, not ASHI.</p>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="component-list">
+                  <div class="component">Roofing <span class="pill violet">Deficiency</span></div>
+                  <div class="component">Exterior <span class="pill green">Inspected</span></div>
+                  <div class="component">Basement / Foundation / Crawlspace / Structure <span class="pill green">Inspected</span></div>
+                  <div class="component">Heating <span class="pill amber">Review</span></div>
+                  <div class="component">Cooling <span class="pill amber">Review</span></div>
+                  <div class="component">Plumbing <span class="pill red">Deficiency</span></div>
+                  <div class="component">Electrical <span class="pill green">Inspected</span></div>
+                  <div class="component">Fireplace & Solid Fuel <span class="pill blue">Not Present</span></div>
+                  <div class="component">Attic / Insulation / Ventilation <span class="pill amber">Needs Photo</span></div>
+                  <div class="component">Doors / Windows / Interior <span class="pill red">Deficiency</span></div>
+                </div>
+                <div class="toolbar">
+                  <button class="btn primary" type="button" id="generatePdf">Generate PDF</button>
+                </div>
+              </div>
+            </aside>
+
+            <article class="paper" aria-label="Report preview">
+              <h2>Residential Inspection Report</h2>
+              <div class="muted">InterNACHI Certified Home Inspector</div>
+              <div class="muted">InterNACHI Cert # [inspector certificate number] | 247 Oakwood Drive | Generated before leaving the driveway</div>
+              <div class="paper-section">
+                <h3>Condition Categories</h3>
+                <p class="muted">Inspected / Not Inspected / Not Present / Deficiency</p>
+              </div>
+              <div class="paper-section">
+                <h3>Plumbing - Deficiency</h3>
+                <div class="paper-finding">
+                  <div class="paper-photo sink"></div>
+                  <div>
+                    <strong>Moisture staining under kitchen sink</strong>
+                    <p class="muted">Risk: Medium. Photo embedded beside finding. Recommend checking supply line and cabinet base. Estimated repair: $250-$650.</p>
+                  </div>
+                </div>
+                <div class="paper-finding">
+                  <div class="paper-photo ceiling"></div>
+                  <div>
+                    <strong>Water staining on ceiling tile</strong>
+                    <p class="muted">Danger: High. 91% confidence. Investigate moisture source above. Estimated repair: $300-$2,500.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="paper-section">
+                <h3>Heating / Cooling - Nameplate</h3>
+                <p class="muted">Carrier 4 ton, 16 SEER, R-410A, manufactured June 2014, estimated remaining service life ~3 years, replacement estimate $5,000-$7,000.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="view-homehealth">
+          <div class="score-wrap">
+            <div class="score-card">
+              <div>
+                <div class="score-number">71</div>
+                <p style="text-align:center;color:var(--muted);font-weight:800">Home Health Score</p>
+              </div>
+            </div>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Future Consumer Product</h2>
+                  <p>Same AI engine, simplified for the 83M homeowner market.</p>
+                </div>
+                <span class="pill green">$4.99 / scan</span>
+              </div>
+              <div class="panel-body">
+                <div class="list">
+                  <div class="item"><div class="thumb"></div><div class="item-main"><strong>0-100 homeowner score</strong><span>Simple, scannable output that turns inspection intelligence into homeowner maintenance guidance.</span></div></div>
+                  <div class="item"><div class="thumb"></div><div class="item-main"><strong>Same AI engine as pro tool</strong><span>Every ClearEye inspection builds training data that improves both products.</span></div></div>
+                  <div class="item"><div class="thumb"></div><div class="item-main"><strong>Next actions</strong><span>Homeowners see what to monitor, what to repair, and when to call a professional.</span></div></div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-settings">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>SOP + Report Settings</h2>
+                <p>Configuration area for the production app.</p>
+              </div>
+              <span class="pill blue">InterNACHI</span>
+            </div>
+            <div class="panel-body">
+              <div class="module-grid">
+                <article class="module">
+                  <h3>Inspector Profile</h3>
+                  <p>Report header slot for the inspector's actual InterNACHI certificate number.</p>
+                  <div class="kv"><span>Name</span><strong>InterNACHI-certified inspector</strong></div>
+                  <div class="kv"><span>Cert #</span><strong>[Add before demo]</strong></div>
+                </article>
+                <article class="module">
+                  <h3>Condition Categories</h3>
+                  <p>Required states preserved throughout the report workflow.</p>
+                  <div class="kv"><span>Categories</span><strong>Inspected / Not Inspected / Not Present / Deficiency</strong></div>
+                </article>
+                <article class="module">
+                  <h3>Demo Moment</h3>
+                  <p>Inspectors conference mid-May: show report ready before leaving the driveway.</p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </section>
   </div>
 
-  <script>
-    const scanButton = document.getElementById("scanButton");
-    const reportButton = document.getElementById("reportButton");
-    const photoZone = document.getElementById("photoZone");
-    const findingsList = document.getElementById("findingsList");
-    const scoreValue = document.getElementById("scoreValue");
-    const nameplateCard = document.getElementById("nameplateCard");
-    const coachNote = document.getElementById("coachNote");
-    const progressCard = document.getElementById("progressCard");
-    const liveStatus = document.getElementById("liveStatus");
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <p class="sr-only" id="screenStatus" aria-live="polite"></p>
 
-    function setStatus(message) {
-      if (liveStatus) liveStatus.textContent = message;
+  <script>
+    const titles = {
+      inspection: ["Live Inspection", "247 Oakwood Drive - Charlotte, NC - Meta Ray-Ban stream active"],
+      findings: ["Findings Queue", "Approve, edit, and place AI findings into the report"],
+      equipment: ["Equipment AI", "Drone, sewer scope, nameplate, glasses, and coaching modules"],
+      report: ["Report Builder", "InterNACHI SOP report preview with photos and cost estimates"],
+      homehealth: ["Home Health", "Future homeowner product built on the same AI engine"],
+      settings: ["SOP Settings", "Inspector profile, condition categories, and demo configuration"]
+    };
+
+    const navButtons = Array.from(document.querySelectorAll(".nav-btn"));
+    const views = Array.from(document.querySelectorAll(".view"));
+    const viewTitle = document.getElementById("viewTitle");
+    const viewSubtitle = document.getElementById("viewSubtitle");
+    const toast = document.getElementById("toast");
+    const screenStatus = document.getElementById("screenStatus");
+    const feedCard = document.getElementById("feedCard");
+    const liveList = document.getElementById("liveList");
+    const captureBtn = document.getElementById("captureBtn");
+    const captureTop = document.getElementById("captureTop");
+    const stopCommand = document.getElementById("stopCommand");
+    const generatePdf = document.getElementById("generatePdf");
+
+    function announce(message) {
+      if (screenStatus) screenStatus.textContent = message;
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(announce.timer);
+      announce.timer = window.setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
-    function runDemo() {
-      if (!scanButton || scanButton.disabled) return;
-      scanButton.disabled = true;
-      scanButton.setAttribute("aria-busy", "true");
-      scanButton.textContent = "Analyzing photo...";
-      photoZone?.classList.add("is-scanning");
-      setStatus("Analyzing inspection photo from Meta Ray-Ban feed.");
+    function switchView(name) {
+      navButtons.forEach((button) => button.classList.toggle("active", button.dataset.view === name));
+      views.forEach((view) => view.classList.toggle("active", view.id === `view-${name}`));
+      viewTitle.textContent = titles[name][0];
+      viewSubtitle.textContent = titles[name][1];
+      announce(`${titles[name][0]} opened.`);
+    }
+
+    function simulateCapture() {
+      feedCard.classList.add("scanning");
+      captureBtn.disabled = true;
+      captureTop.disabled = true;
+      captureBtn.textContent = "Analyzing...";
+      announce("Analyzing Meta Ray-Ban photo.");
 
       window.setTimeout(() => {
-        photoZone?.classList.remove("is-scanning");
-        scoreValue.textContent = "71";
-        findingsList.innerHTML = `
-          <div class="finding">
-            <div class="finding-thumb"></div>
-            <div>
+        feedCard.classList.remove("scanning");
+        captureBtn.disabled = false;
+        captureTop.disabled = false;
+        captureBtn.textContent = "Capture Another";
+        liveList.innerHTML = `
+          <div class="item">
+            <div class="thumb photo-sink"></div>
+            <div class="item-main">
+              <strong>Voice coaching note</strong>
+              <span>"Check under the sink, moisture staining detected. Get a wider ceiling-corner shot."</span>
+            </div>
+            <span class="pill blue">Spoken</span>
+          </div>
+          <div class="item">
+            <div class="thumb photo-sink"></div>
+            <div class="item-main">
               <strong>Plumbing - Deficiency</strong>
-              <span>Cabinet moisture under sink. Recommended follow-up: check supply line. Estimate: $250-$650.</span>
+              <span>Cabinet moisture under kitchen sink. 88% confidence. Photo attached beside finding.</span>
             </div>
-            <span class="tag tag-amber">Medium</span>
+            <div class="risk-stack"><span class="pill amber">Medium Risk</span><span class="cost">$250-$650</span></div>
           </div>
-          <div class="finding">
-            <div class="finding-thumb"></div>
-            <div>
+          <div class="item">
+            <div class="thumb photo-ceiling"></div>
+            <div class="item-main">
               <strong>Interior - Deficiency</strong>
-              <span>Ceiling stain in NW kitchen corner. Add attic photo for source confirmation. Estimate: $400-$1,200.</span>
+              <span>Ceiling stain needs wider attic context photo. 91% confidence.</span>
             </div>
-            <span class="tag tag-red">High</span>
-          </div>
-          <div class="finding">
-            <div class="finding-thumb"></div>
-            <div>
-              <strong>Electrical - Inspected</strong>
-              <span>GFCI present within 6 feet of sink. Photo attached to report section.</span>
-            </div>
-            <span class="tag tag-green">Pass</span>
+            <div class="risk-stack"><span class="pill red">High Danger</span><span class="cost">$300-$2,500</span></div>
           </div>
         `;
-        nameplateCard?.classList.add("is-visible");
-        coachNote?.classList.add("is-visible");
-        progressCard?.classList.add("is-visible");
-        scanButton.textContent = "Analysis complete";
-        scanButton.removeAttribute("aria-busy");
-        setStatus("Analysis complete. Findings, HVAC nameplate data, and voice coaching note are ready.");
-      }, 1200);
+        announce("Analysis complete. Coaching note and report item created.");
+      }, 1100);
     }
 
-    function generateReport() {
-      if (!reportButton) return;
-      reportButton.disabled = true;
-      reportButton.setAttribute("aria-busy", "true");
-      reportButton.textContent = "Generating PDF...";
-      setStatus("Generating InterNACHI PDF report.");
+    navButtons.forEach((button) => button.addEventListener("click", () => switchView(button.dataset.view)));
+    document.querySelectorAll("[data-view-shortcut]").forEach((button) => {
+      button.addEventListener("click", () => switchView(button.dataset.viewShortcut));
+    });
+    captureBtn?.addEventListener("click", simulateCapture);
+    captureTop?.addEventListener("click", simulateCapture);
+    stopCommand?.addEventListener("click", () => {
+      switchView("report");
+      announce("!inspect stop received. InterNACHI PDF report is being assembled.");
+    });
+    generatePdf?.addEventListener("click", () => {
+      generatePdf.disabled = true;
+      generatePdf.textContent = "Generating...";
+      announce("Generating PDF report with photos, findings, condition categories, and cost estimates.");
       window.setTimeout(() => {
-        reportButton.textContent = "PDF ready before driveway";
-        reportButton.removeAttribute("aria-busy");
-        setStatus("InterNACHI PDF report is ready with photos, findings, condition categories, and cost estimates.");
+        generatePdf.textContent = "PDF Ready";
+        announce("PDF ready before leaving the driveway.");
       }, 900);
-    }
-
-    scanButton?.addEventListener("click", runDemo);
-    reportButton?.addEventListener("click", generateReport);
+    });
   </script>
 </body>
 </html>
