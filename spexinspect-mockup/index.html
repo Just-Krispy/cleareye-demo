@@ -1,391 +1,1393 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SpexInspect — AI Home Inspection</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-  * { font-family: 'Inter', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #020617; color: white; overflow-x: hidden; }
-  .bg-hero { background: radial-gradient(circle at 15% 40%, rgba(14,165,233,.18), transparent 40%), radial-gradient(circle at 85% 15%, rgba(99,102,241,.14), transparent 35%), linear-gradient(180deg,#020617 0%,#0c1929 100%); }
-  .glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-  .glass-darker { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); }
-  .glow-blue { box-shadow: 0 0 30px rgba(14,165,233,0.15); }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-  @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(0.8); } }
-  @keyframes scan-line { 0% { top: 8%; } 100% { top: 92%; } }
-  @keyframes bar-fill { from { width: 0; } to { width: var(--w); } }
-  .anim-1 { animation: fadeUp .55s .05s ease both; }
-  .anim-2 { animation: fadeUp .55s .15s ease both; }
-  .anim-3 { animation: fadeUp .55s .25s ease both; }
-  .anim-4 { animation: fadeUp .55s .35s ease both; }
-  .anim-5 { animation: fadeIn .55s .45s ease both; }
-  .live-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:#22c55e; animation: pulse-dot 1.6s ease-in-out infinite; }
-  .scan-line { position:absolute; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,rgba(56,189,248,.8),transparent); animation: scan-line 2.2s ease-in-out infinite alternate; pointer-events:none; }
-  .bar { height:6px; border-radius:3px; background:linear-gradient(90deg,#0ea5e9,#6366f1); animation: bar-fill 1.2s .6s ease both; }
-  .tag { display:inline-flex; align-items:center; gap:5px; border-radius:9999px; padding:4px 12px; font-size:0.72rem; font-weight:600; letter-spacing:.03em; }
-  .tag-green { background:rgba(34,197,94,.15); color:#86efac; }
-  .tag-amber { background:rgba(245,158,11,.15); color:#fcd34d; }
-  .tag-red { background:rgba(239,68,68,.15); color:#fca5a5; }
-  .tag-blue { background:rgba(14,165,233,.15); color:#7dd3fc; }
-  .tag-purple { background:rgba(139,92,246,.15); color:#c4b5fd; }
-  .nav-link { color:#94a3b8; text-decoration:none; font-size:.875rem; transition:color .15s; }
-  .nav-link:hover { color:white; }
-  .btn-sky { background:linear-gradient(135deg,#0ea5e9,#6366f1); color:white; border:none; border-radius:10px; padding:11px 22px; font-weight:600; font-size:.9rem; cursor:pointer; transition:opacity .15s,transform .1s; }
-  .btn-sky:hover { opacity:.9; transform:translateY(-1px); }
-  .btn-outline { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:white; border-radius:10px; padding:10px 20px; font-weight:500; font-size:.9rem; cursor:pointer; transition:background .15s; }
-  .btn-outline:hover { background:rgba(255,255,255,.1); }
-  .row-item { display:flex; align-items:center; gap:12px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); padding:14px; transition: border-color .2s; }
-  .row-item:hover { border-color:rgba(14,165,233,.3); }
-  .icon-box { width:38px; height:38px; border-radius:9px; display:grid; place-items:center; flex-shrink:0; }
-  .score-ring { position:relative; width:90px; height:90px; }
-  .score-ring svg { transform: rotate(-90deg); }
-  .score-ring .val { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .feature-card { border-radius:16px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); padding:22px; transition:border-color .2s,background .2s; }
-  .feature-card:hover { border-color:rgba(14,165,233,.25); background:rgba(14,165,233,.05); }
-  .scanning-overlay { display:none; position:absolute; inset:0; border-radius:16px; overflow:hidden; background:rgba(2,6,23,.6); z-index:2; }
-  .scanning-overlay.active { display:block; }
-  input[type=range] { width:100%; accent-color:#0ea5e9; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClearEye | Visual QA & Risk Insights</title>
+  <meta name="description" content="ClearEye helps users spot visual risks faster with guided review workflows, confidence scoring, and trust-focused results." />
+
+  <style>
+    :root {
+      --bg-950: #020617;
+      --bg-900: #07111f;
+      --bg-850: #0a1730;
+      --panel: rgba(15, 35, 72, 0.66);
+      --panel-strong: rgba(12, 29, 62, 0.9);
+      --line: rgba(148, 163, 184, 0.22);
+      --line-strong: rgba(125, 168, 255, 0.42);
+      --text: #f8fafc;
+      --muted: #aebbd0;
+      --soft: #dbeafe;
+      --cyan: #27d7ff;
+      --cyan-2: #5ce7ff;
+      --blue: #2f80ff;
+      --violet: #7c5cff;
+      --purple: #b96cff;
+      --green: #4ade80;
+      --amber: #f59e0b;
+      --danger: #fb7185;
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 8%, rgba(39, 215, 255, 0.14), transparent 28%),
+        radial-gradient(circle at 75% 16%, rgba(124, 92, 255, 0.18), transparent 32%),
+        linear-gradient(180deg, #020617 0%, #061326 45%, #030712 100%);
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto -10% -24% -10%;
+      height: 45vh;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          160deg,
+          rgba(39, 215, 255, 0.075) 0 1px,
+          transparent 1px 20px
+        );
+      opacity: 0.75;
+      transform: skewY(-8deg);
+      mask-image: linear-gradient(to top, black, transparent);
+    }
+
+    body::after {
+      inset: -12% auto auto -12%;
+      width: 46vw;
+      height: 46vw;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(39, 215, 255, 0.12), transparent 68%);
+      filter: blur(6px);
+      opacity: 0.8;
+      transform: none;
+      mask-image: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1440px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 18px 0 42px;
+    }
+
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 250px;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 27px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .brand-copy span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(24px, 4vw, 64px);
+      color: #e5edf8;
+      font-size: 15px;
+    }
+
+    .nav-links a {
+      opacity: 0.88;
+      transition: color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--cyan-2);
+      opacity: 1;
+    }
+
+    .button {
+      border: 0;
+      cursor: pointer;
+      color: var(--text);
+      font: inherit;
+      font-weight: 700;
+      border-radius: 15px;
+      min-height: 54px;
+      padding: 0 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, #2ee8ff 0%, #2674ff 52%, #714cff 100%);
+      box-shadow:
+        0 18px 40px rgba(39, 215, 255, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    }
+
+    .button-secondary {
+      background: rgba(6, 17, 39, 0.72);
+      border: 1px solid rgba(167, 188, 255, 0.36);
+      color: #cfd8e8;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .button-secondary:hover {
+      border-color: rgba(39, 215, 255, 0.55);
+      color: var(--text);
+    }
+
+    .arrow-orb {
+      width: 25px;
+      height: 25px;
+      border-radius: 999px;
+      display: inline-grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(145deg, rgba(255,255,255,.24), rgba(255,255,255,.05));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.16);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(580px, 1.18fr);
+      gap: 30px;
+      align-items: center;
+      padding: 54px 0 30px;
+    }
+
+    .hero-copy {
+      padding: 4px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 13px;
+      min-height: 50px;
+      padding: 8px 20px 8px 12px;
+      border: 1px solid rgba(147, 166, 255, 0.5);
+      background: rgba(9, 20, 46, 0.68);
+      color: #f5f9ff;
+      border-radius: 999px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    h1 {
+      margin: 28px 0 18px;
+      font-size: clamp(42px, 5.4vw, 72px);
+      line-height: 0.98;
+      letter-spacing: -0.07em;
+      max-width: 640px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(120deg, #35e2ff 0%, #58a6ff 40%, #a974ff 74%, #f08cff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      max-width: 590px;
+      color: #c4cee0;
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      margin-top: 28px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+      max-width: 560px;
+    }
+
+    .stat-card {
+      min-height: 98px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 18px;
+      border: 1px solid rgba(137, 171, 255, 0.28);
+      border-radius: var(--radius-md);
+      background:
+        linear-gradient(145deg, rgba(24, 50, 96, 0.72), rgba(8, 18, 40, 0.76));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.09),
+        0 14px 34px rgba(0,0,0,.22);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 32px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-top: 6px;
+      color: #d9e3f1;
+      font-size: 14px;
+    }
+
+    .product-card {
+      position: relative;
+      border: 1px solid rgba(130, 155, 255, 0.46);
+      border-radius: 28px;
+      padding: 22px;
+      background:
+        linear-gradient(145deg, rgba(18, 43, 86, 0.86), rgba(5, 14, 35, 0.94));
+      box-shadow:
+        0 30px 90px rgba(0,0,0,.42),
+        inset 0 1px 0 rgba(255,255,255,.14),
+        0 0 0 1px rgba(92, 231, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .product-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(39,215,255,.18), transparent 28%),
+        radial-gradient(circle at 90% 100%, rgba(124,92,255,.2), transparent 30%);
+      opacity: .9;
+    }
+
+    .product-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 16px;
+      padding: 0 10px;
+    }
+
+    .review-title {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .review-title small {
+      display: block;
+      color: #bcc8dc;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .review-title h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.035em;
+    }
+
+    .secure-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 15px;
+      border-radius: 16px;
+      border: 1px solid rgba(125, 168, 255, 0.24);
+      background: rgba(4, 14, 31, 0.66);
+      color: #68ecff;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .secure-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #34d399;
+      box-shadow: 0 0 14px #34d399;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 0.92fr 1.45fr;
+      gap: 16px;
+    }
+
+    .upload-panel,
+    .summary-panel,
+    .recommend-card {
+      border: 1px solid rgba(114, 158, 255, 0.28);
+      background:
+        linear-gradient(145deg, rgba(18, 42, 84, 0.55), rgba(5, 16, 39, 0.75));
+      border-radius: 22px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.08),
+        0 16px 40px rgba(0,0,0,.2);
+    }
+
+    .upload-panel {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .upload-zone {
+      flex: 1;
+      min-height: 280px;
+      border: 1px dashed rgba(70, 159, 255, 0.82);
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      text-align: center;
+      background: radial-gradient(circle at 50% 70%, rgba(39,215,255,.12), transparent 48%);
+    }
+
+    .upload-zone h3 {
+      margin: 18px 0 7px;
+      font-size: 17px;
+    }
+
+    .upload-zone p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    .upload-panel .button {
+      margin-top: 18px;
+      width: 100%;
+    }
+
+    .summary-stack {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 16px;
+    }
+
+    .summary-panel {
+      padding: 18px;
+    }
+
+    .summary-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .summary-heading h3 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: -0.03em;
+    }
+
+    .result-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 13px;
+      border: 1px solid rgba(125, 168, 255, 0.21);
+      background: rgba(21, 48, 93, 0.48);
+      border-radius: 15px;
+    }
+
+    .result-row + .result-row {
+      margin-top: 10px;
+    }
+
+    .result-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .result-copy strong {
+      display: block;
+      font-size: 16px;
+      letter-spacing: -0.025em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .result-copy span {
+      display: block;
+      color: #cbd5e1;
+      font-size: 13px;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status {
+      border-radius: 13px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 800;
+      border: 1px solid currentColor;
+      background: rgba(255,255,255,.06);
+    }
+
+    .status-pass { color: #69f2b0; }
+    .status-flag { color: #fbbf24; }
+    .status-clear { color: #60a5fa; }
+
+    .recommend-card {
+      display: flex;
+      gap: 16px;
+      padding: 18px;
+      border-color: rgba(185, 108, 255, 0.58);
+      background:
+        radial-gradient(circle at 0% 40%, rgba(124, 92, 255, 0.28), transparent 36%),
+        linear-gradient(145deg, rgba(51, 40, 100, 0.82), rgba(14, 25, 61, 0.78));
+    }
+
+    .recommend-card h3 {
+      margin: 2px 0 8px;
+      font-size: 16px;
+    }
+
+    .recommend-card p {
+      margin: 0;
+      color: #d7e2f1;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .recommend-card b {
+      color: #5ce7ff;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .feature-card {
+      min-height: 210px;
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      align-items: center;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid rgba(125, 168, 255, 0.24);
+      background:
+        linear-gradient(145deg, rgba(17, 39, 77, 0.72), rgba(4, 15, 34, 0.82));
+      border-radius: 22px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.08),
+        0 20px 60px rgba(0,0,0,.22);
+    }
+
+    .feature-card h3 {
+      margin: 0;
+      font-size: 21px;
+      letter-spacing: -0.04em;
+    }
+
+    .feature-card .rule {
+      width: 40px;
+      height: 3px;
+      border-radius: 999px;
+      margin: 20px 0;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      box-shadow: 0 0 16px rgba(39, 215, 255, 0.45);
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: #c6d2e3;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Premium CSS icon system */
+    .icon {
+      position: relative;
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .icon-orb {
+      width: 62px;
+      height: 62px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 35% 25%, rgba(255,255,255,.72), transparent 14%),
+        radial-gradient(circle at 50% 55%, rgba(39,215,255,.9), transparent 25%),
+        linear-gradient(145deg, rgba(39,215,255,.22), rgba(47,128,255,.18) 45%, rgba(124,92,255,.3));
+      border: 1px solid rgba(133, 201, 255, 0.55);
+      box-shadow:
+        inset 0 0 20px rgba(255,255,255,.12),
+        inset 0 -14px 22px rgba(1, 8, 26, 0.42),
+        0 14px 30px rgba(39,215,255,.18),
+        0 0 34px rgba(39,215,255,.18);
+    }
+
+    .icon-small {
+      width: 38px;
+      height: 38px;
+    }
+
+    .brand-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(38, 214, 255, .24), rgba(124, 92, 255, .34)),
+        radial-gradient(circle at 50% 48%, rgba(92,231,255,.35), transparent 35%);
+      box-shadow: 0 0 28px rgba(60, 160, 255, 0.25);
+      clip-path: polygon(50% 0%, 92% 18%, 86% 76%, 50% 100%, 14% 76%, 8% 18%);
+    }
+
+    .brand-icon::before,
+    .brand-icon::after,
+    .eye-badge::before,
+    .eye-badge::after {
+      content: "";
+      position: absolute;
+      inset: 15px 10px;
+      border-radius: 999px 999px 999px 999px / 70% 70% 70% 70%;
+      border: 2px solid rgba(92, 231, 255, .82);
+      transform: rotate(-8deg);
+      box-shadow: 0 0 15px rgba(92, 231, 255, .4);
+      z-index: 2;
+    }
+
+    .brand-icon::after,
+    .eye-badge::after {
+      inset: 23px 22px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 38% 32%, white 0 10%, #92e7ff 11% 24%, #176cff 25% 52%, #071a4a 54%);
+      border: 0;
+      transform: none;
+    }
+
+    .eye-badge::before {
+      inset: 20px 12px;
+    }
+
+    .eye-badge::after {
+      inset: 25px 25px;
+    }
+
+    .shield-mini,
+    .stat-shield,
+    .recommend-shield {
+      clip-path: polygon(50% 4%, 86% 18%, 79% 76%, 50% 96%, 21% 76%, 14% 18%);
+      background:
+        radial-gradient(circle at 40% 20%, rgba(255,255,255,.65), transparent 13%),
+        linear-gradient(145deg, rgba(50, 240, 255, 0.72), rgba(23, 98, 255, 0.68) 46%, rgba(124, 92, 255, 0.85));
+      box-shadow:
+        inset 0 0 0 2px rgba(255,255,255,.2),
+        inset 0 -18px 28px rgba(1,8,28,.38),
+        0 0 22px rgba(92,231,255,.26);
+    }
+
+    .shield-mini {
+      width: 34px;
+      height: 34px;
+    }
+
+    .shield-mini::before,
+    .stat-shield::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      clip-path: polygon(42% 62%, 28% 48%, 20% 57%, 43% 78%, 78% 36%, 68% 28%);
+      background: #d9fff6;
+      z-index: 3;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,.45));
+    }
+
+    .icon-layers {
+      width: 52px;
+      height: 52px;
+    }
+
+    .icon-layers::before,
+    .icon-layers::after,
+    .icon-layers span {
+      content: "";
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      height: 18px;
+      border-radius: 6px;
+      transform: skewY(-24deg) rotate(22deg);
+      background:
+        linear-gradient(135deg, rgba(92, 231, 255, .96), rgba(47,128,255,.76));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.5),
+        0 8px 15px rgba(39,215,255,.22);
+    }
+
+    .icon-layers::before { top: 8px; }
+    .icon-layers span { top: 18px; opacity: .78; }
+    .icon-layers::after { top: 28px; opacity: .55; }
+
+    .stat-shield {
+      width: 52px;
+      height: 52px;
+      background:
+        linear-gradient(145deg, rgba(45, 255, 201, .62), rgba(39, 215, 255, .54) 50%, rgba(7, 46, 93, .9));
+    }
+
+    .flag-icon {
+      width: 48px;
+      height: 54px;
+    }
+
+    .flag-icon::before {
+      content: "";
+      position: absolute;
+      left: 9px;
+      top: 7px;
+      width: 6px;
+      height: 40px;
+      border-radius: 999px;
+      background: linear-gradient(#e9d5ff, #7c3aed);
+      box-shadow: 0 0 16px rgba(185,108,255,.58);
+    }
+
+    .flag-icon::after {
+      content: "";
+      position: absolute;
+      left: 14px;
+      top: 9px;
+      width: 30px;
+      height: 24px;
+      border-radius: 5px 12px 12px 5px;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,.72), transparent 10%),
+        linear-gradient(135deg, #c084fc, #7c3aed 62%, #5b21b6);
+      clip-path: polygon(0 0, 100% 8%, 80% 50%, 100% 92%, 0 100%);
+      box-shadow: 0 0 20px rgba(185,108,255,.4);
+    }
+
+    .cloud-icon {
+      width: 154px;
+      height: 128px;
+      filter: drop-shadow(0 22px 28px rgba(39, 215, 255, .24));
+    }
+
+    .cloud-icon::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: 38px;
+      width: 110px;
+      height: 58px;
+      border-radius: 42px;
+      background:
+        radial-gradient(circle at 40% 12%, rgba(255,255,255,.65), transparent 12%),
+        linear-gradient(180deg, #7decff 0%, #2580ff 45%, #3040cf 100%);
+      box-shadow:
+        inset 0 2px 0 rgba(255,255,255,.48),
+        inset 0 -20px 26px rgba(0, 10, 60, .36),
+        0 0 34px rgba(39,215,255,.32);
+    }
+
+    .cloud-icon::after {
+      content: "";
+      position: absolute;
+      left: 46px;
+      top: 15px;
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 38% 20%, rgba(255,255,255,.7), transparent 13%),
+        linear-gradient(180deg, #83f1ff 0%, #2f80ff 55%, #3730a3 100%);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,.45);
+    }
+
+    .cloud-arrow {
+      position: absolute;
+      z-index: 3;
+      left: 68px;
+      top: 55px;
+      width: 16px;
+      height: 44px;
+      border-radius: 999px;
+      background: linear-gradient(#ffffff, #a8f7ff);
+      box-shadow: 0 0 18px rgba(255,255,255,.58);
+    }
+
+    .cloud-arrow::before {
+      content: "";
+      position: absolute;
+      left: -16px;
+      top: -2px;
+      width: 48px;
+      height: 48px;
+      clip-path: polygon(50% 0, 92% 43%, 72% 43%, 72% 58%, 28% 58%, 28% 43%, 8% 43%);
+      background: linear-gradient(#ffffff, #a8f7ff);
+    }
+
+    .cloud-base {
+      position: absolute;
+      left: 30px;
+      right: 30px;
+      bottom: 6px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(92, 231, 255, .34);
+      background:
+        radial-gradient(circle, rgba(92,231,255,.44), transparent 56%);
+      box-shadow: 0 0 28px rgba(39,215,255,.45);
+    }
+
+    .analytics-icon::before,
+    .analytics-icon::after {
+      content: "";
+      position: absolute;
+      bottom: 17px;
+      width: 8px;
+      border-radius: 999px 999px 2px 2px;
+      background: linear-gradient(#dff8ff, #2580ff);
+      box-shadow: 0 0 12px rgba(92,231,255,.36);
+    }
+
+    .analytics-icon::before {
+      left: 20px;
+      height: 18px;
+    }
+
+    .analytics-icon::after {
+      left: 33px;
+      height: 28px;
+    }
+
+    .analytics-icon span {
+      position: absolute;
+      left: 46px;
+      bottom: 17px;
+      width: 8px;
+      height: 38px;
+      border-radius: 999px 999px 2px 2px;
+      background: linear-gradient(#eafcff, #60a5fa);
+      box-shadow: 0 0 12px rgba(92,231,255,.36);
+    }
+
+    .check-icon::before {
+      content: "";
+      width: 28px;
+      height: 16px;
+      border-left: 5px solid #c8fff0;
+      border-bottom: 5px solid #c8fff0;
+      transform: rotate(-45deg) translateY(-2px);
+      filter: drop-shadow(0 0 9px rgba(200,255,240,.42));
+    }
+
+    .warning-icon {
+      background:
+        radial-gradient(circle at 36% 22%, rgba(255,255,255,.65), transparent 14%),
+        linear-gradient(145deg, rgba(252, 211, 77, .88), rgba(245, 158, 11, .72) 54%, rgba(75, 36, 9, .78));
+      border-color: rgba(252, 211, 77, .58);
+    }
+
+    .warning-icon::before {
+      content: "";
+      width: 34px;
+      height: 31px;
+      clip-path: polygon(50% 0%, 100% 92%, 0% 92%);
+      background: rgba(5, 13, 31, .72);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.25);
+    }
+
+    .warning-icon::after {
+      content: "!";
+      position: absolute;
+      font-size: 26px;
+      font-weight: 900;
+      color: #fde68a;
+      transform: translateY(1px);
+      text-shadow: 0 0 12px rgba(253,230,138,.38);
+    }
+
+    .search-icon::before {
+      content: "";
+      width: 31px;
+      height: 31px;
+      border-radius: 999px;
+      border: 4px solid rgba(216, 248, 255, .9);
+      box-shadow:
+        inset 0 0 12px rgba(92,231,255,.28),
+        0 0 14px rgba(92,231,255,.28);
+      transform: translate(-3px, -3px);
+    }
+
+    .search-icon::after {
+      content: "";
+      position: absolute;
+      width: 5px;
+      height: 23px;
+      border-radius: 999px;
+      background: rgba(216, 248, 255, .9);
+      transform: rotate(-45deg) translate(17px, 19px);
+      box-shadow: 0 0 10px rgba(92,231,255,.34);
+    }
+
+    .recommend-shield {
+      width: 72px;
+      height: 78px;
+      background:
+        radial-gradient(circle at 36% 20%, rgba(255,255,255,.68), transparent 12%),
+        linear-gradient(145deg, #8b9cff, #714cff 50%, #1d2d7c);
+    }
+
+    .recommend-shield::before {
+      content: "★";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #f5f3ff;
+      font-size: 33px;
+      text-shadow: 0 0 20px rgba(255,255,255,.55);
+      z-index: 3;
+    }
+
+    .feature-visual {
+      position: relative;
+      height: 140px;
+      display: grid;
+      place-items: center;
+    }
+
+    .feature-eye {
+      width: 150px;
+      height: 106px;
+    }
+
+    .feature-eye::before {
+      content: "";
+      position: absolute;
+      inset: 22px 0;
+      border-radius: 999px 999px 999px 999px / 70% 70% 70% 70%;
+      background:
+        radial-gradient(circle at 50% 50%, #06152b 0 13%, #1f8cff 14% 25%, #bfeaff 26% 32%, #1f8cff 33% 45%, #0f2858 46% 65%, transparent 66%),
+        linear-gradient(135deg, rgba(210,244,255,.9), rgba(47,128,255,.55) 50%, rgba(5, 14, 35, .8));
+      border: 1px solid rgba(92,231,255,.36);
+      box-shadow:
+        inset 0 0 30px rgba(255,255,255,.12),
+        0 0 42px rgba(39,215,255,.35);
+      transform: rotate(-6deg);
+    }
+
+    .feature-eye::after {
+      content: "";
+      position: absolute;
+      inset: 50px -8px auto;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(92,231,255,.58);
+      transform: rotate(-12deg);
+      box-shadow: 0 0 30px rgba(39,215,255,.24);
+    }
+
+    .feature-path {
+      width: 150px;
+      height: 116px;
+    }
+
+    .feature-path::before {
+      content: "";
+      position: absolute;
+      inset: 14px 20px 26px;
+      border-radius: 999px;
+      border: 18px solid rgba(95, 135, 255, .35);
+      border-left-color: rgba(92,231,255,.65);
+      border-bottom-color: rgba(124,92,255,.7);
+      transform: rotate(-18deg);
+      box-shadow: 0 0 30px rgba(124,92,255,.28);
+    }
+
+    .feature-path span,
+    .feature-path span::before,
+    .feature-path span::after {
+      content: "";
+      position: absolute;
+      width: 34px;
+      height: 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #8af2ff, #714cff);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 0 16px rgba(92,231,255,.28);
+    }
+
+    .feature-path span { left: 34px; bottom: 32px; }
+    .feature-path span::before { left: 37px; top: -28px; }
+    .feature-path span::after { left: 75px; top: -62px; }
+
+    .feature-lock {
+      width: 132px;
+      height: 132px;
+    }
+
+    .feature-lock::before {
+      content: "";
+      position: absolute;
+      inset: 6px 18px;
+      clip-path: polygon(50% 3%, 91% 18%, 83% 76%, 50% 98%, 17% 76%, 9% 18%);
+      background:
+        radial-gradient(circle at 36% 18%, rgba(255,255,255,.66), transparent 11%),
+        linear-gradient(145deg, #8fc8ff, #2f80ff 50%, #1e2e8f);
+      box-shadow:
+        inset 0 -26px 34px rgba(0, 12, 58, .36),
+        0 0 32px rgba(47,128,255,.34);
+    }
+
+    .feature-lock::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 53px;
+      width: 38px;
+      height: 32px;
+      transform: translateX(-50%);
+      border-radius: 8px;
+      background: linear-gradient(145deg, #4aa3ff, #162f8b);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.28),
+        0 0 16px rgba(92,231,255,.22);
+    }
+
+    .lock-loop {
+      position: absolute;
+      left: 50%;
+      top: 34px;
+      width: 34px;
+      height: 34px;
+      transform: translateX(-50%);
+      border-radius: 999px 999px 0 0;
+      border: 7px solid #9ee7ff;
+      border-bottom: 0;
+      z-index: 4;
+      filter: drop-shadow(0 0 10px rgba(92,231,255,.34));
+    }
+
+    @media (max-width: 1180px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .product-card {
+        max-width: 880px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card {
+        grid-template-columns: 150px 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 28px, 1440px);
+      }
+
+      .nav {
+        height: auto;
+        padding: 14px 0;
+      }
+
+      .brand {
+        min-width: 0;
+      }
+
+      .brand-copy strong {
+        font-size: 22px;
+      }
+
+      .brand-copy span {
+        font-size: 12px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav .button {
+        min-height: 44px;
+        padding: 0 14px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding-top: 34px;
+      }
+
+      h1 {
+        font-size: 43px;
+      }
+
+      .hero-copy p {
+        font-size: 16px;
+      }
+
+      .hero-actions,
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .product-card {
+        padding: 14px;
+        border-radius: 22px;
+      }
+
+      .product-header,
+      .review-title,
+      .product-grid,
+      .recommend-card {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .review-title {
+        gap: 12px;
+      }
+
+      .secure-pill {
+        justify-content: center;
+      }
+
+      .upload-panel {
+        min-height: 320px;
+      }
+
+      .result-row {
+        align-items: flex-start;
+      }
+
+      .result-copy strong,
+      .result-copy span {
+        white-space: normal;
+      }
+
+      .status {
+        padding: 8px 10px;
+      }
+
+      .feature-card {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
+
+      .feature-visual {
+        justify-content: start;
+      }
+    }
+  </style>
 </head>
-<body class="bg-hero min-h-screen">
 
-<!-- NAV -->
-<div class="max-w-7xl mx-auto px-5 sm:px-8 py-5">
-<header class="glass rounded-2xl px-5 py-4 flex items-center justify-between mb-2">
-  <div class="flex items-center gap-3">
-    <div style="width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,rgba(14,165,233,.3),rgba(99,102,241,.3));display:grid;place-items:center;border:1px solid rgba(14,165,233,.3)">
-      <!-- House + Eye icon combined -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </div>
-    <div>
-      <p style="font-size:1.05rem;font-weight:700;letter-spacing:-.02em">SpexInspect <span style="font-size:.65rem;font-weight:500;color:#7dd3fc;vertical-align:middle;margin-left:4px;background:rgba(14,165,233,.15);padding:2px 7px;border-radius:99px">BETA</span></p>
-      <p style="font-size:.72rem;color:#64748b">AI-Powered Home Inspection Platform</p>
-    </div>
-  </div>
-  <nav style="display:flex;gap:1.5rem">
-    <a href="#" class="nav-link">Features</a>
-    <a href="#" class="nav-link">Reports</a>
-    <a href="#" class="nav-link">InterNACHI</a>
-    <a href="#" class="nav-link">Pricing</a>
-  </nav>
-  <div style="display:flex;gap:10px;align-items:center">
-    <span class="tag tag-green"><span class="live-dot"></span> Live AI</span>
-    <button class="btn-sky" style="padding:8px 18px;font-size:.82rem">Start Inspection</button>
-  </div>
-</header>
+<body>
+  <div class="page">
+    <header class="nav" aria-label="Main navigation">
+      <a class="brand" href="#">
+        <span class="icon brand-icon" aria-hidden="true"></span>
+        <span class="brand-copy">
+          <strong>ClearEye</strong>
+          <span>Visual QA &amp; Risk Insights</span>
+        </span>
+      </a>
 
-<!-- HERO -->
-<main>
-<section style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;padding:4rem 0 3rem">
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#results">Results</a>
+        <a href="#contact">Contact</a>
+      </nav>
 
-  <!-- Left -->
-  <div>
-    <div class="anim-1" style="display:inline-flex;align-items:center;gap:7px;border-radius:9999px;border:1px solid rgba(14,165,233,.25);background:rgba(14,165,233,.1);padding:6px 14px;font-size:.8rem;color:#7dd3fc;margin-bottom:1.5rem">
-      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-      InterNACHI Certified · Standards of Practice Compliant
-    </div>
-    <h1 class="anim-2" style="font-size:clamp(2.2rem,4.5vw,3.4rem);font-weight:800;line-height:1.1;letter-spacing:-.04em;margin-bottom:1.25rem">
-      Walk the house.<br/>
-      <span style="background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">AI writes the report.</span>
-    </h1>
-    <p class="anim-3" style="font-size:1rem;line-height:1.75;color:#94a3b8;max-width:480px;margin-bottom:2rem">
-      Snap photos with your Meta Ray-Bans. I detect defects in real time, decode HVAC nameplates, analyze drone roof footage, and generate your full <strong style="color:#cbd5e1">InterNACHI-compliant report</strong> before you pack up your truck.
-    </p>
-    <div class="anim-4" style="display:flex;gap:.75rem;margin-bottom:2.5rem">
-      <button class="btn-sky" onclick="simulateScan()">▶ Run Live Demo</button>
-      <button class="btn-outline">View Sample Report</button>
-    </div>
+      <a class="button button-primary" href="#demo">
+        Start Demo <span aria-hidden="true">→</span>
+      </a>
+    </header>
 
-    <!-- Stats row -->
-    <div class="anim-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem">
-      <div class="glass" style="border-radius:14px;padding:14px 12px;text-align:center">
-        <strong style="display:block;font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">10</strong>
-        <span style="font-size:.72rem;color:#64748b;line-height:1.3">InterNACHI<br/>components</span>
-      </div>
-      <div class="glass" style="border-radius:14px;padding:14px 12px;text-align:center">
-        <strong style="display:block;font-size:1.6rem;font-weight:800;color:white">94%</strong>
-        <span style="font-size:.72rem;color:#64748b;line-height:1.3">defect<br/>detection</span>
-      </div>
-      <div class="glass" style="border-radius:14px;padding:14px 12px;text-align:center">
-        <strong style="display:block;font-size:1.6rem;font-weight:800;color:white">&lt;3m</strong>
-        <span style="font-size:.72rem;color:#64748b;line-height:1.3">report<br/>generation</span>
-      </div>
-      <div class="glass" style="border-radius:14px;padding:14px 12px;text-align:center">
-        <strong style="display:block;font-size:1.6rem;font-weight:800;color:white">0</strong>
-        <span style="font-size:.72rem;color:#64748b;line-height:1.3">forms to<br/>fill out</span>
-      </div>
-    </div>
-  </div>
+    <main>
+      <section class="hero" id="demo">
+        <div class="hero-copy">
+          <div class="eyebrow">
+            <span class="icon shield-mini" aria-hidden="true"></span>
+            <span>Smart screening for clearer decisions</span>
+          </div>
 
-  <!-- Right — Live Inspection Card -->
-  <div class="anim-5">
-    <div class="glow-blue" style="border-radius:20px;border:1px solid rgba(14,165,233,.2);background:rgba(5,15,30,.85);overflow:hidden;backdrop-filter:blur(30px)">
+          <h1>
+            Spot visual risks faster with a cleaner,
+            <span class="gradient-text">guided review experience.</span>
+          </h1>
 
-      <!-- Card header -->
-      <div style="border-bottom:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.4);padding:16px 18px;display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <p style="font-size:.72rem;color:#64748b;margin-bottom:2px">Active Inspection</p>
-          <h2 style="font-size:1rem;font-weight:700">247 Oakwood Drive — Charlotte, NC</h2>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <span class="tag tag-blue">Kitchen</span>
-          <span class="tag tag-green"><span class="live-dot"></span> Recording</span>
-        </div>
-      </div>
+          <p>
+            ClearEye helps you quickly understand what the tool does, guides you
+            through the scan flow, and presents results in a trustworthy,
+            actionable way.
+          </p>
 
-      <div style="display:grid;grid-template-columns:.95fr 1.05fr">
+          <div class="hero-actions">
+            <a class="button button-primary" href="#workflow">
+              Run sample review <span aria-hidden="true">→</span>
+            </a>
+            <a class="button button-secondary" href="#workflow">
+              View workflow <span class="arrow-orb" aria-hidden="true">›</span>
+            </a>
+          </div>
 
-        <!-- Photo feed -->
-        <div style="border-right:1px solid rgba(255,255,255,.07);padding:14px;background:rgba(0,0,0,.25)">
-          <p style="font-size:.72rem;color:#64748b;margin-bottom:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em">📸 AI-Assisted Photo Feed</p>
-          <div id="photo-zone" style="position:relative;border-radius:14px;background:rgba(14,165,233,.04);border:1.5px dashed rgba(14,165,233,.25);height:195px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;overflow:hidden">
-            <div class="scanning-overlay" id="scan-overlay">
-              <div class="scan-line" id="scanline"></div>
-              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
-                <div style="width:32px;height:32px;border:2.5px solid #38bdf8;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite"></div>
-                <p style="font-size:.78rem;color:#7dd3fc;font-weight:600">Analyzing photo…</p>
+          <div class="stats" aria-label="ClearEye review statistics">
+            <div class="stat-card">
+              <span class="icon icon-layers" aria-hidden="true"><span></span></span>
+              <div>
+                <strong>3</strong>
+                <span>step review</span>
               </div>
             </div>
-            <svg id="upload-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-            <p id="upload-text" style="font-size:.8rem;color:#64748b">Photo from glasses appears here</p>
-            <p style="font-size:.68rem;color:#475569">Live stream · Auto-analyzed</p>
-          </div>
-          <button onclick="simulateScan()" id="demo-btn" class="btn-sky" style="width:100%;margin-top:10px;padding:9px;font-size:.82rem">
-            ▶ Simulate Photo Capture
-          </button>
 
-          <!-- HVAC nameplate mini card -->
-          <div id="nameplate-card" style="display:none;margin-top:10px;border-radius:11px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);padding:11px">
-            <p style="font-size:.68rem;color:#a5b4fc;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">🔧 HVAC Nameplate Decoded</p>
-            <div style="display:flex;flex-direction:column;gap:4px;font-size:.76rem">
-              <div style="display:flex;justify-content:space-between"><span style="color:#94a3b8">Unit</span><span style="color:white;font-weight:600">Carrier 4-Ton / 16 SEER</span></div>
-              <div style="display:flex;justify-content:space-between"><span style="color:#94a3b8">Manufactured</span><span style="color:white">June 2014 · Age: 12 yrs</span></div>
-              <div style="display:flex;justify-content:space-between"><span style="color:#94a3b8">Est. remaining</span><span style="color:#fcd34d;font-weight:600">~3 years ⚠️</span></div>
-              <div style="display:flex;justify-content:space-between"><span style="color:#94a3b8">Replacement</span><span style="color:#fca5a5">~$5,000–$7,000</span></div>
+            <div class="stat-card">
+              <span class="icon stat-shield" aria-hidden="true"></span>
+              <div>
+                <strong>92%</strong>
+                <span>confidence</span>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <!-- AI findings -->
-        <div style="padding:14px">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-            <p style="font-size:.72rem;color:#64748b;font-weight:500;text-transform:uppercase;letter-spacing:.06em">🤖 AI Findings</p>
-            <!-- Score ring -->
-            <div class="score-ring">
-              <svg viewBox="0 0 90 90" width="64" height="64">
-                <circle cx="45" cy="45" r="36" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="7"/>
-                <circle id="score-circle" cx="45" cy="45" r="36" fill="none" stroke="url(#sg)" stroke-width="7" stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="226" style="transition:stroke-dashoffset 1.2s ease"/>
-                <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs>
-              </svg>
-              <div class="val" style="font-size:.6rem">
-                <span id="score-val" style="font-size:1.05rem;font-weight:800;color:white">–</span>
-                <span style="color:#64748b">score</span>
+            <div class="stat-card">
+              <span class="icon flag-icon" aria-hidden="true"></span>
+              <div>
+                <strong>4</strong>
+                <span>risk flags</span>
               </div>
             </div>
           </div>
+        </div>
 
-          <div id="findings" style="display:flex;flex-direction:column;gap:7px">
-            <!-- Placeholder -->
-            <div style="border-radius:10px;border:1px dashed rgba(255,255,255,.08);padding:20px;text-align:center;color:#475569;font-size:.8rem">
-              Run demo to see live findings
+        <section class="product-card" id="workflow" aria-label="Patient Image Assessment workflow">
+          <div class="product-header">
+            <div class="review-title">
+              <span class="icon icon-orb eye-badge" aria-hidden="true"></span>
+              <div>
+                <small>Current review</small>
+                <h2>Patient Image Assessment</h2>
+              </div>
+            </div>
+
+            <div class="secure-pill">
+              <span aria-hidden="true">▣</span>
+              Secure session
+              <span class="secure-dot" aria-hidden="true"></span>
             </div>
           </div>
 
-          <!-- Recommendation box -->
-          <div id="reco-box" style="display:none;margin-top:10px;border-radius:11px;background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.18);padding:11px">
-            <p style="font-size:.7rem;font-weight:600;color:#7dd3fc;margin-bottom:4px">📋 Voice Coaching Note</p>
-            <p style="font-size:.76rem;color:#94a3b8;line-height:1.55">Check under the sink for signs of slow leak — moisture staining detected on cabinet base. Also get a wider shot of the ceiling corner for the water mark.</p>
-          </div>
+          <div class="product-grid">
+            <div class="upload-panel">
+              <div class="upload-zone">
+                <div>
+                  <span class="icon cloud-icon" aria-hidden="true">
+                    <span class="cloud-arrow"></span>
+                    <span class="cloud-base"></span>
+                  </span>
+                  <h3>Upload or capture image</h3>
+                  <p>JPG, PNG, or mobile capture</p>
+                </div>
+              </div>
 
-          <!-- Progress bars -->
-          <div id="progress-section" style="display:none;margin-top:12px">
-            <p style="font-size:.7rem;color:#64748b;margin-bottom:8px;font-weight:500">Rooms completed</p>
-            <div style="display:flex;flex-direction:column;gap:5px;font-size:.72rem;color:#94a3b8">
-              <div style="display:flex;align-items:center;gap:8px"><span style="width:68px">Kitchen</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div class="bar" style="--w:100%;width:0"></div></div><span style="color:#86efac;font-weight:600">✓</span></div>
-              <div style="display:flex;align-items:center;gap:8px"><span style="width:68px">Bathroom</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div class="bar" style="--w:75%;width:0"></div></div><span>4/5</span></div>
-              <div style="display:flex;align-items:center;gap:8px"><span style="width:68px">Attic</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div class="bar" style="--w:30%;width:0"></div></div><span>1/3</span></div>
+              <button class="button button-primary" type="button" id="analyzeButton">
+                Analyze sample <span aria-hidden="true">✦</span>
+              </button>
+            </div>
+
+            <div class="summary-stack" id="results">
+              <div class="summary-panel">
+                <div class="summary-heading">
+                  <span class="icon icon-orb analytics-icon" aria-hidden="true"><span></span></span>
+                  <h3>Assessment Summary</h3>
+                </div>
+
+                <div class="result-row">
+                  <span class="icon icon-orb check-icon" aria-hidden="true"></span>
+                  <div class="result-copy">
+                    <strong>Image quality</strong>
+                    <span>Lighting and focus are acceptable</span>
+                  </div>
+                  <span class="status status-pass">Pass</span>
+                </div>
+
+                <div class="result-row">
+                  <span class="icon icon-orb warning-icon" aria-hidden="true"></span>
+                  <div class="result-copy">
+                    <strong>Review needed</strong>
+                    <span>Minor redness detected near lower lid</span>
+                  </div>
+                  <span class="status status-flag">Flag</span>
+                </div>
+
+                <div class="result-row">
+                  <span class="icon icon-orb search-icon" aria-hidden="true"></span>
+                  <div class="result-copy">
+                    <strong>Similarity check</strong>
+                    <span>No critical match found</span>
+                  </div>
+                  <span class="status status-clear">Clear</span>
+                </div>
+              </div>
+
+              <aside class="recommend-card">
+                <span class="icon recommend-shield" aria-hidden="true"></span>
+                <div>
+                  <h3>Recommended next action</h3>
+                  <p>
+                    Overall risk appears low. Minor redness observed near the lower lid.
+                    Confidence: <b>92%</b>. Continue routine monitoring and escalate if
+                    symptoms persist or worsen.
+                  </p>
+                </div>
+              </aside>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </section>
 
-      <!-- Card footer -->
-      <div style="border-top:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.3);padding:11px 18px;display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;gap:10px">
-          <span class="tag tag-purple">🚁 DJI Mavic T3 roof: pending</span>
-          <span class="tag tag-blue">🔭 Sewer scope cam: pending</span>
-        </div>
-        <button class="btn-sky" style="font-size:.75rem;padding:6px 14px">Generate Report →</button>
-      </div>
-    </div>
+      <section class="features" id="features">
+        <article class="feature-card">
+          <div class="feature-visual">
+            <span class="icon feature-eye" aria-hidden="true"></span>
+          </div>
+          <div>
+            <h3>Clear first impression</h3>
+            <div class="rule" aria-hidden="true"></div>
+            <p>
+              Simple, intuitive onboarding and clean visuals help users get confidence
+              from the very first step.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-visual">
+            <span class="icon feature-path" aria-hidden="true"><span></span></span>
+          </div>
+          <div>
+            <h3>Guided action flow</h3>
+            <div class="rule" aria-hidden="true"></div>
+            <p>
+              A streamlined, step-by-step workflow keeps reviews efficient and reduces
+              manual guesswork.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card" id="contact">
+          <div class="feature-visual">
+            <span class="icon feature-lock" aria-hidden="true"><span class="lock-loop"></span></span>
+          </div>
+          <div>
+            <h3>Trust-focused results</h3>
+            <div class="rule" aria-hidden="true"></div>
+            <p>
+              Transparent insights, clear risk signals, and confidence scores you can rely on.
+            </p>
+          </div>
+        </article>
+      </section>
+    </main>
   </div>
-</section>
 
-<!-- FEATURES -->
-<section style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding-bottom:1.5rem">
-  <div class="feature-card">
-    <div style="width:36px;height:36px;border-radius:9px;background:rgba(14,165,233,.15);display:grid;place-items:center;margin-bottom:14px">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    </div>
-    <h3 style="font-weight:700;margin-bottom:8px">AI-Assisted Live Analysis</h3>
-    <p style="font-size:.85rem;line-height:1.7;color:#64748b">Walk any room with Meta Ray-Bans or any camera. Photos stream to AI and defects are flagged in real time as you inspect.</p>
-  </div>
-  <div class="feature-card">
-    <div style="width:36px;height:36px;border-radius:9px;background:rgba(139,92,246,.15);display:grid;place-items:center;margin-bottom:14px">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 2v10l4.24 4.24"/><circle cx="19" cy="5" r="3"/></svg>
-    </div>
-    <h3 style="font-weight:700;margin-bottom:8px">HVAC Nameplate Decoder</h3>
-    <p style="font-size:.85rem;line-height:1.7;color:#64748b">Snap the nameplate → get age, SEER, tonnage, refrigerant type, and years of remaining service life instantly.</p>
-  </div>
-  <div class="feature-card">
-    <div style="width:36px;height:36px;border-radius:9px;background:rgba(34,197,94,.15);display:grid;place-items:center;margin-bottom:14px">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-    </div>
-    <h3 style="font-weight:700;margin-bottom:8px">Drone + Sewer Scope Analysis</h3>
-    <p style="font-size:.85rem;line-height:1.7;color:#64748b">DJI Mavic T3 thermal roof scans detect moisture &amp; heat loss invisible to the naked eye. Sewer scope footage flags root intrusion, cracks &amp; pipe defects automatically.</p>
-  </div>
-  <div class="feature-card">
-    <div style="width:36px;height:36px;border-radius:9px;background:rgba(245,158,11,.15);display:grid;place-items:center;margin-bottom:14px">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    </div>
-    <h3 style="font-weight:700;margin-bottom:8px">InterNACHI Compliant</h3>
-    <p style="font-size:.85rem;line-height:1.7;color:#64748b">Reports structured around all 10 InterNACHI SOP components with your cert number in the header.</p>
-  </div>
-  <div class="feature-card">
-    <div style="width:36px;height:36px;border-radius:9px;background:rgba(14,165,233,.15);display:grid;place-items:center;margin-bottom:14px">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-    </div>
-    <h3 style="font-weight:700;margin-bottom:8px">Zero-Form Reports</h3>
-    <p style="font-size:.85rem;line-height:1.7;color:#64748b">Type <code style="background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:.8em">!inspect stop</code> — full InterNACHI-compliant PDF with your cert number, all 10 SOP components, photos, defects &amp; cost estimates. Ready before you leave the driveway.</p>
-  </div>
-  <div class="feature-card">
-    <div style="width:36px;height:36px;border-radius:9px;background:rgba(239,68,68,.15);display:grid;place-items:center;margin-bottom:14px">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    </div>
-    <h3 style="font-weight:700;margin-bottom:8px">Voice Coaching</h3>
-    <p style="font-size:.85rem;line-height:1.7;color:#64748b">After each photo, I voice-coach you on what to check next — like a second inspector in your ear who never gets tired.</p>
-  </div>
-</section>
+  <script>
+    const analyzeButton = document.getElementById("analyzeButton");
 
-<!-- HOME HEALTH SCORE TEASER -->
-<div style="border-radius:16px;background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(14,165,233,.08));border:1px solid rgba(99,102,241,.2);padding:24px 28px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:2rem">
-  <div style="flex:1">
-    <div style="display:inline-flex;align-items:center;gap:6px;font-size:.72rem;color:#c4b5fd;background:rgba(139,92,246,.15);border-radius:99px;padding:3px 10px;margin-bottom:10px;font-weight:600">🚀 Coming Soon</div>
-    <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:6px">Home Health Score — Consumer Product</h3>
-    <p style="font-size:.85rem;color:#94a3b8;line-height:1.7;max-width:540px">The same AI that powers professional inspections, available to any homeowner. Take photos like a TikTok tour → get a 0–100 score → see exactly what's wrong and what it costs to fix. <strong style="color:#c4b5fd">83 million homeowners. $4.99 per scan.</strong> Every SpexInspect inspection builds the training data that makes the whole platform smarter.</p>
-  </div>
-  <div style="text-align:center;flex-shrink:0">
-    <div style="font-size:3rem;font-weight:800;background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1">83M</div>
-    <div style="font-size:.75rem;color:#64748b;margin-top:4px">potential homeowners</div>
-  </div>
-</div>
+    analyzeButton?.addEventListener("click", () => {
+      const original = analyzeButton.innerHTML;
+      analyzeButton.innerHTML = "Analyzing sample…";
+      analyzeButton.disabled = true;
 
-<!-- INTERNACHI BADGE ROW -->
-<div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;margin-bottom:4rem">
-  <div style="display:flex;align-items:center;gap:14px">
-    <div style="width:44px;height:44px;border-radius:11px;background:rgba(14,165,233,.12);border:1px solid rgba(14,165,233,.2);display:grid;place-items:center">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-    </div>
-    <div>
-      <p style="font-weight:700;font-size:.95rem">InterNACHI Member</p>
-      <p style="font-size:.78rem;color:#64748b">Reports follow InterNACHI Standards of Practice · All 10 required inspection components included</p>
-    </div>
-  </div>
-  <div style="display:flex;gap:14px;font-size:.78rem;color:#64748b;flex-wrap:wrap">
-    <span>✓ Roofing</span>
-    <span>✓ Electrical</span>
-    <span>✓ HVAC</span>
-    <span>✓ Plumbing</span>
-    <span>✓ Structure</span>
-    <span>✓ Exterior</span>
-    <span>✓ Attic</span>
-    <span>✓ Fireplace</span>
-    <span>✓ Doors &amp; Windows</span>
-    <span style="color:#38bdf8">✓ Basement/Crawlspace</span>
-  </div>
-</div>
-
-</main>
-</div>
-
-<style>
-@keyframes spin { to { transform: rotate(360deg); } }
-</style>
-
-<script>
-let scanned = false;
-function simulateScan() {
-  if (scanned) return;
-  scanned = true;
-  const btn = document.getElementById('demo-btn');
-  btn.textContent = 'Analyzing…';
-  btn.disabled = true;
-  btn.style.opacity = '0.6';
-
-  // Show scan overlay
-  document.getElementById('scan-overlay').classList.add('active');
-  document.getElementById('upload-text').style.display = 'none';
-  document.getElementById('upload-icon').style.display = 'none';
-
-  setTimeout(() => {
-    document.getElementById('scan-overlay').classList.remove('active');
-
-    // Show nameplate card
-    document.getElementById('nameplate-card').style.display = 'block';
-
-    // Update findings
-    document.getElementById('findings').innerHTML = `
-      <div class="row-item">
-        <div class="icon-box" style="background:rgba(239,68,68,.15)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </div>
-        <div style="flex:1;min-width:0">
-          <p style="font-weight:600;font-size:.82rem">Water staining — ceiling NW corner</p>
-          <p style="font-size:.72rem;color:#64748b">Active or past leak · Investigate insulation above</p>
-        </div>
-        <span class="tag tag-red">High</span>
-      </div>
-      <div class="row-item">
-        <div class="icon-box" style="background:rgba(245,158,11,.15)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </div>
-        <div style="flex:1;min-width:0">
-          <p style="font-weight:600;font-size:.82rem">Cabinet moisture — under sink</p>
-          <p style="font-size:.72rem;color:#64748b">Staining on base panel · Check supply line</p>
-        </div>
-        <span class="tag tag-amber">Medium</span>
-      </div>
-      <div class="row-item">
-        <div class="icon-box" style="background:rgba(34,197,94,.15)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        </div>
-        <div style="flex:1;min-width:0">
-          <p style="font-weight:600;font-size:.82rem">GFCI outlet — verified present</p>
-          <p style="font-size:.72rem;color:#64748b">Within 6ft of sink · Code compliant</p>
-        </div>
-        <span class="tag tag-green">Pass</span>
-      </div>
-    `;
-
-    // Animate score ring
-    const offset = 226 - (226 * 71 / 100);
-    document.getElementById('score-circle').style.strokeDashoffset = offset;
-    document.getElementById('score-val').textContent = '71';
-
-    // Show reco and progress
-    document.getElementById('reco-box').style.display = 'block';
-    document.getElementById('progress-section').style.display = 'block';
-
-    // Reset button
-    btn.textContent = '✓ Analysis complete';
-    btn.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
-    btn.style.opacity = '1';
-  }, 2000);
-}
-</script>
+      setTimeout(() => {
+        analyzeButton.innerHTML = "Analysis complete ✓";
+        setTimeout(() => {
+          analyzeButton.innerHTML = original;
+          analyzeButton.disabled = false;
+        }, 1300);
+      }, 1000);
+    });
+  </script>
 </body>
 </html>
