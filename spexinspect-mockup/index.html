@@ -75,9 +75,17 @@
       display: grid;
       place-items: center;
       border: 1px solid rgba(56, 189, 248, 0.38);
-      background: linear-gradient(135deg, rgba(56,189,248,.22), rgba(99,102,241,.26));
+      background:
+        radial-gradient(circle at 28% 22%, rgba(255,255,255,.32), transparent 18%),
+        linear-gradient(135deg, rgba(14,165,233,.22), rgba(37,99,235,.22));
       color: #7dd3fc;
-      font-weight: 900;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+    }
+
+    .brand-mark svg {
+      width: 24px;
+      height: 24px;
+      display: block;
     }
 
     .brand strong { display: block; font-size: 18px; letter-spacing: -0.03em; }
@@ -484,7 +492,14 @@
   <div class="page">
     <header class="nav" aria-label="Main navigation">
       <a class="brand" href="#top" id="top">
-        <span class="brand-mark" aria-hidden="true">SI</span>
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 10.5 12 4l8 6.5v8.25A1.25 1.25 0 0 1 18.75 20H5.25A1.25 1.25 0 0 1 4 18.75V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M8.25 11.75c2.25-2.1 5.25-2.1 7.5 0-2.25 2.1-5.25 2.1-7.5 0Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="12" cy="11.75" r="1.15" fill="currentColor"/>
+          </svg>
+        </span>
         <span>
           <strong>SpexInspect</strong>
           <span>AI home inspection reports</span>
@@ -502,7 +517,7 @@
     <main>
       <section class="hero" id="demo">
         <div class="hero-copy">
-          <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span> Built with Bobby hardrock55, InterNACHI-certified inspector</div>
+          <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span> InterNACHI-certified inspector</div>
           <h1>
             Walk the house.
             <span class="gradient-text">AI writes the report.</span>
