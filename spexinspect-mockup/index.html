@@ -3,1391 +3,830 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ClearEye | Visual QA & Risk Insights</title>
-  <meta name="description" content="ClearEye helps users spot visual risks faster with guided review workflows, confidence scoring, and trust-focused results." />
-
+  <title>SpexInspect | AI Home Inspection Reports</title>
+  <meta name="description" content="SpexInspect turns Meta Ray-Ban walkthrough photos, drone thermal scans, sewer scope footage, and HVAC nameplates into InterNACHI-ready inspection reports." />
   <style>
     :root {
-      --bg-950: #020617;
-      --bg-900: #07111f;
-      --bg-850: #0a1730;
-      --panel: rgba(15, 35, 72, 0.66);
-      --panel-strong: rgba(12, 29, 62, 0.9);
-      --line: rgba(148, 163, 184, 0.22);
-      --line-strong: rgba(125, 168, 255, 0.42);
+      --bg: #020617;
+      --panel: rgba(15, 23, 42, 0.78);
+      --panel-2: rgba(15, 35, 68, 0.74);
+      --line: rgba(148, 163, 184, 0.18);
+      --line-strong: rgba(56, 189, 248, 0.34);
       --text: #f8fafc;
-      --muted: #aebbd0;
-      --soft: #dbeafe;
-      --cyan: #27d7ff;
-      --cyan-2: #5ce7ff;
-      --blue: #2f80ff;
-      --violet: #7c5cff;
-      --purple: #b96cff;
-      --green: #4ade80;
+      --muted: #94a3b8;
+      --soft: #cbd5e1;
+      --sky: #38bdf8;
+      --blue: #2563eb;
+      --indigo: #6366f1;
+      --green: #22c55e;
       --amber: #f59e0b;
-      --danger: #fb7185;
-      --shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
+      --red: #ef4444;
+      --radius: 18px;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.32);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family:
-        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at 8% 8%, rgba(39, 215, 255, 0.14), transparent 28%),
-        radial-gradient(circle at 75% 16%, rgba(124, 92, 255, 0.18), transparent 32%),
-        linear-gradient(180deg, #020617 0%, #061326 45%, #030712 100%);
+        radial-gradient(circle at 12% 10%, rgba(56, 189, 248, 0.16), transparent 30%),
+        radial-gradient(circle at 88% 16%, rgba(99, 102, 241, 0.18), transparent 32%),
+        linear-gradient(180deg, #020617 0%, #071526 52%, #020617 100%);
       overflow-x: hidden;
     }
 
-    body::before,
-    body::after {
-      content: "";
-      position: fixed;
-      inset: auto -10% -24% -10%;
-      height: 45vh;
-      pointer-events: none;
-      background:
-        repeating-linear-gradient(
-          160deg,
-          rgba(39, 215, 255, 0.075) 0 1px,
-          transparent 1px 20px
-        );
-      opacity: 0.75;
-      transform: skewY(-8deg);
-      mask-image: linear-gradient(to top, black, transparent);
-    }
-
-    body::after {
-      inset: -12% auto auto -12%;
-      width: 46vw;
-      height: 46vw;
-      border-radius: 999px;
-      background: radial-gradient(circle, rgba(39, 215, 255, 0.12), transparent 68%);
-      filter: blur(6px);
-      opacity: 0.8;
-      transform: none;
-      mask-image: none;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
 
     .page {
-      position: relative;
-      z-index: 1;
-      width: min(1440px, calc(100% - 48px));
+      width: min(1220px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 18px 0 42px;
+      padding: 18px 0 44px;
     }
 
     .nav {
-      height: 72px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+      gap: 18px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(2, 6, 23, 0.62);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 12px 34px rgba(0,0,0,.18);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
-      min-width: 250px;
+      gap: 12px;
+      min-width: 236px;
     }
 
-    .brand-copy strong {
-      display: block;
-      font-size: 27px;
-      letter-spacing: -0.04em;
-      line-height: 1;
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(56, 189, 248, 0.38);
+      background: linear-gradient(135deg, rgba(56,189,248,.22), rgba(99,102,241,.26));
+      color: #7dd3fc;
+      font-weight: 900;
     }
 
-    .brand-copy span {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 14px;
-    }
+    .brand strong { display: block; font-size: 18px; letter-spacing: -0.03em; }
+    .brand span { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
 
     .nav-links {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: clamp(24px, 4vw, 64px);
-      color: #e5edf8;
-      font-size: 15px;
+      gap: clamp(16px, 3vw, 38px);
+      color: var(--soft);
+      font-size: 14px;
     }
 
-    .nav-links a {
-      opacity: 0.88;
-      transition: color 0.2s ease, opacity 0.2s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--cyan-2);
-      opacity: 1;
-    }
+    .nav-links a:hover { color: var(--sky); }
 
     .button {
-      border: 0;
-      cursor: pointer;
-      color: var(--text);
-      font: inherit;
-      font-weight: 700;
-      border-radius: 15px;
-      min-height: 54px;
-      padding: 0 26px;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 12px;
+      border: 1px solid transparent;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease,
-        background 0.2s ease;
-    }
-
-    .button:hover {
-      transform: translateY(-2px);
-    }
-
-    .button-primary {
-      background: linear-gradient(135deg, #2ee8ff 0%, #2674ff 52%, #714cff 100%);
-      box-shadow:
-        0 18px 40px rgba(39, 215, 255, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.42);
-    }
-
-    .button-secondary {
-      background: rgba(6, 17, 39, 0.72);
-      border: 1px solid rgba(167, 188, 255, 0.36);
-      color: #cfd8e8;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    }
-
-    .button-secondary:hover {
-      border-color: rgba(39, 215, 255, 0.55);
-      color: var(--text);
-    }
-
-    .arrow-orb {
-      width: 25px;
-      height: 25px;
-      border-radius: 999px;
-      display: inline-grid;
-      place-items: center;
+      gap: 9px;
       color: white;
-      background: linear-gradient(145deg, rgba(255,255,255,.24), rgba(255,255,255,.05));
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.16);
+      font-weight: 750;
+      cursor: pointer;
+      transition: transform .16s ease, opacity .16s ease, border-color .16s ease;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+    .button-primary {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb 55%, #6366f1);
+      box-shadow: 0 16px 36px rgba(14, 165, 233, 0.22);
+    }
+    .button-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(148, 163, 184, 0.26);
+      color: var(--soft);
     }
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 0.92fr) minmax(580px, 1.18fr);
-      gap: 30px;
+      grid-template-columns: minmax(0, 0.92fr) minmax(560px, 1.08fr);
+      gap: 34px;
       align-items: center;
-      padding: 54px 0 30px;
-    }
-
-    .hero-copy {
-      padding: 4px 0;
+      padding: 54px 0 28px;
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 13px;
-      min-height: 50px;
-      padding: 8px 20px 8px 12px;
-      border: 1px solid rgba(147, 166, 255, 0.5);
-      background: rgba(9, 20, 46, 0.68);
-      color: #f5f9ff;
+      gap: 9px;
+      padding: 8px 13px;
+      border: 1px solid rgba(56, 189, 248, 0.28);
       border-radius: 999px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+      background: rgba(14, 165, 233, 0.09);
+      color: #7dd3fc;
+      font-size: 13px;
+      font-weight: 700;
     }
 
     h1 {
-      margin: 28px 0 18px;
-      font-size: clamp(42px, 5.4vw, 72px);
+      margin: 20px 0 18px;
+      font-size: clamp(44px, 6vw, 76px);
       line-height: 0.98;
-      letter-spacing: -0.07em;
-      max-width: 640px;
+      letter-spacing: -0.055em;
+      max-width: 650px;
     }
 
     .gradient-text {
-      background: linear-gradient(120deg, #35e2ff 0%, #58a6ff 40%, #a974ff 74%, #f08cff 100%);
+      color: transparent;
+      background: linear-gradient(120deg, #38bdf8, #60a5fa 48%, #a5b4fc);
       -webkit-background-clip: text;
       background-clip: text;
-      color: transparent;
     }
 
     .hero-copy p {
       margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.72;
       max-width: 590px;
-      color: #c4cee0;
-      font-size: 18px;
-      line-height: 1.55;
     }
 
     .hero-actions {
-      margin-top: 28px;
       display: flex;
-      gap: 20px;
       flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
     }
 
-    .stats {
+    .proof-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 26px;
-      max-width: 560px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+      max-width: 610px;
     }
 
-    .stat-card {
-      min-height: 98px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 18px 18px;
-      border: 1px solid rgba(137, 171, 255, 0.28);
-      border-radius: var(--radius-md);
-      background:
-        linear-gradient(145deg, rgba(24, 50, 96, 0.72), rgba(8, 18, 40, 0.76));
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.09),
-        0 14px 34px rgba(0,0,0,.22);
+    .proof {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 12px;
+      background: rgba(255, 255, 255, 0.045);
     }
+    .proof strong { display: block; font-size: 25px; letter-spacing: -0.04em; }
+    .proof span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.35; }
 
-    .stat-card strong {
-      display: block;
-      font-size: 32px;
-      letter-spacing: -0.04em;
-      line-height: 1;
-    }
-
-    .stat-card span {
-      display: block;
-      margin-top: 6px;
-      color: #d9e3f1;
-      font-size: 14px;
-    }
-
-    .product-card {
-      position: relative;
-      border: 1px solid rgba(130, 155, 255, 0.46);
-      border-radius: 28px;
-      padding: 22px;
-      background:
-        linear-gradient(145deg, rgba(18, 43, 86, 0.86), rgba(5, 14, 35, 0.94));
-      box-shadow:
-        0 30px 90px rgba(0,0,0,.42),
-        inset 0 1px 0 rgba(255,255,255,.14),
-        0 0 0 1px rgba(92, 231, 255, 0.08);
+    .demo-card {
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      border-radius: 24px;
       overflow: hidden;
+      background: rgba(5, 15, 30, 0.9);
+      box-shadow: var(--shadow);
     }
 
-    .product-card::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 15% 0%, rgba(39,215,255,.18), transparent 28%),
-        radial-gradient(circle at 90% 100%, rgba(124,92,255,.2), transparent 30%);
-      opacity: .9;
-    }
-
-    .product-card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .product-header {
+    .demo-header,
+    .demo-footer {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      margin-bottom: 16px;
-      padding: 0 10px;
+      gap: 14px;
+      padding: 16px 18px;
+      background: rgba(0, 0, 0, 0.32);
+      border-bottom: 1px solid rgba(255,255,255,.07);
     }
 
-    .review-title {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
+    .demo-footer { border-top: 1px solid rgba(255,255,255,.07); border-bottom: 0; }
+    .label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .demo-header h2 { margin: 0; font-size: 18px; letter-spacing: -0.03em; }
 
-    .review-title small {
-      display: block;
-      color: #bcc8dc;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .review-title h2 {
-      margin: 0;
-      font-size: 24px;
-      letter-spacing: -0.035em;
-    }
-
-    .secure-pill {
+    .tag {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 15px;
-      border-radius: 16px;
-      border: 1px solid rgba(125, 168, 255, 0.24);
-      background: rgba(4, 14, 31, 0.66);
-      color: #68ecff;
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .secure-dot {
-      width: 8px;
-      height: 8px;
+      gap: 6px;
       border-radius: 999px;
-      background: #34d399;
-      box-shadow: 0 0 14px #34d399;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      border: 1px solid currentColor;
+      background: rgba(255,255,255,.05);
+    }
+    .tag-green { color: #86efac; }
+    .tag-blue { color: #7dd3fc; }
+    .tag-amber { color: #fcd34d; }
+    .tag-red { color: #fca5a5; }
+    .tag-violet { color: #c4b5fd; }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
     }
 
-    .product-grid {
+    .demo-grid {
       display: grid;
-      grid-template-columns: 0.92fr 1.45fr;
-      gap: 16px;
+      grid-template-columns: 0.95fr 1.05fr;
     }
 
-    .upload-panel,
-    .summary-panel,
-    .recommend-card {
-      border: 1px solid rgba(114, 158, 255, 0.28);
+    .feed {
+      padding: 15px;
+      border-right: 1px solid rgba(255,255,255,.07);
+      background: rgba(0,0,0,.18);
+    }
+
+    .photo-zone {
+      position: relative;
+      min-height: 220px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px dashed rgba(56, 189, 248, 0.32);
       background:
-        linear-gradient(145deg, rgba(18, 42, 84, 0.55), rgba(5, 16, 39, 0.75));
-      border-radius: 22px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.08),
-        0 16px 40px rgba(0,0,0,.2);
-    }
-
-    .upload-panel {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 400px;
-    }
-
-    .upload-zone {
-      flex: 1;
-      min-height: 280px;
-      border: 1px dashed rgba(70, 159, 255, 0.82);
-      border-radius: 22px;
+        linear-gradient(rgba(15, 23, 42, .15), rgba(15, 23, 42, .55)),
+        linear-gradient(135deg, #475569 0 15%, #1e293b 15% 35%, #334155 35% 55%, #0f172a 55% 100%);
       display: grid;
       place-items: center;
-      padding: 22px;
       text-align: center;
-      background: radial-gradient(circle at 50% 70%, rgba(39,215,255,.12), transparent 48%);
+      color: #dbeafe;
     }
 
-    .upload-zone h3 {
-      margin: 18px 0 7px;
-      font-size: 17px;
+    .cabinet {
+      width: min(84%, 260px);
+      aspect-ratio: 1.5;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 34% 70%, rgba(245, 158, 11, .52), transparent 12%),
+        linear-gradient(90deg, #6b4f3a 0 50%, #78583f 50% 100%);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.18), 0 20px 40px rgba(0,0,0,.3);
+      position: relative;
+    }
+    .cabinet::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(0,0,0,.26);
+    }
+    .cabinet::after {
+      content: "Moisture staining";
+      position: absolute;
+      left: 18px;
+      bottom: 14px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(2, 6, 23, .82);
+      border: 1px solid rgba(245, 158, 11, .48);
+      color: #fde68a;
+      font-size: 11px;
+      font-weight: 900;
     }
 
-    .upload-zone p {
-      margin: 0;
-      color: #cbd5e1;
-      font-size: 14px;
+    .scan-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 12%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(125, 211, 252, .9), transparent);
+      animation: scan 2s ease-in-out infinite alternate;
+      opacity: 0;
     }
+    .is-scanning .scan-line { opacity: 1; }
+    @keyframes scan { from { top: 12%; } to { top: 88%; } }
 
-    .upload-panel .button {
-      margin-top: 18px;
-      width: 100%;
+    .nameplate,
+    .coach-note,
+    .progress {
+      display: none;
+      margin-top: 12px;
+      border: 1px solid rgba(99, 102, 241, 0.24);
+      border-radius: 14px;
+      background: rgba(99, 102, 241, 0.09);
+      padding: 12px;
     }
+    .nameplate.is-visible,
+    .coach-note.is-visible,
+    .progress.is-visible { display: block; }
 
-    .summary-stack {
+    .kv { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .kv strong { color: var(--text); text-align: right; }
+
+    .findings { padding: 15px; }
+    .findings-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .score {
+      width: 70px;
+      height: 70px;
+      border-radius: 999px;
       display: grid;
-      grid-template-rows: 1fr auto;
-      gap: 16px;
+      place-items: center;
+      border: 8px solid rgba(255,255,255,.08);
+      background: radial-gradient(circle, rgba(56,189,248,.14), transparent 62%);
+      font-weight: 900;
+      font-size: 24px;
     }
 
-    .summary-panel {
-      padding: 18px;
-    }
-
-    .summary-heading {
+    .finding {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 14px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.045);
+      margin-top: 8px;
     }
-
-    .summary-heading h3 {
-      margin: 0;
-      font-size: 19px;
-      letter-spacing: -0.03em;
-    }
-
-    .result-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 13px 13px;
-      border: 1px solid rgba(125, 168, 255, 0.21);
-      background: rgba(21, 48, 93, 0.48);
-      border-radius: 15px;
-    }
-
-    .result-row + .result-row {
-      margin-top: 10px;
-    }
-
-    .result-copy {
-      min-width: 0;
-      flex: 1;
-    }
-
-    .result-copy strong {
-      display: block;
-      font-size: 16px;
-      letter-spacing: -0.025em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .result-copy span {
-      display: block;
-      color: #cbd5e1;
-      font-size: 13px;
-      margin-top: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .status {
-      border-radius: 13px;
-      padding: 10px 16px;
-      font-size: 13px;
-      font-weight: 800;
-      border: 1px solid currentColor;
-      background: rgba(255,255,255,.06);
-    }
-
-    .status-pass { color: #69f2b0; }
-    .status-flag { color: #fbbf24; }
-    .status-clear { color: #60a5fa; }
-
-    .recommend-card {
-      display: flex;
-      gap: 16px;
-      padding: 18px;
-      border-color: rgba(185, 108, 255, 0.58);
-      background:
-        radial-gradient(circle at 0% 40%, rgba(124, 92, 255, 0.28), transparent 36%),
-        linear-gradient(145deg, rgba(51, 40, 100, 0.82), rgba(14, 25, 61, 0.78));
-    }
-
-    .recommend-card h3 {
-      margin: 2px 0 8px;
-      font-size: 16px;
-    }
-
-    .recommend-card p {
-      margin: 0;
-      color: #d7e2f1;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .recommend-card b {
-      color: #5ce7ff;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 28px;
-    }
-
-    .feature-card {
-      min-height: 210px;
-      display: grid;
-      grid-template-columns: 170px 1fr;
-      align-items: center;
-      gap: 18px;
-      padding: 24px;
-      border: 1px solid rgba(125, 168, 255, 0.24);
-      background:
-        linear-gradient(145deg, rgba(17, 39, 77, 0.72), rgba(4, 15, 34, 0.82));
-      border-radius: 22px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.08),
-        0 20px 60px rgba(0,0,0,.22);
-    }
-
-    .feature-card h3 {
-      margin: 0;
-      font-size: 21px;
-      letter-spacing: -0.04em;
-    }
-
-    .feature-card .rule {
-      width: 40px;
-      height: 3px;
-      border-radius: 999px;
-      margin: 20px 0;
-      background: linear-gradient(90deg, var(--cyan), var(--purple));
-      box-shadow: 0 0 16px rgba(39, 215, 255, 0.45);
-    }
-
-    .feature-card p {
-      margin: 0;
-      color: #c6d2e3;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    /* Premium CSS icon system */
-    .icon {
-      position: relative;
-      flex: 0 0 auto;
-      display: inline-grid;
-      place-items: center;
-      isolation: isolate;
-    }
-
-    .icon-orb {
-      width: 62px;
-      height: 62px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at 35% 25%, rgba(255,255,255,.72), transparent 14%),
-        radial-gradient(circle at 50% 55%, rgba(39,215,255,.9), transparent 25%),
-        linear-gradient(145deg, rgba(39,215,255,.22), rgba(47,128,255,.18) 45%, rgba(124,92,255,.3));
-      border: 1px solid rgba(133, 201, 255, 0.55);
-      box-shadow:
-        inset 0 0 20px rgba(255,255,255,.12),
-        inset 0 -14px 22px rgba(1, 8, 26, 0.42),
-        0 14px 30px rgba(39,215,255,.18),
-        0 0 34px rgba(39,215,255,.18);
-    }
-
-    .icon-small {
-      width: 38px;
-      height: 38px;
-    }
-
-    .brand-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      background:
-        linear-gradient(145deg, rgba(38, 214, 255, .24), rgba(124, 92, 255, .34)),
-        radial-gradient(circle at 50% 48%, rgba(92,231,255,.35), transparent 35%);
-      box-shadow: 0 0 28px rgba(60, 160, 255, 0.25);
-      clip-path: polygon(50% 0%, 92% 18%, 86% 76%, 50% 100%, 14% 76%, 8% 18%);
-    }
-
-    .brand-icon::before,
-    .brand-icon::after,
-    .eye-badge::before,
-    .eye-badge::after {
-      content: "";
-      position: absolute;
-      inset: 15px 10px;
-      border-radius: 999px 999px 999px 999px / 70% 70% 70% 70%;
-      border: 2px solid rgba(92, 231, 255, .82);
-      transform: rotate(-8deg);
-      box-shadow: 0 0 15px rgba(92, 231, 255, .4);
-      z-index: 2;
-    }
-
-    .brand-icon::after,
-    .eye-badge::after {
-      inset: 23px 22px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at 38% 32%, white 0 10%, #92e7ff 11% 24%, #176cff 25% 52%, #071a4a 54%);
-      border: 0;
-      transform: none;
-    }
-
-    .eye-badge::before {
-      inset: 20px 12px;
-    }
-
-    .eye-badge::after {
-      inset: 25px 25px;
-    }
-
-    .shield-mini,
-    .stat-shield,
-    .recommend-shield {
-      clip-path: polygon(50% 4%, 86% 18%, 79% 76%, 50% 96%, 21% 76%, 14% 18%);
-      background:
-        radial-gradient(circle at 40% 20%, rgba(255,255,255,.65), transparent 13%),
-        linear-gradient(145deg, rgba(50, 240, 255, 0.72), rgba(23, 98, 255, 0.68) 46%, rgba(124, 92, 255, 0.85));
-      box-shadow:
-        inset 0 0 0 2px rgba(255,255,255,.2),
-        inset 0 -18px 28px rgba(1,8,28,.38),
-        0 0 22px rgba(92,231,255,.26);
-    }
-
-    .shield-mini {
-      width: 34px;
-      height: 34px;
-    }
-
-    .shield-mini::before,
-    .stat-shield::before {
-      content: "";
-      position: absolute;
-      inset: 9px;
-      clip-path: polygon(42% 62%, 28% 48%, 20% 57%, 43% 78%, 78% 36%, 68% 28%);
-      background: #d9fff6;
-      z-index: 3;
-      filter: drop-shadow(0 0 8px rgba(255,255,255,.45));
-    }
-
-    .icon-layers {
-      width: 52px;
-      height: 52px;
-    }
-
-    .icon-layers::before,
-    .icon-layers::after,
-    .icon-layers span {
-      content: "";
-      position: absolute;
-      left: 8px;
-      right: 8px;
-      height: 18px;
-      border-radius: 6px;
-      transform: skewY(-24deg) rotate(22deg);
-      background:
-        linear-gradient(135deg, rgba(92, 231, 255, .96), rgba(47,128,255,.76));
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.5),
-        0 8px 15px rgba(39,215,255,.22);
-    }
-
-    .icon-layers::before { top: 8px; }
-    .icon-layers span { top: 18px; opacity: .78; }
-    .icon-layers::after { top: 28px; opacity: .55; }
-
-    .stat-shield {
-      width: 52px;
-      height: 52px;
-      background:
-        linear-gradient(145deg, rgba(45, 255, 201, .62), rgba(39, 215, 255, .54) 50%, rgba(7, 46, 93, .9));
-    }
-
-    .flag-icon {
-      width: 48px;
-      height: 54px;
-    }
-
-    .flag-icon::before {
-      content: "";
-      position: absolute;
-      left: 9px;
-      top: 7px;
-      width: 6px;
-      height: 40px;
-      border-radius: 999px;
-      background: linear-gradient(#e9d5ff, #7c3aed);
-      box-shadow: 0 0 16px rgba(185,108,255,.58);
-    }
-
-    .flag-icon::after {
-      content: "";
-      position: absolute;
-      left: 14px;
-      top: 9px;
-      width: 30px;
-      height: 24px;
-      border-radius: 5px 12px 12px 5px;
-      background:
-        radial-gradient(circle at 20% 18%, rgba(255,255,255,.72), transparent 10%),
-        linear-gradient(135deg, #c084fc, #7c3aed 62%, #5b21b6);
-      clip-path: polygon(0 0, 100% 8%, 80% 50%, 100% 92%, 0 100%);
-      box-shadow: 0 0 20px rgba(185,108,255,.4);
-    }
-
-    .cloud-icon {
-      width: 154px;
-      height: 128px;
-      filter: drop-shadow(0 22px 28px rgba(39, 215, 255, .24));
-    }
-
-    .cloud-icon::before {
-      content: "";
-      position: absolute;
-      left: 22px;
-      top: 38px;
-      width: 110px;
-      height: 58px;
-      border-radius: 42px;
-      background:
-        radial-gradient(circle at 40% 12%, rgba(255,255,255,.65), transparent 12%),
-        linear-gradient(180deg, #7decff 0%, #2580ff 45%, #3040cf 100%);
-      box-shadow:
-        inset 0 2px 0 rgba(255,255,255,.48),
-        inset 0 -20px 26px rgba(0, 10, 60, .36),
-        0 0 34px rgba(39,215,255,.32);
-    }
-
-    .cloud-icon::after {
-      content: "";
-      position: absolute;
-      left: 46px;
-      top: 15px;
-      width: 64px;
-      height: 64px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at 38% 20%, rgba(255,255,255,.7), transparent 13%),
-        linear-gradient(180deg, #83f1ff 0%, #2f80ff 55%, #3730a3 100%);
-      box-shadow: inset 0 2px 0 rgba(255,255,255,.45);
-    }
-
-    .cloud-arrow {
-      position: absolute;
-      z-index: 3;
-      left: 68px;
-      top: 55px;
-      width: 16px;
-      height: 44px;
-      border-radius: 999px;
-      background: linear-gradient(#ffffff, #a8f7ff);
-      box-shadow: 0 0 18px rgba(255,255,255,.58);
-    }
-
-    .cloud-arrow::before {
-      content: "";
-      position: absolute;
-      left: -16px;
-      top: -2px;
+    .finding-thumb {
+      flex: 0 0 48px;
       width: 48px;
       height: 48px;
-      clip-path: polygon(50% 0, 92% 43%, 72% 43%, 72% 58%, 28% 58%, 28% 43%, 8% 43%);
-      background: linear-gradient(#ffffff, #a8f7ff);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: linear-gradient(135deg, #334155, #0f172a);
     }
+    .finding strong { display: block; font-size: 13px; }
+    .finding span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.4; }
 
-    .cloud-base {
-      position: absolute;
-      left: 30px;
-      right: 30px;
-      bottom: 6px;
-      height: 28px;
-      border-radius: 999px;
-      border: 1px solid rgba(92, 231, 255, .34);
-      background:
-        radial-gradient(circle, rgba(92,231,255,.44), transparent 56%);
-      box-shadow: 0 0 28px rgba(39,215,255,.45);
+    .section {
+      padding: 32px 0;
     }
-
-    .analytics-icon::before,
-    .analytics-icon::after {
-      content: "";
-      position: absolute;
-      bottom: 17px;
-      width: 8px;
-      border-radius: 999px 999px 2px 2px;
-      background: linear-gradient(#dff8ff, #2580ff);
-      box-shadow: 0 0 12px rgba(92,231,255,.36);
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 16px;
     }
+    .section h2 { margin: 0 0 8px; font-size: 30px; letter-spacing: -0.045em; }
+    .section p { margin: 0; }
 
-    .analytics-icon::before {
-      left: 20px;
-      height: 18px;
-    }
-
-    .analytics-icon::after {
-      left: 33px;
-      height: 28px;
-    }
-
-    .analytics-icon span {
-      position: absolute;
-      left: 46px;
-      bottom: 17px;
-      width: 8px;
-      height: 38px;
-      border-radius: 999px 999px 2px 2px;
-      background: linear-gradient(#eafcff, #60a5fa);
-      box-shadow: 0 0 12px rgba(92,231,255,.36);
-    }
-
-    .check-icon::before {
-      content: "";
-      width: 28px;
-      height: 16px;
-      border-left: 5px solid #c8fff0;
-      border-bottom: 5px solid #c8fff0;
-      transform: rotate(-45deg) translateY(-2px);
-      filter: drop-shadow(0 0 9px rgba(200,255,240,.42));
-    }
-
-    .warning-icon {
-      background:
-        radial-gradient(circle at 36% 22%, rgba(255,255,255,.65), transparent 14%),
-        linear-gradient(145deg, rgba(252, 211, 77, .88), rgba(245, 158, 11, .72) 54%, rgba(75, 36, 9, .78));
-      border-color: rgba(252, 211, 77, .58);
-    }
-
-    .warning-icon::before {
-      content: "";
-      width: 34px;
-      height: 31px;
-      clip-path: polygon(50% 0%, 100% 92%, 0% 92%);
-      background: rgba(5, 13, 31, .72);
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,.25);
-    }
-
-    .warning-icon::after {
-      content: "!";
-      position: absolute;
-      font-size: 26px;
-      font-weight: 900;
-      color: #fde68a;
-      transform: translateY(1px);
-      text-shadow: 0 0 12px rgba(253,230,138,.38);
-    }
-
-    .search-icon::before {
-      content: "";
-      width: 31px;
-      height: 31px;
-      border-radius: 999px;
-      border: 4px solid rgba(216, 248, 255, .9);
-      box-shadow:
-        inset 0 0 12px rgba(92,231,255,.28),
-        0 0 14px rgba(92,231,255,.28);
-      transform: translate(-3px, -3px);
-    }
-
-    .search-icon::after {
-      content: "";
-      position: absolute;
-      width: 5px;
-      height: 23px;
-      border-radius: 999px;
-      background: rgba(216, 248, 255, .9);
-      transform: rotate(-45deg) translate(17px, 19px);
-      box-shadow: 0 0 10px rgba(92,231,255,.34);
-    }
-
-    .recommend-shield {
-      width: 72px;
-      height: 78px;
-      background:
-        radial-gradient(circle at 36% 20%, rgba(255,255,255,.68), transparent 12%),
-        linear-gradient(145deg, #8b9cff, #714cff 50%, #1d2d7c);
-    }
-
-    .recommend-shield::before {
-      content: "★";
-      position: absolute;
-      inset: 0;
+    .cards {
       display: grid;
-      place-items: center;
-      color: #f5f3ff;
-      font-size: 33px;
-      text-shadow: 0 0 20px rgba(255,255,255,.55);
-      z-index: 3;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
     }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.045);
+      padding: 18px;
+      min-height: 190px;
+    }
+    .card h3 { margin: 0 0 10px; font-size: 18px; letter-spacing: -0.03em; }
+    .card p { color: var(--muted); font-size: 14px; line-height: 1.62; }
+    .card ul { margin: 12px 0 0; padding-left: 18px; color: var(--soft); font-size: 13px; line-height: 1.7; }
 
-    .feature-visual {
-      position: relative;
-      height: 140px;
+    .report-panel {
       display: grid;
-      place-items: center;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      gap: 14px;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      padding: 18px;
+    }
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .chip {
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 11px;
+      padding: 9px 10px;
+      color: var(--soft);
+      background: rgba(255,255,255,.04);
+      font-size: 12px;
     }
 
-    .feature-eye {
-      width: 150px;
-      height: 106px;
+    .report-header {
+      border: 1px solid rgba(56, 189, 248, .24);
+      background: rgba(14, 165, 233, .08);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
     }
+    .report-header strong { display: block; font-size: 15px; }
+    .report-header span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
 
-    .feature-eye::before {
-      content: "";
-      position: absolute;
-      inset: 22px 0;
-      border-radius: 999px 999px 999px 999px / 70% 70% 70% 70%;
+    .footer-cta {
+      margin-top: 34px;
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid rgba(56, 189, 248, .24);
       background:
-        radial-gradient(circle at 50% 50%, #06152b 0 13%, #1f8cff 14% 25%, #bfeaff 26% 32%, #1f8cff 33% 45%, #0f2858 46% 65%, transparent 66%),
-        linear-gradient(135deg, rgba(210,244,255,.9), rgba(47,128,255,.55) 50%, rgba(5, 14, 35, .8));
-      border: 1px solid rgba(92,231,255,.36);
-      box-shadow:
-        inset 0 0 30px rgba(255,255,255,.12),
-        0 0 42px rgba(39,215,255,.35);
-      transform: rotate(-6deg);
+        radial-gradient(circle at 90% 20%, rgba(99,102,241,.22), transparent 28%),
+        rgba(14, 165, 233, .08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
     }
 
-    .feature-eye::after {
-      content: "";
+    .sr-only {
       position: absolute;
-      inset: 50px -8px auto;
-      height: 38px;
-      border-radius: 999px;
-      border: 1px solid rgba(92,231,255,.58);
-      transform: rotate(-12deg);
-      box-shadow: 0 0 30px rgba(39,215,255,.24);
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
     }
 
-    .feature-path {
-      width: 150px;
-      height: 116px;
+    @media (max-width: 1040px) {
+      .hero,
+      .report-panel { grid-template-columns: 1fr; }
+      .demo-card { max-width: 860px; }
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
-    .feature-path::before {
-      content: "";
-      position: absolute;
-      inset: 14px 20px 26px;
-      border-radius: 999px;
-      border: 18px solid rgba(95, 135, 255, .35);
-      border-left-color: rgba(92,231,255,.65);
-      border-bottom-color: rgba(124,92,255,.7);
-      transform: rotate(-18deg);
-      box-shadow: 0 0 30px rgba(124,92,255,.28);
-    }
-
-    .feature-path span,
-    .feature-path span::before,
-    .feature-path span::after {
-      content: "";
-      position: absolute;
-      width: 34px;
-      height: 14px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #8af2ff, #714cff);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 0 16px rgba(92,231,255,.28);
-    }
-
-    .feature-path span { left: 34px; bottom: 32px; }
-    .feature-path span::before { left: 37px; top: -28px; }
-    .feature-path span::after { left: 75px; top: -62px; }
-
-    .feature-lock {
-      width: 132px;
-      height: 132px;
-    }
-
-    .feature-lock::before {
-      content: "";
-      position: absolute;
-      inset: 6px 18px;
-      clip-path: polygon(50% 3%, 91% 18%, 83% 76%, 50% 98%, 17% 76%, 9% 18%);
-      background:
-        radial-gradient(circle at 36% 18%, rgba(255,255,255,.66), transparent 11%),
-        linear-gradient(145deg, #8fc8ff, #2f80ff 50%, #1e2e8f);
-      box-shadow:
-        inset 0 -26px 34px rgba(0, 12, 58, .36),
-        0 0 32px rgba(47,128,255,.34);
-    }
-
-    .feature-lock::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 53px;
-      width: 38px;
-      height: 32px;
-      transform: translateX(-50%);
-      border-radius: 8px;
-      background: linear-gradient(145deg, #4aa3ff, #162f8b);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.28),
-        0 0 16px rgba(92,231,255,.22);
-    }
-
-    .lock-loop {
-      position: absolute;
-      left: 50%;
-      top: 34px;
-      width: 34px;
-      height: 34px;
-      transform: translateX(-50%);
-      border-radius: 999px 999px 0 0;
-      border: 7px solid #9ee7ff;
-      border-bottom: 0;
-      z-index: 4;
-      filter: drop-shadow(0 0 10px rgba(92,231,255,.34));
-    }
-
-    @media (max-width: 1180px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-
-      .product-card {
-        max-width: 880px;
-      }
-
-      .features {
-        grid-template-columns: 1fr;
-      }
-
-      .feature-card {
-        grid-template-columns: 150px 1fr;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .page {
-        width: min(100% - 28px, 1440px);
-      }
-
-      .nav {
-        height: auto;
-        padding: 14px 0;
-      }
-
-      .brand {
-        min-width: 0;
-      }
-
-      .brand-copy strong {
-        font-size: 22px;
-      }
-
-      .brand-copy span {
-        font-size: 12px;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .nav .button {
-        min-height: 44px;
-        padding: 0 14px;
-        font-size: 14px;
-      }
-
-      .hero {
-        padding-top: 34px;
-      }
-
-      h1 {
-        font-size: 43px;
-      }
-
-      .hero-copy p {
-        font-size: 16px;
-      }
-
-      .hero-actions,
-      .stats {
-        display: grid;
-        grid-template-columns: 1fr;
-      }
-
-      .button {
-        width: 100%;
-      }
-
-      .product-card {
-        padding: 14px;
-        border-radius: 22px;
-      }
-
-      .product-header,
-      .review-title,
-      .product-grid,
-      .recommend-card {
-        display: grid;
-        grid-template-columns: 1fr;
-      }
-
-      .review-title {
-        gap: 12px;
-      }
-
-      .secure-pill {
-        justify-content: center;
-      }
-
-      .upload-panel {
-        min-height: 320px;
-      }
-
-      .result-row {
-        align-items: flex-start;
-      }
-
-      .result-copy strong,
-      .result-copy span {
-        white-space: normal;
-      }
-
-      .status {
-        padding: 8px 10px;
-      }
-
-      .feature-card {
-        grid-template-columns: 1fr;
-        text-align: left;
-      }
-
-      .feature-visual {
-        justify-content: start;
-      }
+    @media (max-width: 720px) {
+      .page { width: min(100% - 28px, 1220px); }
+      .nav { flex-wrap: wrap; }
+      .brand { min-width: 0; }
+      .nav-links { order: 3; width: 100%; justify-content: space-between; overflow-x: auto; padding-top: 4px; }
+      .hero { padding-top: 34px; }
+      h1 { font-size: 42px; letter-spacing: -0.04em; }
+      .proof-grid,
+      .demo-grid,
+      .cards,
+      .component-grid { grid-template-columns: 1fr; }
+      .feed { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+      .demo-header,
+      .demo-footer,
+      .section-head,
+      .footer-cta { align-items: flex-start; flex-direction: column; }
+      .button { width: 100%; }
     }
   </style>
 </head>
-
 <body>
   <div class="page">
     <header class="nav" aria-label="Main navigation">
-      <a class="brand" href="#">
-        <span class="icon brand-icon" aria-hidden="true"></span>
-        <span class="brand-copy">
-          <strong>ClearEye</strong>
-          <span>Visual QA &amp; Risk Insights</span>
+      <a class="brand" href="#top" id="top">
+        <span class="brand-mark" aria-hidden="true">SI</span>
+        <span>
+          <strong>SpexInspect</strong>
+          <span>AI home inspection reports</span>
         </span>
       </a>
-
       <nav class="nav-links">
-        <a href="#features">Features</a>
         <a href="#workflow">Workflow</a>
-        <a href="#results">Results</a>
-        <a href="#contact">Contact</a>
+        <a href="#equipment">Equipment</a>
+        <a href="#report">Report</a>
+        <a href="#home-health">Home Health</a>
       </nav>
-
-      <a class="button button-primary" href="#demo">
-        Start Demo <span aria-hidden="true">→</span>
-      </a>
+      <a class="button button-primary" href="#demo">Run Demo</a>
     </header>
 
     <main>
       <section class="hero" id="demo">
         <div class="hero-copy">
-          <div class="eyebrow">
-            <span class="icon shield-mini" aria-hidden="true"></span>
-            <span>Smart screening for clearer decisions</span>
-          </div>
-
+          <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span> Built with Bobby hardrock55, InterNACHI-certified inspector</div>
           <h1>
-            Spot visual risks faster with a cleaner,
-            <span class="gradient-text">guided review experience.</span>
+            Walk the house.
+            <span class="gradient-text">AI writes the report.</span>
           </h1>
-
           <p>
-            ClearEye helps you quickly understand what the tool does, guides you
-            through the scan flow, and presents results in a trustworthy,
-            actionable way.
+            Inspector wears Meta Ray-Ban glasses, snaps photos during the walkthrough, and SpexInspect analyzes defects in real time. Type <strong>!inspect stop</strong> and the full InterNACHI-ready PDF is generated automatically, no forms to fill.
           </p>
-
           <div class="hero-actions">
-            <a class="button button-primary" href="#workflow">
-              Run sample review <span aria-hidden="true">→</span>
-            </a>
-            <a class="button button-secondary" href="#workflow">
-              View workflow <span class="arrow-orb" aria-hidden="true">›</span>
-            </a>
+            <button class="button button-primary" type="button" id="scanButton">Simulate Photo Capture</button>
+            <a class="button button-secondary" href="#report">View Report Output</a>
           </div>
-
-          <div class="stats" aria-label="ClearEye review statistics">
-            <div class="stat-card">
-              <span class="icon icon-layers" aria-hidden="true"><span></span></span>
-              <div>
-                <strong>3</strong>
-                <span>step review</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <span class="icon stat-shield" aria-hidden="true"></span>
-              <div>
-                <strong>92%</strong>
-                <span>confidence</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <span class="icon flag-icon" aria-hidden="true"></span>
-              <div>
-                <strong>4</strong>
-                <span>risk flags</span>
-              </div>
-            </div>
+          <div class="proof-grid" aria-label="SpexInspect value proof">
+            <div class="proof"><strong>10</strong><span>InterNACHI required components</span></div>
+            <div class="proof"><strong>0</strong><span>forms to fill out after the job</span></div>
+            <div class="proof"><strong>&lt;3m</strong><span>report generated before the driveway</span></div>
+            <div class="proof"><strong>$4.99</strong><span>future homeowner scan price point</span></div>
           </div>
         </div>
 
-        <section class="product-card" id="workflow" aria-label="Patient Image Assessment workflow">
-          <div class="product-header">
-            <div class="review-title">
-              <span class="icon icon-orb eye-badge" aria-hidden="true"></span>
-              <div>
-                <small>Current review</small>
-                <h2>Patient Image Assessment</h2>
-              </div>
+        <section class="demo-card" aria-label="Live inspection workflow">
+          <div class="demo-header">
+            <div>
+              <span class="label">Active Inspection</span>
+              <h2>247 Oakwood Drive - Charlotte, NC</h2>
             </div>
-
-            <div class="secure-pill">
-              <span aria-hidden="true">▣</span>
-              Secure session
-              <span class="secure-dot" aria-hidden="true"></span>
+            <div>
+              <span class="tag tag-blue">Kitchen</span>
+              <span class="tag tag-green"><span class="live-dot"></span> Live AI</span>
             </div>
           </div>
 
-          <div class="product-grid">
-            <div class="upload-panel">
-              <div class="upload-zone">
-                <div>
-                  <span class="icon cloud-icon" aria-hidden="true">
-                    <span class="cloud-arrow"></span>
-                    <span class="cloud-base"></span>
-                  </span>
-                  <h3>Upload or capture image</h3>
-                  <p>JPG, PNG, or mobile capture</p>
-                </div>
+          <div class="demo-grid">
+            <div class="feed">
+              <span class="label">Meta Ray-Ban feed</span>
+              <div class="photo-zone" id="photoZone" role="img" aria-label="Mock inspection photo showing cabinet moisture staining">
+                <div class="scan-line" aria-hidden="true"></div>
+                <div class="cabinet" aria-hidden="true"></div>
               </div>
-
-              <button class="button button-primary" type="button" id="analyzeButton">
-                Analyze sample <span aria-hidden="true">✦</span>
-              </button>
+              <div class="nameplate" id="nameplateCard">
+                <strong>HVAC Nameplate Decoded</strong>
+                <div class="kv"><span>Model / serial</span><strong>24ABC648A003 / 1814E12345</strong></div>
+                <div class="kv"><span>Manufacture date</span><strong>June 2014</strong></div>
+                <div class="kv"><span>Age / tonnage</span><strong>12 yrs / 4 ton</strong></div>
+                <div class="kv"><span>SEER / refrigerant</span><strong>16 SEER / R-410A</strong></div>
+                <div class="kv"><span>Remaining life</span><strong>~3 years</strong></div>
+                <div class="kv"><span>Replacement estimate</span><strong>$5,000-$7,000</strong></div>
+              </div>
             </div>
 
-            <div class="summary-stack" id="results">
-              <div class="summary-panel">
-                <div class="summary-heading">
-                  <span class="icon icon-orb analytics-icon" aria-hidden="true"><span></span></span>
-                  <h3>Assessment Summary</h3>
+            <div class="findings">
+              <div class="findings-head">
+                <div>
+                  <span class="label">AI Findings</span>
+                  <strong>Defects, coaching, and report items</strong>
                 </div>
+                <div class="score" id="scoreValue">--</div>
+              </div>
 
-                <div class="result-row">
-                  <span class="icon icon-orb check-icon" aria-hidden="true"></span>
-                  <div class="result-copy">
-                    <strong>Image quality</strong>
-                    <span>Lighting and focus are acceptable</span>
+              <div id="findingsList">
+                <div class="finding">
+                  <div class="finding-thumb"></div>
+                  <div>
+                    <strong>Waiting for walkthrough photo</strong>
+                    <span>Click simulate to see the real-time coaching and report-ready findings.</span>
                   </div>
-                  <span class="status status-pass">Pass</span>
-                </div>
-
-                <div class="result-row">
-                  <span class="icon icon-orb warning-icon" aria-hidden="true"></span>
-                  <div class="result-copy">
-                    <strong>Review needed</strong>
-                    <span>Minor redness detected near lower lid</span>
-                  </div>
-                  <span class="status status-flag">Flag</span>
-                </div>
-
-                <div class="result-row">
-                  <span class="icon icon-orb search-icon" aria-hidden="true"></span>
-                  <div class="result-copy">
-                    <strong>Similarity check</strong>
-                    <span>No critical match found</span>
-                  </div>
-                  <span class="status status-clear">Clear</span>
                 </div>
               </div>
 
-              <aside class="recommend-card">
-                <span class="icon recommend-shield" aria-hidden="true"></span>
-                <div>
-                  <h3>Recommended next action</h3>
-                  <p>
-                    Overall risk appears low. Minor redness observed near the lower lid.
-                    Confidence: <b>92%</b>. Continue routine monitoring and escalate if
-                    symptoms persist or worsen.
-                  </p>
-                </div>
-              </aside>
+              <div class="coach-note" id="coachNote">
+                <span class="label">Voice coaching note</span>
+                <p>"Check under the sink, moisture staining detected. Get a wider ceiling-corner shot so the report has the right photo next to the finding."</p>
+              </div>
+
+              <div class="progress" id="progressCard">
+                <span class="label">Report progress</span>
+                <div class="kv"><span>Kitchen</span><strong>Inspected - 3 findings</strong></div>
+                <div class="kv"><span>Heating/Cooling</span><strong>Nameplate decoded</strong></div>
+                <div class="kv"><span>Report command</span><strong>!inspect stop -> PDF</strong></div>
+              </div>
             </div>
           </div>
+
+          <div class="demo-footer">
+            <div>
+              <span class="tag tag-violet">DJI Mavic T3 thermal roof scans</span>
+              <span class="tag tag-blue">Sewer scope analysis</span>
+            </div>
+            <button class="button button-primary" type="button" id="reportButton">Generate PDF</button>
+          </div>
+          <p class="sr-only" id="liveStatus" aria-live="polite"></p>
         </section>
       </section>
 
-      <section class="features" id="features">
-        <article class="feature-card">
-          <div class="feature-visual">
-            <span class="icon feature-eye" aria-hidden="true"></span>
-          </div>
+      <section class="section" id="workflow">
+        <div class="section-head">
           <div>
-            <h3>Clear first impression</h3>
-            <div class="rule" aria-hidden="true"></div>
-            <p>
-              Simple, intuitive onboarding and clean visuals help users get confidence
-              from the very first step.
-            </p>
+            <h2>No more typing reports for hours.</h2>
+            <p class="section-copy">The workflow is built around Bobby's number-one pain point: finish the walkthrough, stop the inspection, and leave with the report already assembled.</p>
           </div>
-        </article>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>1. Capture during walkthrough</h3>
+            <p>Meta Ray-Ban photos auto-send to the AI as the inspector moves through the house.</p>
+          </article>
+          <article class="card">
+            <h3>2. Coach after each photo</h3>
+            <p>SpexInspect voices practical prompts like "check under the sink" when moisture staining or missing context is detected.</p>
+          </article>
+          <article class="card">
+            <h3>3. Stop and generate</h3>
+            <p>Type <strong>!inspect stop</strong> and the PDF report is generated automatically with photos, findings, categories, and cost estimates.</p>
+          </article>
+        </div>
+      </section>
 
-        <article class="feature-card">
-          <div class="feature-visual">
-            <span class="icon feature-path" aria-hidden="true"><span></span></span>
-          </div>
+      <section class="section" id="equipment">
+        <div class="section-head">
           <div>
-            <h3>Guided action flow</h3>
-            <div class="rule" aria-hidden="true"></div>
-            <p>
-              A streamlined, step-by-step workflow keeps reviews efficient and reduces
-              manual guesswork.
-            </p>
+            <h2>Equipment Bobby can demo mid-May.</h2>
+            <p class="section-copy">The mockup keeps the differentiators front and center: glasses-first capture, thermal drone scans, sewer scope footage, and the HVAC nameplate decoder Bobby called brilliant.</p>
           </div>
-        </article>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>Meta Ray-Ban glasses</h3>
+            <p>Hands-free photo capture streams inspection context to AI without interrupting the walkthrough.</p>
+            <ul>
+              <li>Real-time defect analysis</li>
+              <li>Voice coaching notes after photos</li>
+              <li>Photos mapped to report sections</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>DJI Mavic T3 thermal roof</h3>
+            <p>Thermal roof scans surface moisture and heat-loss patterns that are invisible to the naked eye.</p>
+            <ul>
+              <li>Moisture anomaly flags</li>
+              <li>Heat-loss evidence</li>
+              <li>Roofing report placement</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Sewer scope cam</h3>
+            <p>Footage is analyzed for root intrusion, cracks, and belly or sag conditions in the pipe.</p>
+            <ul>
+              <li>Root intrusion detection</li>
+              <li>Crack and separation flags</li>
+              <li>Belly/sag timeline notes</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>HVAC nameplate decoder</h3>
+            <p>Snap a nameplate and the AI extracts model, serial, manufacture date, age, tonnage, SEER, refrigerant type such as R-22, R-410A, or R-32, service life, and replacement cost.</p>
+          </article>
+          <article class="card">
+            <h3>Cost estimates</h3>
+            <p>Repair and replacement ranges are attached to defects so buyers and agents can negotiate with actual numbers.</p>
+          </article>
+          <article class="card">
+            <h3>Training loop</h3>
+            <p>Every SpexInspect inspection builds training data for the same AI engine that will power the homeowner product.</p>
+          </article>
+        </div>
+      </section>
 
-        <article class="feature-card" id="contact">
-          <div class="feature-visual">
-            <span class="icon feature-lock" aria-hidden="true"><span class="lock-loop"></span></span>
-          </div>
+      <section class="section" id="report">
+        <div class="section-head">
           <div>
-            <h3>Trust-focused results</h3>
-            <div class="rule" aria-hidden="true"></div>
-            <p>
-              Transparent insights, clear risk signals, and confidence scores you can rely on.
-            </p>
+            <h2>InterNACHI report, not ASHI.</h2>
+            <p class="section-copy">The report output is organized around InterNACHI SOP, includes Bobby's certification slot in the header, embeds photos next to findings, and uses the required condition categories.</p>
           </div>
-        </article>
+        </div>
+        <div class="report-panel">
+          <div class="panel">
+            <div class="report-header">
+              <strong>Bobby "hardrock55" - InterNACHI Certified Home Inspector</strong>
+              <span>InterNACHI Cert # [Bobby's certificate number] | 247 Oakwood Drive | Report generated before leaving the driveway</span>
+            </div>
+            <span class="tag tag-blue">Condition categories</span>
+            <div class="component-grid">
+              <div class="chip">Inspected</div>
+              <div class="chip">Not Inspected</div>
+              <div class="chip">Not Present</div>
+              <div class="chip">Deficiency</div>
+            </div>
+            <div style="margin-top:14px">
+              <span class="tag tag-amber">Sample defect with photo + estimate</span>
+              <div class="finding">
+                <div class="finding-thumb"></div>
+                <div>
+                  <strong>Plumbing - Deficiency</strong>
+                  <span>Moisture staining under kitchen sink. Photo embedded beside finding. Estimated repair: $250-$650.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel" id="internachi">
+            <span class="tag tag-green">All 10 InterNACHI components</span>
+            <div class="component-grid">
+              <div class="chip">Roofing</div>
+              <div class="chip">Exterior</div>
+              <div class="chip">Basement / Foundation / Crawlspace / Structure</div>
+              <div class="chip">Heating</div>
+              <div class="chip">Cooling</div>
+              <div class="chip">Plumbing</div>
+              <div class="chip">Electrical</div>
+              <div class="chip">Fireplace & Solid Fuel</div>
+              <div class="chip">Attic / Insulation / Ventilation</div>
+              <div class="chip">Doors / Windows / Interior</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="home-health">
+        <div class="section-head">
+          <div>
+            <h2>Future consumer product: Home Health Score.</h2>
+            <p class="section-copy">The pro inspection engine becomes a homeowner scan product for an 83M-homeowner market, with a simple 0-100 score and an accessible price point around $4.99 per scan.</p>
+          </div>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>0-100 Home Health Score</h3>
+            <p>Homeowners get a simple score, clear risk areas, and a next-action list built from the same AI engine as the pro tool.</p>
+          </article>
+          <article class="card">
+            <h3>83M homeowner market</h3>
+            <p>The consumer layer expands SpexInspect beyond pro inspections while preserving the inspector-grade analysis foundation.</p>
+          </article>
+          <article class="card">
+            <h3>$4.99 per scan</h3>
+            <p>Low-friction pricing supports broad adoption while every scan improves the training dataset over time.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="footer-cta">
+        <div>
+          <h2 style="margin:0 0 8px;font-size:28px;letter-spacing:-.04em">Bobby's demo moment is the driveway report.</h2>
+          <p class="section-copy">The pitch is simple: Ray-Bans capture, AI coaches, equipment data flows in, and the report is ready before he leaves the driveway.</p>
+        </div>
+        <a class="button button-primary" href="#demo">Replay Demo</a>
       </section>
     </main>
   </div>
 
   <script>
-    const analyzeButton = document.getElementById("analyzeButton");
+    const scanButton = document.getElementById("scanButton");
+    const reportButton = document.getElementById("reportButton");
+    const photoZone = document.getElementById("photoZone");
+    const findingsList = document.getElementById("findingsList");
+    const scoreValue = document.getElementById("scoreValue");
+    const nameplateCard = document.getElementById("nameplateCard");
+    const coachNote = document.getElementById("coachNote");
+    const progressCard = document.getElementById("progressCard");
+    const liveStatus = document.getElementById("liveStatus");
 
-    analyzeButton?.addEventListener("click", () => {
-      const original = analyzeButton.innerHTML;
-      analyzeButton.innerHTML = "Analyzing sample…";
-      analyzeButton.disabled = true;
+    function setStatus(message) {
+      if (liveStatus) liveStatus.textContent = message;
+    }
 
-      setTimeout(() => {
-        analyzeButton.innerHTML = "Analysis complete ✓";
-        setTimeout(() => {
-          analyzeButton.innerHTML = original;
-          analyzeButton.disabled = false;
-        }, 1300);
-      }, 1000);
-    });
+    function runDemo() {
+      if (!scanButton || scanButton.disabled) return;
+      scanButton.disabled = true;
+      scanButton.setAttribute("aria-busy", "true");
+      scanButton.textContent = "Analyzing photo...";
+      photoZone?.classList.add("is-scanning");
+      setStatus("Analyzing inspection photo from Meta Ray-Ban feed.");
+
+      window.setTimeout(() => {
+        photoZone?.classList.remove("is-scanning");
+        scoreValue.textContent = "71";
+        findingsList.innerHTML = `
+          <div class="finding">
+            <div class="finding-thumb"></div>
+            <div>
+              <strong>Plumbing - Deficiency</strong>
+              <span>Cabinet moisture under sink. Recommended follow-up: check supply line. Estimate: $250-$650.</span>
+            </div>
+            <span class="tag tag-amber">Medium</span>
+          </div>
+          <div class="finding">
+            <div class="finding-thumb"></div>
+            <div>
+              <strong>Interior - Deficiency</strong>
+              <span>Ceiling stain in NW kitchen corner. Add attic photo for source confirmation. Estimate: $400-$1,200.</span>
+            </div>
+            <span class="tag tag-red">High</span>
+          </div>
+          <div class="finding">
+            <div class="finding-thumb"></div>
+            <div>
+              <strong>Electrical - Inspected</strong>
+              <span>GFCI present within 6 feet of sink. Photo attached to report section.</span>
+            </div>
+            <span class="tag tag-green">Pass</span>
+          </div>
+        `;
+        nameplateCard?.classList.add("is-visible");
+        coachNote?.classList.add("is-visible");
+        progressCard?.classList.add("is-visible");
+        scanButton.textContent = "Analysis complete";
+        scanButton.removeAttribute("aria-busy");
+        setStatus("Analysis complete. Findings, HVAC nameplate data, and voice coaching note are ready.");
+      }, 1200);
+    }
+
+    function generateReport() {
+      if (!reportButton) return;
+      reportButton.disabled = true;
+      reportButton.setAttribute("aria-busy", "true");
+      reportButton.textContent = "Generating PDF...";
+      setStatus("Generating InterNACHI PDF report.");
+      window.setTimeout(() => {
+        reportButton.textContent = "PDF ready before driveway";
+        reportButton.removeAttribute("aria-busy");
+        setStatus("InterNACHI PDF report is ready with photos, findings, condition categories, and cost estimates.");
+      }, 900);
+    }
+
+    scanButton?.addEventListener("click", runDemo);
+    reportButton?.addEventListener("click", generateReport);
   </script>
 </body>
 </html>
