@@ -18,29 +18,22 @@
   @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(0.8); } }
   @keyframes scan-line { 0% { top: 8%; } 100% { top: 92%; } }
   @keyframes bar-fill { from { width: 0; } to { width: var(--w); } }
-  @keyframes ce-breathe { 0%,100% { box-shadow: 0 0 0 1px rgba(148,197,255,.18) inset, 0 6px 20px -4px rgba(14,165,233,.45), 0 0 24px -6px rgba(99,102,241,.35); } 50% { box-shadow: 0 0 0 1px rgba(148,197,255,.28) inset, 0 10px 28px -4px rgba(14,165,233,.65), 0 0 36px -4px rgba(129,140,248,.6); } }
-  @keyframes ce-scan { 0%,100% { opacity:0; transform:translateX(-100%); } 50% { opacity:1; } 80% { transform:translateX(110%); opacity:0; } }
+  @keyframes ce-gem-glow { 0%,100% { filter: drop-shadow(0 0 6px rgba(96,165,250,.45)) drop-shadow(0 0 14px rgba(37,99,235,.35)); } 50% { filter: drop-shadow(0 0 10px rgba(96,165,250,.7)) drop-shadow(0 0 22px rgba(37,99,235,.55)); } }
+  @keyframes ce-ring-pulse { 0% { opacity:0; r:4; } 40% { opacity:.7; } 100% { opacity:0; r:15; } }
+  @keyframes ce-sparkle { 0%,100% { opacity:.3; } 50% { opacity:1; } }
   .brand-mark {
-    width:46px; height:46px; border-radius:13px; position:relative; display:grid; place-items:center;
-    background: linear-gradient(145deg,#1e40af 0%,#4338ca 40%,#0ea5e9 100%);
-    overflow:hidden;
-    animation: ce-breathe 3.2s ease-in-out infinite;
+    width:52px; height:52px; position:relative; display:grid; place-items:center;
+    animation: ce-gem-glow 3.4s ease-in-out infinite;
   }
-  .brand-mark::before {
-    content:""; position:absolute; inset:0; border-radius:13px;
-    background: linear-gradient(145deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,.1) 100%);
-    pointer-events:none;
-  }
-  .brand-mark::after {
-    content:""; position:absolute; top:0; bottom:0; width:30%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
-    animation: ce-scan 4.2s ease-in-out infinite;
-    pointer-events:none;
-  }
-  .brand-mark svg { position:relative; z-index:1; }
+  .brand-mark svg { position:relative; z-index:1; overflow:visible; }
+  .ce-ring-1 { animation: ce-ring-pulse 2.8s ease-out infinite; }
+  .ce-ring-2 { animation: ce-ring-pulse 2.8s ease-out 1.4s infinite; }
+  .ce-sparkle { animation: ce-sparkle 2s ease-in-out infinite; }
+  .ce-sparkle-2 { animation: ce-sparkle 2s ease-in-out .6s infinite; }
+  .ce-sparkle-3 { animation: ce-sparkle 2s ease-in-out 1.2s infinite; }
   .brand-link { transition: transform .2s ease; }
   .brand-link:hover { transform: translateY(-1px); }
-  .brand-link:hover .brand-mark { animation-duration: 1.6s; }
+  .brand-link:hover .brand-mark { animation-duration: 1.8s; }
   .btn-sky-arrow { position:relative; padding-right:42px !important; }
   .btn-sky-arrow::after {
     content:""; position:absolute; right:10px; top:50%; transform:translateY(-50%);
@@ -115,23 +108,72 @@
   <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 0% 50%,rgba(14,165,233,.08),transparent 40%),radial-gradient(circle at 100% 50%,rgba(99,102,241,.06),transparent 40%)"></div>
   <a href="#" class="brand-link" style="display:flex;align-items:center;gap:13px;position:relative;text-decoration:none;color:inherit">
     <div class="brand-mark" aria-hidden="true">
-      <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <radialGradient id="ceIris2" cx="16" cy="16" r="8" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#7dd3fc"/>
-            <stop offset=".55" stop-color="#38bdf8"/>
-            <stop offset="1" stop-color="#0c4a6e"/>
+          <radialGradient id="ceGemFill" cx="26" cy="24" r="24" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#60a5fa" stop-opacity=".9"/>
+            <stop offset=".45" stop-color="#2563eb" stop-opacity=".55"/>
+            <stop offset=".85" stop-color="#0c1f4d" stop-opacity=".85"/>
+            <stop offset="1" stop-color="#020617"/>
           </radialGradient>
-          <linearGradient id="ceEye" x1="0" y1="16" x2="32" y2="16" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
-            <stop offset="1" stop-color="#dbeafe" stop-opacity=".9"/>
+          <linearGradient id="ceGemEdge" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#bfdbfe" stop-opacity=".95"/>
+            <stop offset=".5" stop-color="#60a5fa" stop-opacity=".8"/>
+            <stop offset="1" stop-color="#1e3a8a" stop-opacity=".55"/>
           </linearGradient>
+          <linearGradient id="ceFacet" x1="0" y1="0" x2="0" y2="52" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#93c5fd" stop-opacity=".55"/>
+            <stop offset="1" stop-color="#3b82f6" stop-opacity=".15"/>
+          </linearGradient>
+          <radialGradient id="ceHouseGlow" cx="26" cy="28" r="10" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#dbeafe"/>
+            <stop offset="1" stop-color="#60a5fa" stop-opacity=".1"/>
+          </radialGradient>
         </defs>
-        <path d="M3 16 C7 8, 12 5, 16 5 C20 5, 25 8, 29 16 C25 24, 20 27, 16 27 C12 27, 7 24, 3 16 Z" fill="url(#ceEye)" opacity=".96"/>
-        <circle cx="16" cy="16" r="6.5" fill="url(#ceIris2)"/>
-        <circle cx="16" cy="16" r="3" fill="#061a2e"/>
-        <circle cx="14" cy="14" r="1.4" fill="#ffffff" opacity=".95"/>
-        <circle cx="18.5" cy="18" r=".6" fill="#ffffff" opacity=".65"/>
+
+        <!-- Outer faceted crystal hexagon -->
+        <path d="M26 3 L46 14 L46 38 L26 49 L6 38 L6 14 Z"
+              fill="url(#ceGemFill)" stroke="url(#ceGemEdge)" stroke-width="1.1" stroke-linejoin="round"/>
+
+        <!-- Facet lines radiating from center to each vertex -->
+        <g stroke="url(#ceFacet)" stroke-width=".55" opacity=".85">
+          <line x1="26" y1="26" x2="26" y2="3"/>
+          <line x1="26" y1="26" x2="46" y2="14"/>
+          <line x1="26" y1="26" x2="46" y2="38"/>
+          <line x1="26" y1="26" x2="26" y2="49"/>
+          <line x1="26" y1="26" x2="6" y2="38"/>
+          <line x1="26" y1="26" x2="6" y2="14"/>
+        </g>
+
+        <!-- Inner diamond/facet outline for depth -->
+        <path d="M26 10 L40 18 L40 34 L26 42 L12 34 L12 18 Z"
+              fill="none" stroke="url(#ceFacet)" stroke-width=".5" opacity=".6"/>
+
+        <!-- Scan pulse rings around the house -->
+        <circle class="ce-ring-1" cx="26" cy="28" cy-orig="28" r="10" fill="none" stroke="#7dd3fc" stroke-width=".6"/>
+        <circle class="ce-ring-2" cx="26" cy="28" r="7" fill="none" stroke="#7dd3fc" stroke-width=".6"/>
+
+        <!-- Static concentric arcs -->
+        <circle cx="26" cy="28" r="6" fill="none" stroke="rgba(147,197,253,.45)" stroke-width=".4"/>
+        <circle cx="26" cy="28" r="9" fill="none" stroke="rgba(147,197,253,.25)" stroke-width=".4"/>
+
+        <!-- House icon -->
+        <g transform="translate(20 22)">
+          <!-- Soft glow behind house -->
+          <circle cx="6" cy="6" r="8" fill="url(#ceHouseGlow)" opacity=".35"/>
+          <!-- Roof + body -->
+          <path d="M0 5.5 L6 0.5 L12 5.5 L12 11.5 L0 11.5 Z" fill="#ffffff" opacity=".95"/>
+          <!-- Chimney -->
+          <rect x="8.2" y="2" width="1.6" height="2.4" fill="#ffffff" opacity=".85"/>
+          <!-- Warm-lit window -->
+          <rect x="4.4" y="7" width="2.2" height="3" fill="#fbbf24" opacity=".95"/>
+        </g>
+
+        <!-- Corner sparkle highlights -->
+        <circle class="ce-sparkle" cx="46" cy="14" r="1" fill="#ffffff"/>
+        <circle class="ce-sparkle-2" cx="6" cy="38" r="1" fill="#ffffff"/>
+        <circle class="ce-sparkle-3" cx="26" cy="3" r=".8" fill="#ffffff"/>
+        <circle class="ce-sparkle-2" cx="26" cy="49" r=".6" fill="#ffffff" opacity=".7"/>
       </svg>
     </div>
     <div>
