@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SpexInspect — AI Home Inspection</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  * { font-family: 'Inter', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #020617; color: white; overflow-x: hidden; }
+  .bg-hero { background: radial-gradient(circle at 15% 40%, rgba(14,165,233,.18), transparent 40%), radial-gradient(circle at 85% 15%, rgba(99,102,241,.14), transparent 35%), linear-gradient(180deg,#020617 0%,#0c1929 100%); }
+  .glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  .glass-darker { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); }
+  .glow-blue { box-shadow: 0 0 30px rgba(14,165,233,0.15); }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(0.8); } }
+  @keyframes scan-line { 0% { top: 8%; } 100% { top: 92%; } }
+  @keyframes bar-fill { from { width: 0; } to { width: var(--w); } }
+  .anim-1 { animation: fadeUp .55s .05s ease both; }
+  .anim-2 { animation: fadeUp .55s .15s ease both; }
+  .anim-3 { animation: fadeUp .55s .25s ease both; }
+  .anim-4 { animation: fadeUp .55s .35s ease both; }
+  .anim-5 { animation: fadeIn .55s .45s ease both; }
+  .live-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:#22c55e; animation: pulse-dot 1.6s ease-in-out infinite; }
+  .scan-line { position:absolute; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,rgba(56,189,248,.8),transparent); animation: scan-line 2.2s ease-in-out infinite alternate; pointer-events:none; }
+  .bar { height:6px; border-radius:3px; background:linear-gradient(90deg,#0ea5e9,#6366f1); animation: bar-fill 1.2s .6s ease both; }
+  .tag { display:inline-flex; align-items:center; gap:5px; border-radius:9999px; padding:4px 12px; font-size:0.72rem; font-weight:600; letter-spacing:.03em; }
+  .tag-green { background:rgba(34,197,94,.15); color:#86efac; }
+  .tag-amber { background:rgba(245,158,11,.15); color:#fcd34d; }
+  .tag-red { background:rgba(239,68,68,.15); color:#fca5a5; }
+  .tag-blue { background:rgba(14,165,233,.15); color:#7dd3fc; }
+  .tag-purple { background:rgba(139,92,246,.15); color:#c4b5fd; }
+  .nav-link { color:#94a3b8; text-decoration:none; font-size:.875rem; transition:color .15s; }
+  .nav-link:hover { color:white; }
+  .btn-sky { background:linear-gradient(135deg,#0ea5e9,#6366f1); color:white; border:none; border-radius:10px; padding:11px 22px; font-weight:600; font-size:.9rem; cursor:pointer; transition:opacity .15s,transform .1s; }
+  .btn-sky:hover { opacity:.9; transform:translateY(-1px); }
+  .btn-outline { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:white; border-radius:10px; padding:10px 20px; font-weight:500; font-size:.9rem; cursor:pointer; transition:background .15s; }
+  .btn-outline:hover { background:rgba(255,255,255,.1); }
+  .row-item { display:flex; align-items:center; gap:12px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); padding:14px; transition: border-color .2s; }
+  .row-item:hover { border-color:rgba(14,165,233,.3); }
+  .icon-box { width:38px; height:38px; border-radius:9px; display:grid; place-items:center; flex-shrink:0; }
+  .score-ring { position:relative; width:90px; height:90px; }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring .val { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .feature-card { border-radius:16px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); padding:22px; transition:border-color .2s,background .2s; }
+  .feature-card:hover { border-color:rgba(14,165,233,.25); background:rgba(14,165,233,.05); }
+  .scanning-overlay { display:none; position:absolute; inset:0; border-radius:16px; overflow:hidden; background:rgba(2,6,23,.6); z-index:2; }
+  .scanning-overlay.active { display:block; }
+  input[type=range] { width:100%; accent-color:#0ea5e9; }
+</style>
+</head>
+<body class="bg-hero min-h-screen">
+
+<!-- NAV -->
+<div class="max-w-7xl mx-auto px-5 sm:px-8 py-5">
+<header class="glass rounded-2xl px-5 py-4 flex items-center justify-between mb-2">
+  <div class="flex items-center gap-3">
+    <div style="width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,rgba(14,165,233,.3),rgba(99,102,241,.3));display:grid;place-items:center;border:1px solid rgba(14,165,233,.3)">
+      <!-- House + Eye icon combined -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <div>
+      <p style="font-size:1.05rem;font-weight:700;letter-spacing:-.02em">SpexInspect <span style="font-size:.65rem;font-weight:500;color:#7dd3fc;vertical-align:middle;margin-left:4px;background:rgba(14,165,233,.15);padding:2px 7px;border-radius:99px">BETA</span></p>
+      <p style="font-size:.72rem;color:#64748b">AI-Powered Home Inspection Platform</p>
+    </div>
+  </div>
+  <nav style="display:flex;gap:1.5rem">
+    <a href="#" class="nav-link">Features</a>
+    <a href="#" class="nav-link">Reports</a>
+    <a href="#" class="nav-link">InterNACHI</a>
+    <a href="#" class="nav-link">Pricing</a>
+  </nav>
+  <div style="display:flex;gap:10px;align-items:center">
+    <span class="tag tag-green"><span class="live-dot"></span> Live AI</span>
+    <button class="btn-sky" style="padding:8px 18px;font-size:.82rem">Start Inspection</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<main>
+<section style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;padding:4rem 0 3rem">
+
+  <!-- Left -->
+  <div>
+    <div class="anim-1" style="display:inline-flex;align-items:center;gap:7px;border-radius:9999px;border:1px solid rgba(14,165,233,.25);background:rgba(14,165,233,.1);padding:6px 14px;font-size:.8rem;color:#7dd3fc;margin-bottom:1.5rem">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+      InterNACHI Certified · Standards of Practice Compliant
+    </div>
+    <h1 class="anim-2" style="font-size:clamp(2.2rem,4.5vw,3.4rem);font-weight:800;line-height:1.1;letter-spacing:-.04em;margin-bottom:1.25rem">
+      Walk the house.<br/>
+      <span style="background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">AI writes the report.</span>
+    </h1>
+    <p class="anim-3" style="font-size:1rem;line-height:1.75;color:#94a3b8;max-width:480px;margin-bottom:2rem">
+      Snap photos with your Meta Ray-Bans. I detect defects in real time, decode HVAC nameplates, analyze drone roof footage, and generate your full <strong style="color:#cbd5e1">InterNACHI-compliant report</strong> before you pack up your truck.
+    </p>
+    <div class="anim-4" style="display:flex;gap:.75rem;margin-bottom:2.5rem">
+      <button class="btn-sky" onclick="simulateScan()">▶ Run Live Demo</button>
+      <button class="btn-outline">View Sample Report</button>
+    </div>
+
+    <!-- Stats row -->
+    <div class="anim-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem">
+      <div class="glass" style="border-radius:14px;padding:14px 12px;text-align:center">
+        <strong style="display:block;font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">10</strong>
+        <span style="font-size:.72rem;color:#64748b;line-height:1.3">InterNACHI<br/>components</span>
+      </div>
+      <div class="glass" style="border-radius:14px;padding:14px 12px;text-align:center">
+        <strong style="display:block;font-size:1.6rem;font-weight:800;color:white">94%</strong>
+        <span style="font-size:.72rem;color:#64748b;line-height:1.3">defect<br/>detection</span>
+      </div>
+      <div class="glass" style="border-radius:14px;padding:14px 12px;text-align:center">
+        <strong style="display:block;font-size:1.6rem;font-weight:800;color:white">&lt;3m</strong>
+        <span style="font-size:.72rem;color:#64748b;line-height:1.3">report<br/>generation</span>
+      </div>
+      <div class="glass" style="border-radius:14px;padding:14px 12px;text-align:center">
+        <strong style="display:block;font-size:1.6rem;font-weight:800;color:white">0</strong>
+        <span style="font-size:.72rem;color:#64748b;line-height:1.3">forms to<br/>fill out</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right — Live Inspection Card -->
+  <div class="anim-5">
+    <div class="glow-blue" style="border-radius:20px;border:1px solid rgba(14,165,233,.2);background:rgba(5,15,30,.85);overflow:hidden;backdrop-filter:blur(30px)">
+
+      <!-- Card header -->
+      <div style="border-bottom:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.4);padding:16px 18px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <p style="font-size:.72rem;color:#64748b;margin-bottom:2px">Active Inspection</p>
+          <h2 style="font-size:1rem;font-weight:700">247 Oakwood Drive — Charlotte, NC</h2>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="tag tag-blue">Kitchen</span>
+          <span class="tag tag-green"><span class="live-dot"></span> Recording</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:.95fr 1.05fr">
+
+        <!-- Photo feed -->
+        <div style="border-right:1px solid rgba(255,255,255,.07);padding:14px;background:rgba(0,0,0,.25)">
+          <p style="font-size:.72rem;color:#64748b;margin-bottom:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em">📸 AI-Assisted Photo Feed</p>
+          <div id="photo-zone" style="position:relative;border-radius:14px;background:rgba(14,165,233,.04);border:1.5px dashed rgba(14,165,233,.25);height:195px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;overflow:hidden">
+            <div class="scanning-overlay" id="scan-overlay">
+              <div class="scan-line" id="scanline"></div>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+                <div style="width:32px;height:32px;border:2.5px solid #38bdf8;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+                <p style="font-size:.78rem;color:#7dd3fc;font-weight:600">Analyzing photo…</p>
+              </div>
+            </div>
+            <svg id="upload-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            <p id="upload-text" style="font-size:.8rem;color:#64748b">Photo from glasses appears here</p>
+            <p style="font-size:.68rem;color:#475569">Live stream · Auto-analyzed</p>
+          </div>
+          <button onclick="simulateScan()" id="demo-btn" class="btn-sky" style="width:100%;margin-top:10px;padding:9px;font-size:.82rem">
+            ▶ Simulate Photo Capture
+          </button>
+
+          <!-- HVAC nameplate mini card -->
+          <div id="nameplate-card" style="display:none;margin-top:10px;border-radius:11px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);padding:11px">
+            <p style="font-size:.68rem;color:#a5b4fc;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">🔧 HVAC Nameplate Decoded</p>
+            <div style="display:flex;flex-direction:column;gap:4px;font-size:.76rem">
+              <div style="display:flex;justify-content:space-between"><span style="color:#94a3b8">Unit</span><span style="color:white;font-weight:600">Carrier 4-Ton / 16 SEER</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#94a3b8">Manufactured</span><span style="color:white">June 2014 · Age: 12 yrs</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#94a3b8">Est. remaining</span><span style="color:#fcd34d;font-weight:600">~3 years ⚠️</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:#94a3b8">Replacement</span><span style="color:#fca5a5">~$5,000–$7,000</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI findings -->
+        <div style="padding:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <p style="font-size:.72rem;color:#64748b;font-weight:500;text-transform:uppercase;letter-spacing:.06em">🤖 AI Findings</p>
+            <!-- Score ring -->
+            <div class="score-ring">
+              <svg viewBox="0 0 90 90" width="64" height="64">
+                <circle cx="45" cy="45" r="36" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="7"/>
+                <circle id="score-circle" cx="45" cy="45" r="36" fill="none" stroke="url(#sg)" stroke-width="7" stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="226" style="transition:stroke-dashoffset 1.2s ease"/>
+                <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs>
+              </svg>
+              <div class="val" style="font-size:.6rem">
+                <span id="score-val" style="font-size:1.05rem;font-weight:800;color:white">–</span>
+                <span style="color:#64748b">score</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="findings" style="display:flex;flex-direction:column;gap:7px">
+            <!-- Placeholder -->
+            <div style="border-radius:10px;border:1px dashed rgba(255,255,255,.08);padding:20px;text-align:center;color:#475569;font-size:.8rem">
+              Run demo to see live findings
+            </div>
+          </div>
+
+          <!-- Recommendation box -->
+          <div id="reco-box" style="display:none;margin-top:10px;border-radius:11px;background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.18);padding:11px">
+            <p style="font-size:.7rem;font-weight:600;color:#7dd3fc;margin-bottom:4px">📋 Voice Coaching Note</p>
+            <p style="font-size:.76rem;color:#94a3b8;line-height:1.55">Check under the sink for signs of slow leak — moisture staining detected on cabinet base. Also get a wider shot of the ceiling corner for the water mark.</p>
+          </div>
+
+          <!-- Progress bars -->
+          <div id="progress-section" style="display:none;margin-top:12px">
+            <p style="font-size:.7rem;color:#64748b;margin-bottom:8px;font-weight:500">Rooms completed</p>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:.72rem;color:#94a3b8">
+              <div style="display:flex;align-items:center;gap:8px"><span style="width:68px">Kitchen</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div class="bar" style="--w:100%;width:0"></div></div><span style="color:#86efac;font-weight:600">✓</span></div>
+              <div style="display:flex;align-items:center;gap:8px"><span style="width:68px">Bathroom</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div class="bar" style="--w:75%;width:0"></div></div><span>4/5</span></div>
+              <div style="display:flex;align-items:center;gap:8px"><span style="width:68px">Attic</span><div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden"><div class="bar" style="--w:30%;width:0"></div></div><span>1/3</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card footer -->
+      <div style="border-top:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.3);padding:11px 18px;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;gap:10px">
+          <span class="tag tag-purple">🚁 DJI Mavic T3 roof: pending</span>
+          <span class="tag tag-blue">🔭 Sewer scope cam: pending</span>
+        </div>
+        <button class="btn-sky" style="font-size:.75rem;padding:6px 14px">Generate Report →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding-bottom:1.5rem">
+  <div class="feature-card">
+    <div style="width:36px;height:36px;border-radius:9px;background:rgba(14,165,233,.15);display:grid;place-items:center;margin-bottom:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </div>
+    <h3 style="font-weight:700;margin-bottom:8px">AI-Assisted Live Analysis</h3>
+    <p style="font-size:.85rem;line-height:1.7;color:#64748b">Walk any room with Meta Ray-Bans or any camera. Photos stream to AI and defects are flagged in real time as you inspect.</p>
+  </div>
+  <div class="feature-card">
+    <div style="width:36px;height:36px;border-radius:9px;background:rgba(139,92,246,.15);display:grid;place-items:center;margin-bottom:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 2v10l4.24 4.24"/><circle cx="19" cy="5" r="3"/></svg>
+    </div>
+    <h3 style="font-weight:700;margin-bottom:8px">HVAC Nameplate Decoder</h3>
+    <p style="font-size:.85rem;line-height:1.7;color:#64748b">Snap the nameplate → get age, SEER, tonnage, refrigerant type, and years of remaining service life instantly.</p>
+  </div>
+  <div class="feature-card">
+    <div style="width:36px;height:36px;border-radius:9px;background:rgba(34,197,94,.15);display:grid;place-items:center;margin-bottom:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+    </div>
+    <h3 style="font-weight:700;margin-bottom:8px">Drone + Sewer Scope Analysis</h3>
+    <p style="font-size:.85rem;line-height:1.7;color:#64748b">DJI Mavic T3 thermal roof scans detect moisture &amp; heat loss invisible to the naked eye. Sewer scope footage flags root intrusion, cracks &amp; pipe defects automatically.</p>
+  </div>
+  <div class="feature-card">
+    <div style="width:36px;height:36px;border-radius:9px;background:rgba(245,158,11,.15);display:grid;place-items:center;margin-bottom:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <h3 style="font-weight:700;margin-bottom:8px">InterNACHI Compliant</h3>
+    <p style="font-size:.85rem;line-height:1.7;color:#64748b">Reports structured around all 10 InterNACHI SOP components with your cert number in the header.</p>
+  </div>
+  <div class="feature-card">
+    <div style="width:36px;height:36px;border-radius:9px;background:rgba(14,165,233,.15);display:grid;place-items:center;margin-bottom:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    </div>
+    <h3 style="font-weight:700;margin-bottom:8px">Zero-Form Reports</h3>
+    <p style="font-size:.85rem;line-height:1.7;color:#64748b">Type <code style="background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;font-size:.8em">!inspect stop</code> — full InterNACHI-compliant PDF with your cert number, all 10 SOP components, photos, defects &amp; cost estimates. Ready before you leave the driveway.</p>
+  </div>
+  <div class="feature-card">
+    <div style="width:36px;height:36px;border-radius:9px;background:rgba(239,68,68,.15);display:grid;place-items:center;margin-bottom:14px">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <h3 style="font-weight:700;margin-bottom:8px">Voice Coaching</h3>
+    <p style="font-size:.85rem;line-height:1.7;color:#64748b">After each photo, I voice-coach you on what to check next — like a second inspector in your ear who never gets tired.</p>
+  </div>
+</section>
+
+<!-- HOME HEALTH SCORE TEASER -->
+<div style="border-radius:16px;background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(14,165,233,.08));border:1px solid rgba(99,102,241,.2);padding:24px 28px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:2rem">
+  <div style="flex:1">
+    <div style="display:inline-flex;align-items:center;gap:6px;font-size:.72rem;color:#c4b5fd;background:rgba(139,92,246,.15);border-radius:99px;padding:3px 10px;margin-bottom:10px;font-weight:600">🚀 Coming Soon</div>
+    <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:6px">Home Health Score — Consumer Product</h3>
+    <p style="font-size:.85rem;color:#94a3b8;line-height:1.7;max-width:540px">The same AI that powers professional inspections, available to any homeowner. Take photos like a TikTok tour → get a 0–100 score → see exactly what's wrong and what it costs to fix. <strong style="color:#c4b5fd">83 million homeowners. $4.99 per scan.</strong> Every SpexInspect inspection builds the training data that makes the whole platform smarter.</p>
+  </div>
+  <div style="text-align:center;flex-shrink:0">
+    <div style="font-size:3rem;font-weight:800;background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1">83M</div>
+    <div style="font-size:.75rem;color:#64748b;margin-top:4px">potential homeowners</div>
+  </div>
+</div>
+
+<!-- INTERNACHI BADGE ROW -->
+<div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;margin-bottom:4rem">
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="width:44px;height:44px;border-radius:11px;background:rgba(14,165,233,.12);border:1px solid rgba(14,165,233,.2);display:grid;place-items:center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+    </div>
+    <div>
+      <p style="font-weight:700;font-size:.95rem">InterNACHI Member</p>
+      <p style="font-size:.78rem;color:#64748b">Reports follow InterNACHI Standards of Practice · All 10 required inspection components included</p>
+    </div>
+  </div>
+  <div style="display:flex;gap:14px;font-size:.78rem;color:#64748b;flex-wrap:wrap">
+    <span>✓ Roofing</span>
+    <span>✓ Electrical</span>
+    <span>✓ HVAC</span>
+    <span>✓ Plumbing</span>
+    <span>✓ Structure</span>
+    <span>✓ Exterior</span>
+    <span>✓ Attic</span>
+    <span>✓ Fireplace</span>
+    <span>✓ Doors &amp; Windows</span>
+    <span style="color:#38bdf8">✓ Basement/Crawlspace</span>
+  </div>
+</div>
+
+</main>
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+let scanned = false;
+function simulateScan() {
+  if (scanned) return;
+  scanned = true;
+  const btn = document.getElementById('demo-btn');
+  btn.textContent = 'Analyzing…';
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+
+  // Show scan overlay
+  document.getElementById('scan-overlay').classList.add('active');
+  document.getElementById('upload-text').style.display = 'none';
+  document.getElementById('upload-icon').style.display = 'none';
+
+  setTimeout(() => {
+    document.getElementById('scan-overlay').classList.remove('active');
+
+    // Show nameplate card
+    document.getElementById('nameplate-card').style.display = 'block';
+
+    // Update findings
+    document.getElementById('findings').innerHTML = `
+      <div class="row-item">
+        <div class="icon-box" style="background:rgba(239,68,68,.15)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div style="flex:1;min-width:0">
+          <p style="font-weight:600;font-size:.82rem">Water staining — ceiling NW corner</p>
+          <p style="font-size:.72rem;color:#64748b">Active or past leak · Investigate insulation above</p>
+        </div>
+        <span class="tag tag-red">High</span>
+      </div>
+      <div class="row-item">
+        <div class="icon-box" style="background:rgba(245,158,11,.15)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div style="flex:1;min-width:0">
+          <p style="font-weight:600;font-size:.82rem">Cabinet moisture — under sink</p>
+          <p style="font-size:.72rem;color:#64748b">Staining on base panel · Check supply line</p>
+        </div>
+        <span class="tag tag-amber">Medium</span>
+      </div>
+      <div class="row-item">
+        <div class="icon-box" style="background:rgba(34,197,94,.15)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div style="flex:1;min-width:0">
+          <p style="font-weight:600;font-size:.82rem">GFCI outlet — verified present</p>
+          <p style="font-size:.72rem;color:#64748b">Within 6ft of sink · Code compliant</p>
+        </div>
+        <span class="tag tag-green">Pass</span>
+      </div>
+    `;
+
+    // Animate score ring
+    const offset = 226 - (226 * 71 / 100);
+    document.getElementById('score-circle').style.strokeDashoffset = offset;
+    document.getElementById('score-val').textContent = '71';
+
+    // Show reco and progress
+    document.getElementById('reco-box').style.display = 'block';
+    document.getElementById('progress-section').style.display = 'block';
+
+    // Reset button
+    btn.textContent = '✓ Analysis complete';
+    btn.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
+    btn.style.opacity = '1';
+  }, 2000);
+}
+</script>
+</body>
+</html>
