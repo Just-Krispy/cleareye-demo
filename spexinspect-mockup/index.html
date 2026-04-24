@@ -26,24 +26,95 @@
     animation: ce-gem-glow 3.4s ease-in-out infinite;
   }
   .brand-mark img { width:100%; height:100%; display:block; object-fit:contain; position:relative; z-index:1; }
-  .brand-mark svg { position:relative; z-index:1; overflow:visible; }
-  .ce-ring-1 { animation: ce-ring-pulse 2.8s ease-out infinite; }
-  .ce-ring-2 { animation: ce-ring-pulse 2.8s ease-out 1.4s infinite; }
-  .ce-sparkle { animation: ce-sparkle 2s ease-in-out infinite; }
-  .ce-sparkle-2 { animation: ce-sparkle 2s ease-in-out .6s infinite; }
-  .ce-sparkle-3 { animation: ce-sparkle 2s ease-in-out 1.2s infinite; }
-  .brand-link { transition: transform .2s ease; }
+  .brand-link { transition: transform .2s ease; text-decoration:none; }
   .brand-link:hover { transform: translateY(-1px); }
   .brand-link:hover .brand-mark { animation-duration: 1.8s; }
-  .btn-sky-arrow { position:relative; padding-right:42px !important; }
+  .brand-name {
+    background: linear-gradient(110deg,#ffffff 0%,#e0f2fe 30%,#ffffff 50%,#bae6fd 70%,#ffffff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: ce-shimmer 6s linear infinite;
+  }
+  @keyframes ce-shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+  @keyframes ce-grid-drift { 0% { background-position: 0 0; } 100% { background-position: 64px 64px; } }
+  @keyframes ce-line-flow { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+  .header-shell {
+    position: relative;
+    overflow: visible;
+    padding: 14px 22px;
+    border-radius: 22px;
+    background:
+      linear-gradient(135deg, rgba(14,165,233,.045) 0%, transparent 30%, transparent 70%, rgba(99,102,241,.05) 100%),
+      rgba(8,15,30,.72);
+    border: 1px solid rgba(255,255,255,.07);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.04) inset,
+      0 24px 48px -22px rgba(2,6,23,.7),
+      0 0 0 1px rgba(56,189,248,.04);
+  }
+  .header-grid-bg {
+    position:absolute; inset:0; border-radius:22px; pointer-events:none; opacity:.35;
+    background-image:
+      linear-gradient(rgba(56,189,248,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    animation: ce-grid-drift 22s linear infinite;
+  }
+  .header-glow-l { position:absolute; left:-40px; top:50%; transform:translateY(-50%); width:240px; height:120px; border-radius:50%; background:radial-gradient(ellipse,rgba(14,165,233,.18),transparent 60%); pointer-events:none; }
+  .header-glow-r { position:absolute; right:-40px; top:50%; transform:translateY(-50%); width:240px; height:120px; border-radius:50%; background:radial-gradient(ellipse,rgba(99,102,241,.16),transparent 60%); pointer-events:none; }
+  .header-bottom-line {
+    position:absolute; left:8%; right:8%; bottom:-1px; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(56,189,248,.55), rgba(129,140,248,.45), transparent);
+    pointer-events:none;
+  }
+  .header-bottom-line::after {
+    content:""; position:absolute; inset:0; width:30%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent);
+    animation: ce-line-flow 4.5s ease-in-out infinite;
+  }
+  .brand-divider {
+    width:1px; height:38px; margin:0 4px;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,.14), transparent);
+  }
+  .nav-link {
+    color:#94a3b8; text-decoration:none; font-size:.875rem; font-weight:500;
+    padding:8px 14px; border-radius:10px;
+    transition: color .15s, background .15s;
+    position:relative;
+  }
+  .nav-link:hover { color:#ffffff; background:rgba(56,189,248,.08); }
+  .nav-link::after {
+    content:""; position:absolute; left:50%; bottom:3px; width:0; height:1.5px;
+    background: linear-gradient(90deg,#38bdf8,#818cf8);
+    border-radius:1px;
+    transform:translateX(-50%);
+    transition: width .25s ease;
+  }
+  .nav-link:hover::after { width:50%; }
+  .header-tag {
+    display:inline-flex; align-items:center; gap:7px;
+    border-radius:9999px; padding:6px 14px;
+    font-size:.74rem; font-weight:600; letter-spacing:.02em;
+    background: linear-gradient(135deg,rgba(34,197,94,.18),rgba(16,185,129,.12));
+    border: 1px solid rgba(34,197,94,.3);
+    color:#86efac;
+    box-shadow: 0 0 16px -2px rgba(34,197,94,.2);
+  }
+  .btn-sky-arrow { position:relative; padding-right:44px !important; box-shadow: 0 8px 24px -8px rgba(14,165,233,.6), 0 0 0 1px rgba(56,189,248,.2) inset; }
   .btn-sky-arrow::after {
     content:""; position:absolute; right:10px; top:50%; transform:translateY(-50%);
-    width:22px; height:22px; border-radius:50%;
-    background: rgba(255,255,255,.2);
+    width:24px; height:24px; border-radius:50%;
+    background: rgba(255,255,255,.22);
     display:grid; place-items:center;
     transition: background .15s, transform .15s;
   }
-  .btn-sky-arrow:hover::after { background: rgba(255,255,255,.3); transform:translateY(-50%) translateX(2px); }
+  .btn-sky-arrow:hover::after { background: rgba(255,255,255,.32); transform:translateY(-50%) translateX(2px); }
   .btn-sky-arrow-inner { position:absolute; right:17px; top:50%; transform:translateY(-50%); pointer-events:none; z-index:1; }
   .anim-1 { animation: fadeUp .55s .05s ease both; }
   .anim-2 { animation: fadeUp .55s .15s ease both; }
@@ -105,30 +176,39 @@
 
 <!-- NAV -->
 <div class="app-shell max-w-7xl mx-auto px-5 sm:px-8 py-5">
-<header class="top-card glass rounded-2xl px-5 py-4 flex items-center justify-between mb-2" style="position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 0% 50%,rgba(14,165,233,.08),transparent 40%),radial-gradient(circle at 100% 50%,rgba(99,102,241,.06),transparent 40%)"></div>
-  <a href="#" class="brand-link" style="display:flex;align-items:center;gap:13px;position:relative;text-decoration:none;color:inherit">
+<header class="top-card header-shell flex items-center justify-between mb-2">
+  <div class="header-grid-bg"></div>
+  <div class="header-glow-l"></div>
+  <div class="header-glow-r"></div>
+
+  <a href="#" class="brand-link" style="display:flex;align-items:center;gap:14px;position:relative;color:inherit">
     <div class="brand-mark" aria-hidden="true">
-      <img src="assets/gem-icon.png" alt="ClearEye" width="56" height="56" style="display:block;object-fit:contain"/>
+      <img src="assets/gem-icon.png" alt="ClearEye" width="56" height="56"/>
     </div>
     <div>
-      <p class="brand-name" style="font-size:1.5rem;font-weight:800;letter-spacing:-.035em;line-height:1;color:#ffffff">ClearEye</p>
-      <p style="font-size:.68rem;color:#7c8aa3;letter-spacing:.02em;margin-top:4px;font-weight:500">Home Inspection</p>
+      <p class="brand-name" style="font-size:1.55rem;font-weight:800;letter-spacing:-.04em;line-height:1">ClearEye</p>
+      <p style="font-size:.66rem;color:#7c8aa3;letter-spacing:.16em;margin-top:5px;font-weight:600;text-transform:uppercase">Home Inspection</p>
     </div>
   </a>
-  <nav class="desktop-nav" style="display:flex;gap:1.5rem;position:relative">
+
+  <div class="brand-divider" style="display:none"></div>
+
+  <nav class="desktop-nav" style="display:flex;gap:.4rem;position:relative;align-items:center">
     <a href="#" class="nav-link">Features</a>
     <a href="#" class="nav-link">Reports</a>
     <a href="#" class="nav-link">InterNACHI</a>
     <a href="#" class="nav-link">Pricing</a>
   </nav>
-  <div style="display:flex;gap:10px;align-items:center;position:relative">
-    <span class="tag tag-green"><span class="live-dot"></span> Live AI</span>
-    <button class="btn-sky btn-sky-arrow" style="padding:9px 18px;font-size:.85rem;font-weight:700">
+
+  <div style="display:flex;gap:12px;align-items:center;position:relative">
+    <span class="header-tag"><span class="live-dot"></span> Live AI</span>
+    <button class="btn-sky btn-sky-arrow" style="padding:10px 20px;font-size:.875rem;font-weight:700">
       Start Inspection
-      <svg class="btn-sky-arrow-inner" width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M1 6h9m0 0L6 2m4 4L6 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="btn-sky-arrow-inner" width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 6h9m0 0L6 2m4 4L6 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </div>
+
+  <div class="header-bottom-line"></div>
 </header>
 
 <!-- HERO -->
