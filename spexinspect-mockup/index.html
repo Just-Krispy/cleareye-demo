@@ -22,9 +22,10 @@
   @keyframes ce-ring-pulse { 0% { opacity:0; r:4; } 40% { opacity:.7; } 100% { opacity:0; r:15; } }
   @keyframes ce-sparkle { 0%,100% { opacity:.3; } 50% { opacity:1; } }
   .brand-mark {
-    width:52px; height:52px; position:relative; display:grid; place-items:center;
+    width:56px; height:56px; position:relative; display:grid; place-items:center;
     animation: ce-gem-glow 3.4s ease-in-out infinite;
   }
+  .brand-mark img { width:100%; height:100%; display:block; object-fit:contain; position:relative; z-index:1; }
   .brand-mark svg { position:relative; z-index:1; overflow:visible; }
   .ce-ring-1 { animation: ce-ring-pulse 2.8s ease-out infinite; }
   .ce-ring-2 { animation: ce-ring-pulse 2.8s ease-out 1.4s infinite; }
@@ -108,73 +109,7 @@
   <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 0% 50%,rgba(14,165,233,.08),transparent 40%),radial-gradient(circle at 100% 50%,rgba(99,102,241,.06),transparent 40%)"></div>
   <a href="#" class="brand-link" style="display:flex;align-items:center;gap:13px;position:relative;text-decoration:none;color:inherit">
     <div class="brand-mark" aria-hidden="true">
-      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="ceGemFill" cx="26" cy="24" r="24" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#60a5fa" stop-opacity=".9"/>
-            <stop offset=".45" stop-color="#2563eb" stop-opacity=".55"/>
-            <stop offset=".85" stop-color="#0c1f4d" stop-opacity=".85"/>
-            <stop offset="1" stop-color="#020617"/>
-          </radialGradient>
-          <linearGradient id="ceGemEdge" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#bfdbfe" stop-opacity=".95"/>
-            <stop offset=".5" stop-color="#60a5fa" stop-opacity=".8"/>
-            <stop offset="1" stop-color="#1e3a8a" stop-opacity=".55"/>
-          </linearGradient>
-          <linearGradient id="ceFacet" x1="0" y1="0" x2="0" y2="52" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#93c5fd" stop-opacity=".55"/>
-            <stop offset="1" stop-color="#3b82f6" stop-opacity=".15"/>
-          </linearGradient>
-          <radialGradient id="ceHouseGlow" cx="26" cy="28" r="10" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#dbeafe"/>
-            <stop offset="1" stop-color="#60a5fa" stop-opacity=".1"/>
-          </radialGradient>
-        </defs>
-
-        <!-- Outer faceted crystal hexagon -->
-        <path d="M26 3 L46 14 L46 38 L26 49 L6 38 L6 14 Z"
-              fill="url(#ceGemFill)" stroke="url(#ceGemEdge)" stroke-width="1.1" stroke-linejoin="round"/>
-
-        <!-- Facet lines radiating from center to each vertex -->
-        <g stroke="url(#ceFacet)" stroke-width=".55" opacity=".85">
-          <line x1="26" y1="26" x2="26" y2="3"/>
-          <line x1="26" y1="26" x2="46" y2="14"/>
-          <line x1="26" y1="26" x2="46" y2="38"/>
-          <line x1="26" y1="26" x2="26" y2="49"/>
-          <line x1="26" y1="26" x2="6" y2="38"/>
-          <line x1="26" y1="26" x2="6" y2="14"/>
-        </g>
-
-        <!-- Inner diamond/facet outline for depth -->
-        <path d="M26 10 L40 18 L40 34 L26 42 L12 34 L12 18 Z"
-              fill="none" stroke="url(#ceFacet)" stroke-width=".5" opacity=".6"/>
-
-        <!-- Scan pulse rings around the house -->
-        <circle class="ce-ring-1" cx="26" cy="28" cy-orig="28" r="10" fill="none" stroke="#7dd3fc" stroke-width=".6"/>
-        <circle class="ce-ring-2" cx="26" cy="28" r="7" fill="none" stroke="#7dd3fc" stroke-width=".6"/>
-
-        <!-- Static concentric arcs -->
-        <circle cx="26" cy="28" r="6" fill="none" stroke="rgba(147,197,253,.45)" stroke-width=".4"/>
-        <circle cx="26" cy="28" r="9" fill="none" stroke="rgba(147,197,253,.25)" stroke-width=".4"/>
-
-        <!-- House icon -->
-        <g transform="translate(20 22)">
-          <!-- Soft glow behind house -->
-          <circle cx="6" cy="6" r="8" fill="url(#ceHouseGlow)" opacity=".35"/>
-          <!-- Roof + body -->
-          <path d="M0 5.5 L6 0.5 L12 5.5 L12 11.5 L0 11.5 Z" fill="#ffffff" opacity=".95"/>
-          <!-- Chimney -->
-          <rect x="8.2" y="2" width="1.6" height="2.4" fill="#ffffff" opacity=".85"/>
-          <!-- Warm-lit window -->
-          <rect x="4.4" y="7" width="2.2" height="3" fill="#fbbf24" opacity=".95"/>
-        </g>
-
-        <!-- Corner sparkle highlights -->
-        <circle class="ce-sparkle" cx="46" cy="14" r="1" fill="#ffffff"/>
-        <circle class="ce-sparkle-2" cx="6" cy="38" r="1" fill="#ffffff"/>
-        <circle class="ce-sparkle-3" cx="26" cy="3" r=".8" fill="#ffffff"/>
-        <circle class="ce-sparkle-2" cx="26" cy="49" r=".6" fill="#ffffff" opacity=".7"/>
-      </svg>
+      <img src="assets/gem-icon.png" alt="ClearEye" width="56" height="56" style="display:block;object-fit:contain"/>
     </div>
     <div>
       <p class="brand-name" style="font-size:1.5rem;font-weight:800;letter-spacing:-.035em;line-height:1;color:#ffffff">ClearEye</p>
